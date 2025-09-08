@@ -116,7 +116,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.hover-sidebarHeader {
+  @apply p-1.5 rounded-md cursor-pointer text-gray-400 hover:bg-zinc-800 hover:text-white;
 }
