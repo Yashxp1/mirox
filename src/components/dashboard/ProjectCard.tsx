@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 const ProjectCard = () => {
   return (
-    <div className='border w-full'>ProjectCard</div>
-  )
-}
+    <div className="border w-full h-screen flex justify-center items-center">
+      ProjectCard
+    </div>
+  );
+};
 
-export default ProjectCard
+export default ProjectCard;

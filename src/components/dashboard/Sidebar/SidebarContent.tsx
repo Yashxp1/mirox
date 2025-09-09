@@ -9,10 +9,8 @@ import {
   MoreHorizontal,
   Plus,
 } from 'lucide-react';
-import React, { useState } from 'react';
 
 const SidebarContent = () => {
-  const [isToggle, setIsToggle] = useState(false);
 
   const items = [
     {
