@@ -7,7 +7,11 @@ import {
 } from 'lucide-react';
 import React from 'react';
 
-const Topbar = () => {
+interface TopbarProps {
+  toggleSidebar: () => void;
+}
+
+const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
   const items = [
     {
       icon: Copy,
@@ -29,7 +33,10 @@ const Topbar = () => {
 
   return (
     <div className="border gap-2 w-full flex p-1.5">
-      <div className="flex justify-center items-center hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-lg transition-all px-4">
+      <div
+        onClick={toggleSidebar}
+        className="flex justify-center items-center hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-lg transition-all px-4"
+      >
         <PanelRightOpen size={19} strokeWidth={2.5} />
       </div>
       {items.map((i, idx) => (
