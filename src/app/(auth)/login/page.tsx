@@ -1,9 +1,14 @@
-import React from 'react'
+import Login from '@/components/auth/LoginForm';
+import { signIn } from '@/lib/auth';
+import React from 'react';
+
+const handleLogin = async () => {
+  'use server';
+  await signIn('credentials');
+};
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+  return <Login />;
+};
 
-export default page
+export default page;
