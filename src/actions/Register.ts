@@ -5,7 +5,7 @@ import { RegisterSchema } from '@/lib/schema';
 import bcrypt from 'bcryptjs';
 import z from 'zod';
 
-export const regiser = async (data: z.infer<typeof RegisterSchema>) => {
+export const Register = async (data: z.infer<typeof RegisterSchema>) => {
   try {
     const validateData = RegisterSchema.parse(data);
 
@@ -38,6 +38,7 @@ export const regiser = async (data: z.infer<typeof RegisterSchema>) => {
         name,
         email: lowerCaseEmail,
         password: hashPassword,
+        
       },
     });
 
