@@ -5,6 +5,7 @@ import {
   Cloud,
   FileInput,
   Github,
+  Inbox,
   Layers,
   MoreHorizontal,
   Plus,
@@ -16,7 +17,7 @@ const SidebarContent = () => {
     {
       title: null,
       options: [
-        { icon: Box, label: 'Projects' },
+        { icon: Inbox, label: 'Inbox' },
         { icon: BugPlay, label: 'My issues' },
       ],
     },
@@ -58,18 +59,18 @@ const SidebarContent = () => {
     <aside className="flex flex-col justify-between px-4">
       {items.map((i, idx) => (
         <div key={idx} className=" gap-0.5 flex flex-col">
-          <h1 className="px-2 pt-2 text-sm font-semibold">{i.title}</h1>
+          <h1 className="px-2 cursor-default pt-2 text-sm font-semibold text-zinc-500">{i.title}</h1>
           {i.options?.map((i2, idx2) => (
             <div
               key={idx2}
-              className="flex  items-center gap-2 hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-lg transition-all p-2"
+              className="flex cursor-default  items-center gap-2 hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-lg transition-all p-2"
             >
 
               <span className="">
-                {<i2.icon size={19} strokeWidth={2.5} />}
+                {<i2.icon size={18} strokeWidth={2.5} />}
               </span>
 
-              <p className=" text-[#E3E4E7] font-[500]">{i2.label}</p>
+              <p className=" text-[#E3E4E7] text-sm font-medium">{i2.label}</p>
             </div>
           ))}
           
