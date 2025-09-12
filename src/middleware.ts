@@ -1,8 +1,9 @@
-// export { auth as middleware } from "@/lib/auth"
-
-import { auth } from '@/lib/auth';
+import NextAuth from 'next-auth';
+import authconfig from './lib/authconfig';
 import { authRoute, privateRoute } from './route';
 import { NextResponse } from 'next/server';
+
+const { auth } = NextAuth(authconfig);
 
 export default auth((req) => {
   const { nextUrl } = req;
