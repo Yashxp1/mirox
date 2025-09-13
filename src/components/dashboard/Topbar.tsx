@@ -32,7 +32,7 @@ const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
   ];
 
   return (
-    <div className="border-b gap-2 w-full flex p-1.5">
+    <div className="border border-l-0 gap-2 w-full flex p-1.5">
       <div
         onClick={toggleSidebar}
         className="flex justify-center items-center hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-lg transition-all px-4"

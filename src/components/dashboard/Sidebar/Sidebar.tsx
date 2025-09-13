@@ -29,7 +29,7 @@ const Sidebar = () => {
       <SidebarHeader/>
       <SidebarContent/>
       <div
-        className="hover:border-r-zinc-500 hover:border-2 border transition-all absolute top-0 right-0 h-screen  cursor-col-resize"
+        className="hover:border-r-zinc-500 hover:border border transition-all absolute top-0 right-0 h-screen  cursor-col-resize"
         onMouseDown={startResize}
       ></div>
     </div>

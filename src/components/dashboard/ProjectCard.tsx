@@ -2,8 +2,10 @@ import React from 'react';
 
 const ProjectCard = () => {
   return (
-    <div className="w-full border-b flex justify-center items-center">
-      ProjectCard
+    <div className="w-full flex justify-between items-center">
+      <div className=" h-screen">
+
+      </div>
     </div>
   );
 };

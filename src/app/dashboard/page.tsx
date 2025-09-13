@@ -11,8 +11,12 @@ const Page = () => {
     <div className="flex">
       <div className="">{isSidebarOpen && <Sidebar />}</div>
       <div className="w-full border">
-        <Topbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <ProjectCard />
+        <div className="p-2 px-0">
+          <div className="bg-[#101012]">
+            <Topbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+            <ProjectCard />
+          </div>
+        </div>
       </div>
     </div>
   );
