@@ -2,27 +2,32 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
   emailVerified DateTime?
-   password      String? 
+  password      String?
   image         String?
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
- 
+
+  tasks         Task[] @relation("CreatedTasks")
+  assignedTasks Task[] @relation("AssignedTasks")
+
+  comments Comments[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -35,33 +40,33 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -72,8 +77,79 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
+}
+
+model Project {
+  id Int @id @default(autoincrement())
+
+  title       String
+  summary     String?
+  description String?
+  startdata   DateTime?
+  target      DateTime?
+
+  priority Priority @default(NONE)
+  status   Status   @default(PLANNED)
+  Task     Task[]
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  startdata   DateTime?
+  target      DateTime?
+  status      Status    @default(PLANNED)
+  priority    Priority  @default(NONE)
+
+  author   User   @relation("CreatedTasks", fields: [authorId], references: [id])
+  authorId String
+
+  assignee   User?   @relation("AssignedTasks", fields: [assigneeId], references: [id])
+  assigneeId String?
+
+  comments Comments[]
+
+  CreatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String?
+  Project   Project? @relation(fields: [projectId], references: [id])
+  projectId Int?
+}
+
+model Comments {
+  id Int @id @default(autoincrement())
+
+  body String
+  // filetype String?
+  // fileUrl  String?
+
+  issue   Task @relation(fields: [issueId], references: [id])
+  issueId Int
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  createdAt DateTime @default(now())
+}
+
+enum Priority {
+  LOW
+  HIGH
+  MEDIUM
+  NONE
+}
+
+enum Status {
+  DONE
+  IN_PROGRESS
+  PLANNED
+  COMPLETED
+  BACKLOG
+  CANCELED
 }
