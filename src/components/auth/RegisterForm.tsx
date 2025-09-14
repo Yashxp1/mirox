@@ -120,14 +120,10 @@ const RegisterForm = () => {
           </div>
         </CardContent>
 
-        <CardFooter className="flex-col gap-2">
+        <CardFooter className="flex-col gap-2 pt-6">
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Registering...' : 'Register'}
           </Button>
-
-          <div className="w-full">
-            <Github />
-          </div>
 
           <hr />
 
@@ -136,6 +132,9 @@ const RegisterForm = () => {
           </Link>
         </CardFooter>
       </form>
+      <div className="flex justify-center items-center">
+        <Github />
+      </div>
     </Card>
   );
 };

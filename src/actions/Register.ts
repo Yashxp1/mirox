@@ -9,11 +9,11 @@ export const Register = async (data: z.infer<typeof RegisterSchema>) => {
   try {
     const validateData = RegisterSchema.parse(data);
 
+    const { name, email, password, passwordConfirmation } = validateData;
+
     if (!validateData) {
       return { message: 'Invalid input data' };
     }
-
-    const { name, email, password, passwordConfirmation } = validateData;
 
     if (password !== passwordConfirmation) {
       return { message: 'Password do not match' };
@@ -38,7 +38,6 @@ export const Register = async (data: z.infer<typeof RegisterSchema>) => {
         name,
         email: lowerCaseEmail,
         password: hashPassword,
-        
       },
     });
 

@@ -1,20 +1,20 @@
-"use client"
-import React from 'react';
-import { Button } from '../ui/button';
-import { GithubIcon } from 'lucide-react';
-import { githubSignIn } from '@/actions/Github';
+"use client";
+import React from "react";
+import { Button } from "../ui/button";
+import { GithubIcon } from "lucide-react";
+import { signInWithGithub } from "@/actions/Github";
 
 const Github = () => {
   return (
-    <div onClick={githubSignIn}>
+    <form action={signInWithGithub}>
       <Button
         type="submit"
         variant="outline"
-        className="flex w-full justify-center items-center"
+        className="flex justify-center items-center"
       >
-        <GithubIcon /> Contiue with Github
+        <GithubIcon className="mr-2" /> Continue with GitHub
       </Button>
-    </div>
+    </form>
   );
 };
 

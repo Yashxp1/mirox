@@ -40,9 +40,9 @@ const LoginForm = () => {
       setIsLoading(false);
     }
 
-    if (res?.message) {
+    if (res?.error) {
       setIsError('');
-      setIsSuccess(res.message);
+      setIsSuccess(res.error);
       setIsLoading(false);
     }
   };
@@ -94,14 +94,10 @@ const LoginForm = () => {
           </div>
         </CardContent>
 
-        <CardFooter className="flex-col gap-2">
+        <CardFooter className="flex-col gap-2 pt-6">
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Logging you in...' : 'Login'}
           </Button>
-
-          <div className="w-full">
-            <Github />
-          </div>
 
           <hr />
 
@@ -110,6 +106,9 @@ const LoginForm = () => {
           </Link>
         </CardFooter>
       </form>
+      <div className="flex justify-center items-center">
+        <Github />
+      </div>
     </Card>
   );
 };

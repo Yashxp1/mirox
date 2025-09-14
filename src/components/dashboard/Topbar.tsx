@@ -6,6 +6,7 @@ import {
   Radio,
 } from 'lucide-react';
 import React from 'react';
+import SignOut from '../auth/SignOut';
 
 interface TopbarProps {
   toggleSidebar: () => void;
@@ -48,6 +49,9 @@ const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
           <p className="text-sm font-medium text-[#E3E4E7]">{i.label}</p>
         </div>
       ))}
+      <div>
+        <SignOut />
+      </div>
     </div>
   );
 };
