@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from './auth';
 
-// type HandlerResult<T> = T | NextResponse;
 
 type Hanlder<T> = (
   req: NextRequest,
@@ -22,10 +21,6 @@ export function withApiHandler<T>(handler: Hanlder<T>) {
       }
 
       const result = await handler(req, { id: session.user.id }, ctx);
-
-      // if (result instanceof NextResponse) {
-      //   return result;
-      // }
 
       return NextResponse.json(
         { success: true, data: result },
