@@ -101,7 +101,7 @@ model Task {
   id          Int       @id @default(autoincrement())
   title       String
   description String?
-  startdata   DateTime?
+  startdate   DateTime?
   target      DateTime?
   status      Status    @default(PLANNED)
   priority    Priority  @default(NONE)
