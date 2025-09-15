@@ -74,3 +74,13 @@ export const UpdateProjectSchema = z.object({
   startdate: z.string().datetime().optional().nullable(),
   target: z.string().datetime().optional().nullable(),
 });
+
+export const WorkSpaceSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export const UpdateWorkSpaceSchema = z.object({
+  id: z.number(),
+  name: z.string().optional(),
+});
