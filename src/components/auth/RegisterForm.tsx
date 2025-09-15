@@ -17,6 +17,7 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema } from '@/lib/schema';
 import { Register } from '@/actions/Register';
+import { toast } from 'sonner';
 
 const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,11 +40,13 @@ const RegisterForm = () => {
     if (res.message) {
       setIsError(res.message);
       setIsLoading(false);
+      toast(res.message);
     }
     if (res.success) {
       setIsError('');
       setIsSuccess(res.success);
       setIsLoading(false);
+      toast(res.success);
     }
   };
 

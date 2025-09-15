@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/darkmode/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({
   variable: '--font-geist-sans',
   subsets: ['latin'],
 });
-
 
 export const metadata: Metadata = {
   title: 'Mirox',
@@ -24,17 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-
-        className={`${inter.className} antialiased`}
-      >
+      <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <main>{children}</main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

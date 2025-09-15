@@ -17,6 +17,7 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema } from '@/lib/schema';
 import { login } from '@/actions/Login';
+import { toast } from 'sonner';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,12 +39,14 @@ const LoginForm = () => {
     if (res?.error) {
       setIsError(res.error);
       setIsLoading(false);
+      toast(res.error);
     }
 
     if (res?.error) {
       setIsError('');
       setIsSuccess(res.error);
       setIsLoading(false);
+      toast(res.error);
     }
   };
 
