@@ -1,11 +1,11 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { ProjectSchema, UpdateProjectSchema } from '@/lib/schema';
+import { CreateProjectSchema, UpdateProjectSchema } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
 const createProject = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
-  const validatedData = ProjectSchema.parse(body);
+  const validatedData = CreateProjectSchema.parse(body);
 
   const project = await prisma.project.create({
     data: {
@@ -17,6 +17,14 @@ const createProject = async (req: NextRequest, user: { id: string }) => {
       startdate: validatedData.startdate,
       target: validatedData.target,
       author: { connect: { id: user.id } },
+      workspace: { connect: { id: validatedData.workspaceId } },
+    },
+    include: {
+      workspace: {
+        select: {
+          id: true,
+        },
+      },
     },
   });
 
@@ -36,7 +44,7 @@ const updateProject = async (req: NextRequest, user: { id: string }) => {
       target: validatedData.target,
       status: validatedData.status,
       priority: validatedData.priority,
-      author: { connect: { id: user.id } },
+      authorId: user.id,
     },
   });
 

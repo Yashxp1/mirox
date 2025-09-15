@@ -1,16 +1,16 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { UpdateWorkSpaceSchema, WorkSpaceSchema } from '@/lib/schema';
+import { CreateWorkSpaceSchema, UpdateWorkSpaceSchema, } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
 const createWorkSpace = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
-  const validateData = WorkSpaceSchema.parse(body);
+  const validateData = CreateWorkSpaceSchema.parse(body);
 
   const workSpace = await prisma.workSpace.create({
     data: {
       name: validateData.name,
-      author: { connect: { id: user.id } },
+      authorId: user.id,
     },
   });
 
@@ -31,12 +31,12 @@ const updateWorkSpace = async (req: NextRequest) => {
   return update;
 };
 const deleteWorkSpace = async (req: NextRequest) => {
-  const { taskId } = await req.json();
-  if (!taskId) {
+  const { workSpaceId } = await req.json();
+  if (!workSpaceId) {
     throw new Error('Workspace Id not found!');
   }
   const deleteWorkSpace = await prisma.workSpace.delete({
-    where: { id: taskId },
+    where: { id: workSpaceId },
   });
   return deleteWorkSpace;
 };

@@ -1,11 +1,11 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { TaskSchema, UpdateTaskSchema } from '@/lib/schema';
+import { CreateTaskSchema, UpdateTaskSchema } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
 const createTask = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
-  const validatedData = TaskSchema.parse(body);
+  const validatedData = CreateTaskSchema.parse(body);
 
   const task = await prisma.task.create({
     data: {
@@ -15,7 +15,7 @@ const createTask = async (req: NextRequest, user: { id: string }) => {
       target: validatedData.target,
       status: validatedData.status,
       priority: validatedData.priority,
-      author: { connect: { id: user.id } },
+      authorId:user.id ,
     },
   });
 
