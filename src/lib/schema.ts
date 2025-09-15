@@ -74,7 +74,7 @@ export const CreateTaskSchema = z.object({
   status: StatusEnum.optional(),
   priority: PriorityEnum.optional(),
   assigneeId: z.string().nullable().optional(),
-  projectId: z.number().nullable().optional(),
+  projectId: z.number().nullable(),
 });
 
 export const UpdateTaskSchema = z.object({
