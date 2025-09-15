@@ -19,16 +19,13 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
- 
-  workspace WorkSpace[]
-  authoredProjects Project[] @relation("ProjectAuthor")
-  createdTasks Task[] @relation("TaskAuthor")
-  assignedTasks Task[] @relation("TaskAssignee")
-
+  workspace        WorkSpace[]
+  authoredProjects Project[]   @relation("ProjectAuthor")
+  createdTasks     Task[]      @relation("TaskAuthor")
+  assignedTasks    Task[]      @relation("TaskAssignee")
 }
 
 model Account {
@@ -87,12 +84,12 @@ model Authenticator {
 }
 
 model WorkSpace {
-  id        Int      @id @default(autoincrement())
-  name      String
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  id     Int     @id @default(autoincrement())
+  name   String
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 
-   Project   Project[]
+  Project Project[]
 
   CreatedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -110,13 +107,13 @@ model Project {
   priority Priority @default(NONE)
   status   Status   @default(PLANNED)
 
-  tasks         Task[]
+  tasks Task[]
   // comments Comments[]
 
-  author   User   @relation("ProjectAuthor",fields: [authorId], references: [id])
+  author   User   @relation("ProjectAuthor", fields: [authorId], references: [id])
   authorId String
 
-  workspace  WorkSpace? @relation(fields: [workspaceId], references: [id])
+  workspace   WorkSpace? @relation(fields: [workspaceId], references: [id])
   workspaceId Int?
 
   createdAt DateTime @default(now())
@@ -132,7 +129,7 @@ model Task {
   status      Status    @default(PLANNED)
   priority    Priority  @default(NONE)
 
-  author   User   @relation("TaskAuthor",fields: [authorId], references: [id])
+  author   User   @relation("TaskAuthor", fields: [authorId], references: [id])
   authorId String
 
   assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
