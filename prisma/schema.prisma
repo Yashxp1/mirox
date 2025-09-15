@@ -22,7 +22,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  workspace         WorkSpace[]
+  // workspace         WorkSpace[]
   authoredWorkspace WorkSpace[] @relation("WorkspaceAuthor")
 
   authoredProjects Project[]  @relation("ProjectAuthor")
@@ -89,8 +89,6 @@ model Authenticator {
 model WorkSpace {
   id     Int     @id @default(autoincrement())
   name   String
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
 
   Project Project[]
 
