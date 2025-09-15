@@ -27,7 +27,7 @@ const updateProject = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
   const validatedData = UpdateProjectSchema.parse(body);
 
-  const updateTask = await prisma.task.update({
+  const updateTask = await prisma.project.update({
     where: { id: validatedData.id },
     data: {
       title: validatedData.title,
@@ -51,6 +51,7 @@ const deleteProject = async (req: NextRequest) => {
 
   const deleteProject = await prisma.project.delete({
     where: { id: projectId },
+    include: { tasks: true },
   });
 
   return deleteProject;
@@ -59,7 +60,6 @@ const getProject = async (req: NextRequest, user: { id: string }) => {
   const project = await prisma.project.findMany({
     where: { authorId: user.id },
   });
-
   return project;
 };
 

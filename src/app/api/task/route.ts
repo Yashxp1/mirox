@@ -52,8 +52,12 @@ const deleteTask = async (req: NextRequest) => {
 };
 
 const getTask = async (req: NextRequest, user: { id: string }) => {
-  
-  const task = await prisma.task.findMany({ where: { authorId: user.id } });
+  const task = await prisma.task.findMany({
+    where: { authorId: user.id },
+    include: {
+      comments: true,
+    },
+  });
 
   return task;
 };
