@@ -1,11 +1,7 @@
-import React from 'react';
-
 const ProjectCard = () => {
   return (
     <div className="w-full flex justify-between items-center">
-      <div className=" h-screen">
-
-      </div>
+      <div className="h-screen">Project card</div>
     </div>
   );
 };

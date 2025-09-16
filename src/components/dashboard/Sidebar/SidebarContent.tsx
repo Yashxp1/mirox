@@ -30,20 +30,20 @@ const SidebarContent = () => {
       ],
     },
 
-    {
-      title: 'Your teams',
-      teams: [
-        {
-          icon: Cloud,
-          label: 'UI fix',
-          options: [
-            { icon: FileInput, label: 'Issues' },
-            { icon: Box, label: 'Projects' },
-            { icon: Layers, label: 'Views' },
-          ],
-        },
-      ],
-    },
+    // {
+    //   title: 'Your teams',
+    //   teams: [
+    //     {
+    //       icon: Cloud,
+    //       label: 'UI fix',
+    //       options: [
+    //         { icon: FileInput, label: 'Issues' },
+    //         { icon: Box, label: 'Projects' },
+    //         { icon: Layers, label: 'Views' },
+    //       ],
+    //     },
+    //   ],
+    // },
 
     {
       title: 'Try',
