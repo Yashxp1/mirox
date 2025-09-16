@@ -1,3 +1,4 @@
+'use client';
 import {
   CircleDashed,
   Copy,
@@ -6,7 +7,6 @@ import {
   Radio,
 } from 'lucide-react';
 import React from 'react';
-import SignOut from '../auth/SignOut';
 
 interface TopbarProps {
   toggleSidebar: () => void;
@@ -14,29 +14,17 @@ interface TopbarProps {
 
 const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
   const items = [
-    {
-      icon: Copy,
-      label: 'All issues',
-    },
-    {
-      icon: Radio,
-      label: 'Active',
-    },
-    {
-      icon: CircleDashed,
-      label: 'Backlog',
-    },
-    {
-      icon: DiamondPlus,
-      label: null,
-    },
+    { icon: Copy, label: 'All issues' },
+    { icon: Radio, label: 'Active' },
+    { icon: CircleDashed, label: 'Backlog' },
+    { icon: DiamondPlus, label: null },
   ];
 
   return (
     <div className="border border-l-0 gap-2 w-full flex p-1.5">
       <div
         onClick={toggleSidebar}
-        className="flex justify-center items-center hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-lg transition-all px-4"
+        className="flex justify-center items-center hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-lg transition-all px-4 cursor-pointer"
       >
         <PanelRightOpen size={19} strokeWidth={2.5} />
       </div>
@@ -49,9 +37,6 @@ const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
           <p className="text-sm font-medium text-[#E3E4E7]">{i.label}</p>
         </div>
       ))}
-      <div>
-        <SignOut />
-      </div>
     </div>
   );
 };
