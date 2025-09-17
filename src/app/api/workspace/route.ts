@@ -1,6 +1,6 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { CreateWorkSpaceSchema, UpdateWorkSpaceSchema, } from '@/lib/schema';
+import { CreateWorkSpaceSchema, UpdateWorkSpaceSchema } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
 const createWorkSpace = async (req: NextRequest, user: { id: string }) => {

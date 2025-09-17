@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from './auth';
 
-type Hanlder<T> = (
+type Hanlder<T, P = Record<string, string>> = (
   req: NextRequest,
   user: { id: string },
-  ctx: undefined
+  ctx: { params: P }
 ) => Promise<T>;
 
-export function withApiHandler<T>(handler: Hanlder<T>) {
-  return async (req: NextRequest, ctx?: undefined) => {
+export function withApiHandler<T, P = Record<string, string>>(
+  handler: Hanlder<T, P>
+) {
+  return async (req: NextRequest, ctx: { params: P }) => {
     try {
       const session = await auth();
 
