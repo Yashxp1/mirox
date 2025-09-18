@@ -1,5 +1,5 @@
 'use client';
-import { useWorkspaces } from '@/api-hooks/useWorkspaces';
+import { useGetAllWorkspaces } from '@/api-hooks/useWorkspaces';
 import SignOut from '@/components/auth/SignOut';
 import Create from '@/components/icon/Create';
 import {
@@ -9,6 +9,7 @@ import {
   Plus,
   Search,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 
 const SidebarHeader = () => {
@@ -34,7 +35,7 @@ const SidebarHeader = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const { data, error } = useWorkspaces();
+  const { data, error } = useGetAllWorkspaces();
   if (error) return <p>Something went wrong</p>;
 
   return (
@@ -72,7 +73,7 @@ const SidebarHeader = () => {
                   key={ws.id}
                   className="px-3 py-1 rounded-md text-sm font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer transition-colors"
                 >
-                  {ws.name}
+                  <Link href={`/dashboard/${ws.name}`}>{ws.name}</Link>
                 </li>
               ))}
 
