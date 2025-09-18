@@ -45,6 +45,7 @@ export const UpdateWorkSpaceSchema = z.object({
 
 export const CreateProjectSchema = z.object({
   title: z.string().min(1),
+  name: z.string().min(1),
   summary: z.string().nullable().optional(),
   description: z.string().nullable().optional(),
   status: StatusEnum.optional(),
@@ -56,6 +57,7 @@ export const CreateProjectSchema = z.object({
 
 export const UpdateProjectSchema = z.object({
   id: z.number(),
+  name: z.string().min(1),
   title: z.string().optional(),
   summary: z.string().nullable().optional(),
   description: z.string().nullable().optional(),
