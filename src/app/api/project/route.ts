@@ -10,6 +10,7 @@ const createProject = async (req: NextRequest, user: { id: string }) => {
   const project = await prisma.project.create({
     data: {
       title: validatedData.title,
+      name: validatedData.name,
       summary: validatedData.summary,
       description: validatedData.description,
       status: validatedData.status,
@@ -39,6 +40,7 @@ const updateProject = async (req: NextRequest, user: { id: string }) => {
     where: { id: validatedData.id },
     data: {
       title: validatedData.title,
+      name: validatedData.name,
       description: validatedData.description,
       startdate: validatedData.startdate,
       target: validatedData.target,
