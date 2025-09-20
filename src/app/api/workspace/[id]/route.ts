@@ -8,7 +8,8 @@ const updateWorkspace = async (
   user: { id: string },
   ctx?: { params: { id: string } }
 ) => {
-  const workspaceId = await Number(ctx?.params.id);
+  const params = await ctx?.params;
+  const workspaceId = Number(params?.id);
   if (isNaN(workspaceId)) throw new Error('Invalid workspace id');
 
   const body = await req.json();
@@ -27,7 +28,8 @@ const deleteWorkspace = async (
   user: { id: string },
   ctx?: { params: { id: string } }
 ) => {
-  const workspaceId = Number(ctx?.params.id);
+  const params = await ctx?.params;
+  const workspaceId = Number(params?.id);
   if (isNaN(workspaceId)) throw new Error('Invalid workspace id');
 
   const deleteWorkspace = await prisma.workSpace.deleteMany({
@@ -41,5 +43,26 @@ const deleteWorkspace = async (
   return deleteWorkspace;
 };
 
+const getWorkspaceById = async (
+  req: NextRequest,
+  user: { id: string },
+  ctx?: { params: { id: string } }
+) => {
+  
+  const params = await ctx?.params;
+  const workspaceId = Number(params?.id);
+
+  if (isNaN(workspaceId)) {
+    throw new Error('Invalid workspace id');
+  }
+
+  const workspace = await prisma.workSpace.findUnique({
+    where: { id: workspaceId, authorId: user.id },
+  });
+
+  return workspace;
+};
+
 export const PUT = withApiHandler(updateWorkspace);
 export const DELETE = withApiHandler(deleteWorkspace);
+export const GET = withApiHandler(getWorkspaceById);
