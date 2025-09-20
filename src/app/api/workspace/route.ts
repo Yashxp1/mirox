@@ -1,57 +1,33 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { CreateWorkSpaceSchema, UpdateWorkSpaceSchema } from '@/lib/schema';
+import { CreateWorkSpaceSchema } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
-const createWorkSpace = async (req: NextRequest, user: { id: string }) => {
+const createWorkspace = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
-  const validateData = CreateWorkSpaceSchema.parse(body);
+  const validatedData = CreateWorkSpaceSchema.parse(body);
 
-  const workSpace = await prisma.workSpace.create({
+  const workspace = await prisma.workSpace.create({
     data: {
-      name: validateData.name,
-      authorId: user.id,
+      name: validatedData.name,
+      author: { connect: { id: user.id } },
     },
   });
 
-  return workSpace;
+  return workspace;
 };
 
-const updateWorkSpace = async (req: NextRequest) => {
-  const body = await req.json();
-  const validateData = UpdateWorkSpaceSchema.parse(body);
-
-  const update = await prisma.workSpace.update({
-    where: { id: validateData.id },
-    data: {
-      name: validateData.name,
-    },
-  });
-
-  return update;
-};
-const deleteWorkSpace = async (req: NextRequest) => {
-  const { workSpaceId } = await req.json();
-  if (!workSpaceId) {
-    throw new Error('Workspace Id not found!');
-  }
-  const deleteWorkSpace = await prisma.workSpace.delete({
-    where: { id: workSpaceId },
-  });
-  return deleteWorkSpace;
-};
-
-const getWorkSpace = async (req: NextRequest, user: { id: string }) => {
-  const Workspace = await prisma.workSpace.findMany({
+const getAllWorkspace = async (
+  req: NextRequest,
+  user: { id: string }
+  // ctx?: { params: { id: string } }
+) => {
+  const workspace = await prisma.workSpace.findMany({
     where: { authorId: user.id },
-    include: {
-      Project: true,
-    },
   });
-  return Workspace;
+
+  return workspace;
 };
 
-export const POST = withApiHandler(createWorkSpace);
-export const PUT = withApiHandler(updateWorkSpace);
-export const DELETE = withApiHandler(deleteWorkSpace);
-export const GET = withApiHandler(getWorkSpace);
+export const POST = withApiHandler(createWorkspace);
+export const GET = withApiHandler(getAllWorkspace);
