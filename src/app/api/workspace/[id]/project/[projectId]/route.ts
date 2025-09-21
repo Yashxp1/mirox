@@ -19,8 +19,6 @@ const updateProject = async (
   const body = await req.json();
   const validatedData = UpdateProjectSchema.parse(body);
 
-  console.log("ws: ", workspaceId)
-
   const update = await prisma.project.update({
     where: {
       id: projectId,
