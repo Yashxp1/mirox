@@ -27,7 +27,7 @@ model User {
 
   authoredProjects Project[]  @relation("ProjectAuthor")
   createdTasks     Task[]     @relation("TaskAuthor")
-  assignedTasks    Task[]     @relation("TaskAssignee")
+  // assignedTasks    Task[]     @relation("TaskAssignee")
   authoredComment  Comments[] @relation("CommentAuthor")
 }
 
@@ -95,7 +95,7 @@ model WorkSpace {
   author   User   @relation("WorkspaceAuthor", fields: [authorId], references: [id])
   authorId String
 
-  CreatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
@@ -137,8 +137,8 @@ model Task {
   author   User   @relation("TaskAuthor", fields: [authorId], references: [id])
   authorId String
 
-  assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
-  assigneeId String?
+  // assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  // assigneeId String?
 
   comments Comments[]
 
