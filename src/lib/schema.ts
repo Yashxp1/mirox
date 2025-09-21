@@ -39,7 +39,7 @@ export const CreateWorkSpaceSchema = z.object({
 });
 
 export const UpdateWorkSpaceSchema = z.object({
-  id: z.number(),
+  // id: z.number(),
   name: z.string().min(1).optional(),
 });
 
@@ -52,11 +52,11 @@ export const CreateProjectSchema = z.object({
   priority: PriorityEnum.optional(),
   startdate: z.coerce.date().nullable().optional(),
   target: z.coerce.date().nullable().optional(),
-  workspaceId: z.number(),
+  // workspaceId: z.number(),
 });
 
 export const UpdateProjectSchema = z.object({
-  id: z.number(),
+  // id: z.number(),
   name: z.string().min(1),
   title: z.string().optional(),
   summary: z.string().nullable().optional(),
@@ -75,12 +75,12 @@ export const CreateTaskSchema = z.object({
   target: z.coerce.date().nullable().optional(),
   status: StatusEnum.optional(),
   priority: PriorityEnum.optional(),
-  assigneeId: z.string().nullable().optional(),
-  projectId: z.number().nullable(),
+  // assigneeId: z.string().nullable().optional(),
+  // projectId: z.number().nullable(),
 });
 
 export const UpdateTaskSchema = z.object({
-  id: z.number(),
+  // id: z.number(),
   title: z.string().optional(),
   description: z.string().nullable().optional(),
   startdate: z.coerce.date().nullable().optional(),
