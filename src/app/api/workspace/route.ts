@@ -7,6 +7,14 @@ const createWorkspace = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
   const validatedData = CreateWorkSpaceSchema.parse(body);
 
+  const existingUser = await prisma.user.findUnique({
+    where: { id: user.id },
+  });
+
+  if (!existingUser) {
+    throw new Error(`User with id ${user.id} not found`);
+  }
+
   const workspace = await prisma.workSpace.create({
     data: {
       name: validatedData.name,

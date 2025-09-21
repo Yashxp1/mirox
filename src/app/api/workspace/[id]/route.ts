@@ -13,11 +13,11 @@ const updateWorkspace = async (
   if (isNaN(workspaceId)) throw new Error('Invalid workspace id');
 
   const body = await req.json();
-  const validated = UpdateWorkSpaceSchema.parse(body);
+  const validatedData = UpdateWorkSpaceSchema.parse(body);
 
   const updated = await prisma.workSpace.update({
     where: { id: workspaceId, authorId: user.id },
-    data: { name: validated.name },
+    data: { name: validatedData.name },
   });
 
   return updated;
@@ -48,7 +48,6 @@ const getWorkspaceById = async (
   user: { id: string },
   ctx?: { params: { id: string } }
 ) => {
-  
   const params = await ctx?.params;
   const workspaceId = Number(params?.id);
 
