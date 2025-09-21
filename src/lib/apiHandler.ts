@@ -4,13 +4,13 @@ import { auth } from './auth';
 type Hanlder<T, P = Record<string, string>> = (
   req: NextRequest,
   user: { id: string },
-  ctx: { params: P }
+  ctx?: { params: P }
 ) => Promise<T>;
 
 export function withApiHandler<T, P = Record<string, string>>(
   handler: Hanlder<T, P>
 ) {
-  return async (req: NextRequest, ctx: { params: P }) => {
+  return async (req: NextRequest, ctx?: { params: P }) => {
     try {
       const session = await auth();
 
