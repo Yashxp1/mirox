@@ -1,5 +1,6 @@
 'use client';
-import { useGetAllWorkspaces } from '@/api-hooks/useWorkspaces';
+
+import { useGetAllWorkspace } from '@/api-hooks/useWorkspaces';
 import SignOut from '@/components/auth/SignOut';
 import Create from '@/components/icon/Create';
 import {
@@ -35,7 +36,7 @@ const SidebarHeader = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const { data, error } = useGetAllWorkspaces();
+  const { data, error } = useGetAllWorkspace();
   if (error) return <p>Something went wrong</p>;
 
   return (
@@ -73,7 +74,7 @@ const SidebarHeader = () => {
                   key={ws.id}
                   className="px-3 py-1 rounded-md text-sm font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer transition-colors"
                 >
-                  <Link href={`/dashboard/${ws.name}`}>{ws.name}</Link>
+                  <Link href={`/${ws.name}`}>{ws.name}</Link>
                 </li>
               ))}
 
