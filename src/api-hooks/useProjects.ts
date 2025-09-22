@@ -1,47 +1,58 @@
-import { projectApi } from '@/lib/api';
+import { projectApi } from '@/lib/api/projectApi';
 import { Project } from '@/types/project';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 //------ReadAll------
-export function useGetAllProject() {
+export function useGetAllProject(workspaceId: string | number) {
   return useQuery<Project[]>({
-    queryKey: ['projects'],
-    queryFn: projectApi.getAll,
+    queryKey: ['projects', workspaceId],
+    queryFn: () => projectApi.getAll(workspaceId),
     staleTime: 5 * 60 * 1000,
   });
 }
 
 //------ReadOne------
-export function useGetOneProject(id: number) {
+export function useGetOneProject(
+  workspaceId: number | string,
+  projectId: string | number
+) {
   return useQuery<Project>({
-    queryKey: ['projects', id],
-    queryFn: () => projectApi.getOne(id),
+    queryKey: ['projects', workspaceId, projectId],
+    queryFn: () => projectApi.getOne(workspaceId, projectId),
     staleTime: 5 * 60 * 1000,
   });
 }
 
 //------Create------
-export function useCreateProject() {
+export function useCreateProject(workspaceId: string | number) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: projectApi.create,
+    mutationFn: (payload: Omit<Project, 'id'>) =>
+      projectApi.create(workspaceId, payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }),
   });
 }
 //------Update------
-export function useUpdateProject(id: number) {
+export function useUpdateProject(
+  workspaceId: number | string,
+  projectId: string | number
+) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (payload: Partial<Project>) => projectApi.update(id, payload),
+    mutationFn: (payload: Partial<Project>) =>
+      projectApi.update(workspaceId, projectId, payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }),
   });
 }
 
 //------Delete------
-export function useRemoveProject(id: number) {
+export function useRemoveProject(
+  workspaceId: number | string,
+  projectId: string | number
+) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: () => projectApi.remove(id),
+    mutationFn: () => projectApi.remove(workspaceId, projectId),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['projects'] }),
   });
 }

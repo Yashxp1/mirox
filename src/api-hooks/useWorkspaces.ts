@@ -1,9 +1,9 @@
-import { workspaceApi } from '@/lib/api';
+import { workspaceApi } from '@/lib/api/workspaceApi';
 import { Workspace } from '@/types/workspace';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 //------ReadAll------
-export function useGetAllWorkspaces() {
+export function useGetAllWorkspace() {
   return useQuery<Workspace[]>({
     queryKey: ['workspaces'],
     queryFn: workspaceApi.getAll,
@@ -12,16 +12,16 @@ export function useGetAllWorkspaces() {
 }
 
 //------ReadOne------
-export function useGetOneWorkspaces(id: number) {
+export function useGetOneWorkspace(workspaceId: string | number) {
   return useQuery<Workspace>({
-    queryKey: ['workspaces', id],
-    queryFn: () => workspaceApi.getOne(id),
+    queryKey: ['workspaces', workspaceId],
+    queryFn: () => workspaceApi.getOne(workspaceId),
     staleTime: 5 * 60 * 1000,
   });
 }
 
 //------Create------
-export function useCreateWorkspaces() {
+export function useCreateWorkspace() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: workspaceApi.create,
@@ -30,20 +30,20 @@ export function useCreateWorkspaces() {
 }
 
 //------Update------
-export function useUpdateWorkspaces(id: number) {
+export function useUpdateWorkspace(workspaceId: string | number) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (payload: Partial<Workspace>) =>
-      workspaceApi.update(id, payload),
+      workspaceApi.update(workspaceId, payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['workspaces'] }),
   });
 }
 
 //------Delete------
-export function useRemoveWorkspaces(id: number) {
+export function useRemoveWorkspace(workspaceId: string | number) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: () => workspaceApi.remove(id),
+    mutationFn: () => workspaceApi.remove(workspaceId),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['workspaces'] }),
   });
 }
