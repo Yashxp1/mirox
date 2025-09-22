@@ -18,7 +18,6 @@ const SidebarHeader = () => {
   const dropdownRef = useRef(null);
 
   const handlePopUp = () => {
-    console.log('Clicked');
     setIsOpen(!isOpen);
   };
 
@@ -36,7 +35,7 @@ const SidebarHeader = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const { data, error } = useGetAllWorkspace();
+  const { data, error, isLoading } = useGetAllWorkspace();
   if (error) return <p>Something went wrong</p>;
 
   return (
@@ -68,22 +67,28 @@ const SidebarHeader = () => {
               <BriefcaseBusiness size={16} /> Workspaces
             </h1>
 
-            <ul className="flex-1 overflow-y-auto py-2 space-y-1">
-              {data?.map((ws) => (
-                <li
-                  key={ws.id}
-                  className="px-3 py-1 rounded-md text-sm font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer transition-colors"
-                >
-                  <Link href={`/${ws.name}`}>{ws.name}</Link>
-                </li>
-              ))}
+            {isLoading ? (
+              <p className="text-xs text-zinc-500 px-3 py-2">
+                Loading workspace
+              </p>
+            ) : (
+              <ul className="flex-1 overflow-y-auto py-2 space-y-1">
+                {data?.map((ws) => (
+                  <li
+                    key={ws.id}
+                    className="px-3 py-1 rounded-md text-sm font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer transition-colors"
+                  >
+                    <Link href={`/${ws.name}`}>{ws.name}</Link>
+                  </li>
+                ))}
 
-              {(!data || data.length === 0) && (
-                <p className="text-xs text-zinc-500 px-3 py-2">
-                  No workspaces available
-                </p>
-              )}
-            </ul>
+                {(!data || data.length === 0) && (
+                  <p className="text-xs text-zinc-500 px-3 py-2">
+                    No workspaces available
+                  </p>
+                )}
+              </ul>
+            )}
             <div className="w-full flex gap-1 px-2 border justify-center items-center rounded-lg py-1  bg-white text-black">
               <button className=" text-sm text-center">Create workspace</button>
               <Plus size={19} />
