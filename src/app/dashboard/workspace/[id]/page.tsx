@@ -1,11 +1,22 @@
-import React from 'react'
+'use client';
 
-const page = () => {
+import GetProjects from '@/components/project/GetProjects';
+import { useParams } from 'next/navigation';
+
+
+const Page = () => {
+  
+  const params = useParams();
+  const slug = params.id;
+
+  console.log('slug: ', slug)
+
   return (
     <div>
-      <h1 className='text-center'>Workspace page</h1>
+      <h1 className="text-center">Workspace: {slug}</h1>
+      <GetProjects />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
