@@ -78,7 +78,7 @@ const SidebarHeader = () => {
                     key={ws.id}
                     className="px-3 py-1 rounded-md text-sm font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer transition-colors"
                   >
-                    <Link href={`/${ws.name}`}>{ws.name}</Link>
+                    <Link href={`/dashboard/workspace/${ws.id}`}>{ws.name}</Link>
                   </li>
                 ))}
 
