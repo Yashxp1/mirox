@@ -1,8 +1,14 @@
+import Header from '@/components/project/Header';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="flex w-full">{children}</div>;
+  return (
+    <div className=" w-full">
+      <Header />
+      {children}
+    </div>
+  );
 }
