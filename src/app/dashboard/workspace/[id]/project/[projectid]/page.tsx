@@ -1,9 +1,15 @@
-import React from 'react'
+'use client';
+import ProjectById from '@/components/project/ProjectById';
+import TaskHeader from '@/components/Task/TaskHeader';
+import React from 'react';
 
 const page = () => {
   return (
-    <div>Project page</div>
-  )
-}
+    <div>
+      <TaskHeader />
+      <ProjectById />
+    </div>
+  );
+};
 
-export default page
+export default page;

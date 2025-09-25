@@ -1,19 +1,10 @@
-'use client';
-
 import GetProjects from '@/components/project/GetProjects';
-import { useParams } from 'next/navigation';
-
+import Header from '@/components/project/Header';
 
 const Page = () => {
-  
-  const params = useParams();
-  const slug = params.id;
-
-  console.log('slug: ', slug)
-
   return (
-    <div>
-      <h1 className="text-center">Workspace: {slug}</h1>
+    <div className='w-full'>
+        <Header />
       <GetProjects />
     </div>
   );
