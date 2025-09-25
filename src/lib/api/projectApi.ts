@@ -1,11 +1,12 @@
 import { Project } from '@/types/project';
+import axios from 'axios';
 
 const baseURL = '/api/workspace';
 
 export const projectApi = {
   getAll: async (workspaceId: string | number): Promise<Project[]> => {
     const res = await axios.get<{ data: Project[] }>(
-      `${baseURL}/${workspaceId}/`
+      `${baseURL}/${workspaceId}/project`
     );
     return res.data.data;
   },
@@ -15,7 +16,7 @@ export const projectApi = {
     projectId: string | number
   ): Promise<Project> => {
     const res = await axios.get<{ data: Project }>(
-      `${baseURL}/${workspaceId}/${projectId}`
+      `${baseURL}/${workspaceId}/project/${projectId}`
     );
     return res.data.data;
   },
