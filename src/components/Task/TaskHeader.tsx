@@ -46,9 +46,9 @@ const TaskHeader = () => {
           )}
         </h2>
 
-        {/* <h2 className="bg-zinc-800 px-2 py-1 rounded-md flex justify-center items-center gap-2">
+        <h2 className="bg-zinc-800 px-2 py-1 rounded-md flex justify-center items-center gap-2">
           <ClipboardList size={15} /> Tasks
-        </h2> */}
+        </h2>
       </div>
       <div className="flex justify-center items-center gap-8">
         <Link size={16} />

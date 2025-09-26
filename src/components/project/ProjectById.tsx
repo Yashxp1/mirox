@@ -18,6 +18,8 @@ const ProjectById = () => {
   const workspaceId = params.id as string;
   const projectId = params.projectid as string;
   const { data, error, isLoading } = useGetOneProject(workspaceId, projectId);
+
+  if (error) return <p className='text-3xl flex justify-center items-center'>A error occured</p>;
   return (
     <div>
       {isLoading ? (
@@ -99,7 +101,7 @@ const ProjectById = () => {
             </div>
 
             <div className="font-[500] flex flex-col gap-6 py-14">
-              <h2 className='text-zinc-400'>Description</h2>
+              <h2 className="text-zinc-400">Description</h2>
               {data?.description ? (
                 data.description
               ) : (
