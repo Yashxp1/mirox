@@ -1,8 +1,9 @@
 'use client';
 import { useGetOneWorkspace } from '@/api-hooks/useWorkspaces';
-import { Box, BriefcaseBusiness, Link, Plus } from 'lucide-react';
+import { Box, BriefcaseBusiness, Link } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React from 'react';
+import AddProject from './AddProject';
 
 const Header = () => {
   const params = useParams();
@@ -27,9 +28,9 @@ const Header = () => {
       </div>
       <div className="flex justify-center items-center gap-8">
         <Link size={16} />
-        <div className="flex justify-center items-center gap-2  hover:bg-zinc-800 rounded-md px-2 py-1">
-          <Plus size={16} />
-          <p className="">Add Project</p>
+        <div className="flex justify-center items-center gap-2 rounded-md px-2 py-1">
+      
+          <AddProject />
         </div>
       </div>
     </div>
