@@ -78,7 +78,9 @@ const SidebarHeader = () => {
                     key={ws.id}
                     className="px-3 py-1 rounded-md text-sm font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer transition-colors"
                   >
-                    <Link href={`/dashboard/workspace/${ws.id}`}>{ws.name}</Link>
+                    <Link href={`/dashboard/workspace/${ws.id}`}>
+                      {ws.name}
+                    </Link>
                   </li>
                 ))}
 
@@ -89,10 +91,14 @@ const SidebarHeader = () => {
                 )}
               </ul>
             )}
-            <div className="w-full flex gap-1 px-2 border justify-center items-center rounded-lg py-1  bg-white text-black">
-              <button className=" text-sm text-center">Create workspace</button>
-              <Plus size={19} />
-            </div>
+            <Link href='/room'>
+              <div className="w-full flex gap-1 px-2 border justify-center items-center rounded-lg py-1  bg-white text-black">
+                <button className=" text-sm text-center">
+                  Create workspace
+                </button>
+                <Plus size={19} />
+              </div>
+            </Link>
           </div>
 
           <div className="pt-1">

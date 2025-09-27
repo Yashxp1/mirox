@@ -1,7 +1,14 @@
+import JoinRoom from '@/components/dashboard/JoinRoom';
+import Topbar from '@/components/dashboard/Topbar';
 import React from 'react';
 
 const page = () => {
-  return <div>This is dashboard</div>;
+  return (
+    <div >
+      <Topbar />
+      <JoinRoom/>
+    </div>
+  );
 };
 
 export default page;
