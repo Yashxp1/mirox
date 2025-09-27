@@ -4,5 +4,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="w-full bg-[#0F0F10]">{children}</div>;
+  return <div className="w-full h-screen bg-[#0F0F10]">{children}</div>;
 }
