@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import {
@@ -10,7 +11,7 @@ import {
   X,
 } from 'lucide-react';
 
-const AddProject = () => {
+const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleModal = () => {
@@ -25,12 +26,12 @@ const AddProject = () => {
       </Button>
       {isOpen && (
         <div className="fixed inset-0 text-zinc-200 flex items-center justify-center bg-black/70 z-50 transition-all">
-          <div className="bg-[#1c1d1f]  w-[60%] h-[80%] rounded-lg border flex flex-col">
+          <div className="bg-[#1c1d1f]  w-[60%] h-[50%] rounded-lg border flex flex-col">
             <div className="p-6 flex-1 overflow-y-auto">
               <div className="flex justify-between ">
                 <p className="flex gap-2 ">
                   <Box size={18} />
-                  New Project
+                  New Task
                 </p>
                 <X onClick={() => setIsOpen(false)} />
               </div>
@@ -38,12 +39,12 @@ const AddProject = () => {
                 <input
                   className="text-3xl font-[500] focus:outline-none focus:ring-0"
                   type="text"
-                  placeholder="Project"
+                  placeholder="Task title"
                 />
                 <input
                   className="text-lg pb-6 focus:outline-none focus:ring-0"
                   type="text"
-                  placeholder="Add a short summary..."
+                  placeholder="Add a short description..."
                 />
               </div>
               <div className="flex pb-8 justify-start gap-2 flex-wrap">
@@ -67,13 +68,13 @@ const AddProject = () => {
                   <span>Status</span>
                 </div>
               </div>
-              <hr />
-              <div className="pt-6 text-lg">
+              {/* <hr /> */}
+              {/* <div className="pt-6 text-lg">
                 <textarea
                   placeholder="Write a description..."
-                  className="focus:outline-none ring-0 w-full"
+                  className="focus:outline-none ring-0"
                 />
-              </div>
+              </div> */}
             </div>
             <div className="flex border-t px-6 py-4 gap-3 justify-end items-end">
               <Button variant="outline" onClick={() => setIsOpen(false)}>
@@ -88,4 +89,4 @@ const AddProject = () => {
   );
 };
 
-export default AddProject;
+export default AddTask;

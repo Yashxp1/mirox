@@ -10,7 +10,7 @@ const Header = () => {
   const id = params.id as string;
   const { data, error, isLoading } = useGetOneWorkspace(id);
   return (
-    <div className="flex justify-between items-center text-sm cursor-default p-4 py-3  border-b">
+    <div className="flex justify-between items-center text-sm cursor-default p-4 py-1  border-b">
       <div className="flex gap-2">
         <h2 className="bg-zinc-800 px-2 py-1 rounded-md flex justify-center items-center gap-2">
           {isLoading ? (
