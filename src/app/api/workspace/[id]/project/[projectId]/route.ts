@@ -9,10 +9,10 @@ const updateProject = async (
   ctx?: { params: { id: string; projectId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
 
-  if (isNaN(workspaceId) || isNaN(projectId)) {
+  if (!workspaceId || isNaN(projectId)) {
     throw new Error('Invalid workspace or project id');
   }
 
@@ -47,10 +47,10 @@ const getProjectById = async (
   ctx?: { params: { id: string; projectId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
 
-  if (isNaN(workspaceId) || isNaN(projectId)) {
+  if (!workspaceId || isNaN(projectId)) {
     throw new Error('Invalid workspace or project id');
   }
 
@@ -77,10 +77,10 @@ const deleteProject = async (
   ctx?: { params: { id: string; projectId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
 
-  if (isNaN(workspaceId) || isNaN(projectId)) {
+  if (!workspaceId || isNaN(projectId)) {
     throw new Error('Invalid workspace or project id');
   }
 

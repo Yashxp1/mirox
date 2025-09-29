@@ -9,8 +9,8 @@ const updateWorkspace = async (
   ctx?: { params: { id: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
-  if (isNaN(workspaceId)) throw new Error('Invalid workspace id');
+  const workspaceId = params?.id;
+  if (!workspaceId) throw new Error('Invalid workspace id');
 
   const body = await req.json();
   const validatedData = UpdateWorkSpaceSchema.parse(body);
@@ -29,8 +29,8 @@ const deleteWorkspace = async (
   ctx?: { params: { id: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
-  if (isNaN(workspaceId)) throw new Error('Invalid workspace id');
+  const workspaceId = params?.id;
+  if (!workspaceId) throw new Error('Invalid workspace id');
 
   const deleteWorkspace = await prisma.workSpace.deleteMany({
     where: { id: workspaceId, authorId: user.id },
@@ -49,9 +49,9 @@ const getWorkspaceById = async (
   ctx?: { params: { id: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id;
 
-  if (isNaN(workspaceId)) {
+  if (!workspaceId) {
     throw new Error('Invalid workspace id');
   }
 

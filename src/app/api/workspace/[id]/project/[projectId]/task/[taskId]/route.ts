@@ -10,11 +10,11 @@ const updateTask = async (
 ) => {
   const params = await ctx?.params;
 
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
   const taskId = Number(params?.taskId);
 
-  if (isNaN(projectId) || isNaN(taskId) || isNaN(workspaceId))
+  if (isNaN(projectId) || isNaN(taskId) || !workspaceId)
     throw new Error('Invalid task id or project id');
 
   const body = await req.json();
@@ -43,11 +43,11 @@ const deleteTask = async (
   ctx?: { params: { id: string; projectId: string; taskId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
   const taskId = Number(params?.taskId);
 
-  if (isNaN(projectId) || isNaN(taskId) || isNaN(workspaceId))
+  if (isNaN(projectId) || isNaN(taskId) || !workspaceId)
     throw new Error('Invalid task id or project id');
 
   const deleteTask = await prisma.task.deleteMany({
@@ -68,11 +68,11 @@ const getTaskById = async (
 ) => {
   const params = await ctx?.params;
 
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
   const taskId = Number(params?.taskId);
 
-  if (isNaN(projectId) || isNaN(taskId) || isNaN(workspaceId)) {
+  if (isNaN(projectId) || isNaN(taskId) || !workspaceId) {
     throw new Error('Invalid task i or project idd');
   }
 

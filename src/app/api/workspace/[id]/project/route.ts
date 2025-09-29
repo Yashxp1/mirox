@@ -9,9 +9,9 @@ const createProject = async (
   ctx?: { params: { id: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = (params?.id);
 
-  if (isNaN(workspaceId)) throw new Error('Invalid workspace id');
+  if (!workspaceId) throw new Error('Invalid workspace id');
 
   const body = await req.json();
   const validatedData = CreateProjectSchema.parse(body);
@@ -46,9 +46,9 @@ const getProject = async (
   ctx?: { params: { id: string; projectId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
 
-  if (isNaN(workspaceId)) throw new Error('Invalid workspace id');
+  if (!workspaceId) throw new Error('Invalid workspace id');
 
   const workspace = await prisma.workSpace.findFirst({
     where: { id: workspaceId, authorId: user.id },

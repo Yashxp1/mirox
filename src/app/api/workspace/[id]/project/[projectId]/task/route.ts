@@ -10,10 +10,10 @@ const createTask = async (
 ) => {
   const params = await ctx?.params;
 
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
 
-  if (isNaN(projectId) || isNaN(workspaceId))
+  if (isNaN(projectId) || !workspaceId)
     throw new Error('Invalid project id');
 
   const body = await req.json();
@@ -52,10 +52,10 @@ const getTask = async (
   ctx?: { params: { id: string; projectId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = Number(params?.id);
+  const workspaceId = params?.id
   const projectId = Number(params?.projectId);
 
-  if (isNaN(projectId) || isNaN(workspaceId))
+  if (isNaN(projectId) || !workspaceId)
     throw new Error('Invalid project id');
 
   const project = await prisma.project.findUnique({
