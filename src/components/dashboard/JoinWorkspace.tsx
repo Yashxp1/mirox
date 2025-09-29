@@ -9,7 +9,7 @@ interface WorkspaceResponse {
   id: string;
 }
 
-const JoinRoom = () => {
+const JoinWorkspace = () => {
   const [roomId, setRoomId] = useState<string>('');
   const router = useRouter();
 
@@ -51,4 +51,4 @@ const JoinRoom = () => {
   );
 };
 
-export default JoinRoom;
+export default JoinWorkspace;
