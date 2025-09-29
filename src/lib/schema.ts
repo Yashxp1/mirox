@@ -36,6 +36,7 @@ export const PriorityEnum = z.enum(['LOW', 'HIGH', 'MEDIUM', 'NONE']);
 
 export const CreateWorkSpaceSchema = z.object({
   name: z.string().min(1),
+  inviteId: z.string().optional(),
 });
 
 export const UpdateWorkSpaceSchema = z.object({
@@ -45,6 +46,7 @@ export const UpdateWorkSpaceSchema = z.object({
 
 export const CreateProjectSchema = z.object({
   title: z.string().min(1),
+  // publicId: z.string(),
   name: z.string().min(1),
   summary: z.string().nullable().optional(),
   description: z.string().nullable().optional(),
