@@ -23,11 +23,13 @@ model User {
   updatedAt DateTime @updatedAt
 
   // workspace         WorkSpace[]
-  authoredWorkspace WorkSpace[] @relation("WorkspaceAuthor")
+  authoredWorkspace    WorkSpace[]       @relation("WorkspaceAuthor")
+  workspaceMemberships WorkspaceMember[]
 
   authoredProjects Project[]  @relation("ProjectAuthor")
   createdTasks     Task[]     @relation("TaskAuthor")
-  // assignedTasks    Task[]     @relation("TaskAssignee")
+  assignedTasks    Task[]     @relation("TaskAssignee")
+  assignedProject  Project[]  @relation("ProjectAssignee")
   authoredComment  Comments[] @relation("CommentAuthor")
 }
 
@@ -87,10 +89,12 @@ model Authenticator {
 }
 
 model WorkSpace {
-  id   Int    @id @default(autoincrement())
+  id   String @unique @default(cuid())
+  // publicId String @unique @default(cuid())
   name String
 
   Project Project[]
+  members WorkspaceMember[]
 
   author   User   @relation("WorkspaceAuthor", fields: [authorId], references: [id])
   authorId String
@@ -99,10 +103,26 @@ model WorkSpace {
   updatedAt DateTime @updatedAt
 }
 
-model Project {
-  id   Int    @id @default(autoincrement())
-  name String
+model WorkspaceMember {
+  id   Int           @id @default(autoincrement())
+  role WorkspaceRole @default(MEMBER)
 
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  workspace   WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  invitedBy String?
+  joinedAt  DateTime @default(now())
+
+  @@unique([userId, workspaceId])
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  // publicId    String    @unique @default(cuid())
+  name        String
   title       String
   summary     String?
   description String?
@@ -118,8 +138,11 @@ model Project {
   author   User   @relation("ProjectAuthor", fields: [authorId], references: [id])
   authorId String
 
+  assignee   User?   @relation("ProjectAssignee", fields: [assigneeId], references: [id])
+  assigneeId String?
+
   workspace   WorkSpace? @relation(fields: [workspaceId], references: [id])
-  workspaceId Int?
+  workspaceId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -137,8 +160,8 @@ model Task {
   author   User   @relation("TaskAuthor", fields: [authorId], references: [id])
   authorId String
 
-  // assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
-  // assigneeId String?
+  assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  assigneeId String?
 
   comments Comments[]
 
@@ -179,4 +202,11 @@ enum Status {
   COMPLETED
   BACKLOG
   CANCELED
+}
+
+enum WorkspaceRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
 }
