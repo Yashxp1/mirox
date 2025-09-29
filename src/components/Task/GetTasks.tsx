@@ -47,7 +47,11 @@ const GetTasks = () => {
                 <div className="flex-1 flex gap-2 p-4">
                   {' '}
                   <ClipboardList size={15} />
-                  {task.title || '-'}
+                  {task.title
+                    ? task.title.length > 30
+                      ? task.title.slice(0, 30) + '...'
+                      : task.title
+                    : '-'}
                 </div>
 
                 <div className="flex-1 p-4 flex gap-2 ">

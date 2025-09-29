@@ -1,11 +1,11 @@
 'use client';
 import { useGetOneProject } from '@/api-hooks/useProjects';
 import { useGetOneWorkspace } from '@/api-hooks/useWorkspaces';
-import { Box, BriefcaseBusiness, ClipboardList, Link } from 'lucide-react';
+import { Box, BriefcaseBusiness, ClipboardList, Link2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React from 'react';
 import AddTask from './AddTask';
-import { Button } from '../ui/button';
+import Link from 'next/link';
 
 const TaskHeader = () => {
   const params = useParams();
@@ -19,8 +19,8 @@ const TaskHeader = () => {
   const { data, error, isLoading } = useGetOneProject(workspaceId, projectId);
   console.log('pid: ', projectId);
   return (
-    <div className="flex justify-between items-center text-sm cursor-default p-4 py-1  border-b">
-      <div className="flex gap-2">
+    <div className="flex justify-between items-center text-xs cursor-default p-4 py-1  border-b">
+      <div className="flex justify-center items-center gap-2 text-xs">
         <h2 className="bg-zinc-800 px-2 py-1 rounded-md flex justify-center items-center gap-2">
           {wsLoading ? (
             'Loading...'
@@ -41,13 +41,18 @@ const TaskHeader = () => {
             </>
           )}
         </h2>
-
-        <Button variant="ghost">
-          <ClipboardList size={15} /> Tasks
-        </Button>
+        <Link
+          href={`/dashboard/workspace/${workspaceId}/project/${projectId}/task`}
+        >
+          <h2 className="hover:bg-zinc-800 px-2 py-1 rounded-md flex justify-center items-center gap-2">
+            <ClipboardList size={15} /> Tasks
+          </h2>
+        </Link>
+        {/* <Button variant="ghost">
+        </Button> */}
       </div>
       <div className="flex justify-center items-center gap-8">
-        <Link size={16} />
+        <Link2 size={16} />
         <AddTask />
       </div>
     </div>

@@ -91,7 +91,7 @@ const SidebarHeader = () => {
                 )}
               </ul>
             )}
-            <Link href='/room'>
+            <Link href='/dashboard'>
               <div className="w-full flex gap-1 px-2 border justify-center items-center rounded-lg py-1  bg-white text-black">
                 <button className=" text-sm text-center">
                   Create workspace
