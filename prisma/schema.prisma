@@ -90,13 +90,12 @@ model Authenticator {
 
 model WorkSpace {
   id   String @unique @default(cuid())
-  // publicId String @unique @default(cuid())
   name String
 
   Project Project[]
   members WorkspaceMember[]
 
-  author   User   @relation("WorkspaceAuthor", fields: [authorId], references: [id])
+  author   User   @relation("WorkspaceAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   createdAt DateTime @default(now())
@@ -113,6 +112,7 @@ model WorkspaceMember {
   workspace   WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
 
+
   invitedBy String?
   joinedAt  DateTime @default(now())
 
@@ -121,9 +121,7 @@ model WorkspaceMember {
 
 model Project {
   id          Int       @id @default(autoincrement())
-  // publicId    String    @unique @default(cuid())
   name        String
-  title       String
   summary     String?
   description String?
   startdate   DateTime?
@@ -141,7 +139,7 @@ model Project {
   assignee   User?   @relation("ProjectAssignee", fields: [assigneeId], references: [id])
   assigneeId String?
 
-  workspace   WorkSpace? @relation(fields: [workspaceId], references: [id])
+  workspace   WorkSpace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String?
 
   createdAt DateTime @default(now())
@@ -165,7 +163,7 @@ model Task {
 
   comments Comments[]
 
-  Project   Project? @relation(fields: [projectId], references: [id])
+  Project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId Int?
 
   createdAt DateTime @default(now())
@@ -197,7 +195,7 @@ enum Priority {
 
 enum Status {
   DONE
-  IN_PROGRESS
+  In_PROGRESS
   PLANNED
   COMPLETED
   BACKLOG
