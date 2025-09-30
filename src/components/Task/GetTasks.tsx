@@ -37,8 +37,8 @@ const GetTasks = () => {
             {/* <div className="flex-1 p-4">Status</div> */}
             <div className="flex-1 p-4">Priority</div>
           </div>
-
           {data?.map((task) => (
+            
             <Link
               href={`/dashboard/workspace/${workspaceSlug}/project/${projectSlug}/task/${task.id}`}
               key={task.id}
