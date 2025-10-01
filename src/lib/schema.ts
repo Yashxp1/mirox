@@ -40,7 +40,6 @@ export const CreateWorkSpaceSchema = z.object({
 });
 
 export const UpdateWorkSpaceSchema = z.object({
-  // id: z.number(),
   name: z.string().min(1).optional(),
 });
 
@@ -52,7 +51,6 @@ export const CreateProjectSchema = z.object({
   priority: PriorityEnum.optional(),
   startdate: z.coerce.date().nullable().optional(),
   target: z.coerce.date().nullable().optional(),
-  // workspaceId: z.number(),
 });
 
 export const UpdateProjectSchema = z.object({
@@ -76,7 +74,6 @@ export const CreateTaskSchema = z.object({
 });
 
 export const UpdateTaskSchema = z.object({
-  // id: z.number(),
   title: z.string().optional(),
   description: z.string().nullable().optional(),
   startdate: z.coerce.date().nullable().optional(),
@@ -84,4 +81,10 @@ export const UpdateTaskSchema = z.object({
   status: StatusEnum.optional(),
   priority: PriorityEnum.optional(),
   assigneeId: z.string().nullable().optional(),
+});
+
+// ===== role =====
+export const roleUpdateSchema = z.object({
+  targetUserId: z.string().min(1),
+  role: z.enum(['OWNER', 'ADMIN', 'MEMBER', 'VIEWER']),
 });
