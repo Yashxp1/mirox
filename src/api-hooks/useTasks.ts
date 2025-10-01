@@ -9,7 +9,7 @@ export function useGetAllTasks(
 ) {
   return useQuery<Task[]>({
     queryKey: ['projects', workspaceId, projectId],
-    queryFn: () => taskApi.getAll(workspaceId, projectId),
+    queryFn: () => taskApi.getAll(workspaceId, projectId) || [],
     staleTime: 5 * 60 * 1000,
   });
 }
