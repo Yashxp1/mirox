@@ -55,9 +55,26 @@ const getWorkspaceById = async (
     throw new Error('Invalid workspace id');
   }
 
-  const workspace = await prisma.workSpace.findUnique({
-    where: { id: workspaceId, authorId: user.id },
+ 
+  const membership = await prisma.workspaceMember.findFirst({
+    where: {
+      workspaceId,
+      userId: user.id,
+    },
   });
+
+  const workspace = await prisma.workSpace.findUnique({
+    where: { id: workspaceId },
+    include: {
+      members: { include: { user: true } },
+    },
+  });
+
+  if (!workspace) throw new Error('Workspace not found');
+
+  if (workspace.authorId !== user.id && !membership) {
+    throw new Error('Not authorized to access this workspace');
+  }
 
   return workspace;
 };

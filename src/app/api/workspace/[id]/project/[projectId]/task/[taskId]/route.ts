@@ -10,7 +10,7 @@ const updateTask = async (
 ) => {
   const params = await ctx?.params;
 
-  const workspaceId = params?.id
+  const workspaceId = params?.id;
   const projectId = Number(params?.projectId);
   const taskId = Number(params?.taskId);
 
@@ -23,7 +23,6 @@ const updateTask = async (
   const updated = await prisma.task.update({
     where: { id: taskId, authorId: user.id, projectId },
     data: {
-      //  id: z.number(),
       title: validatedData.title,
       description: validatedData.description,
       startdate: validatedData.startdate,
@@ -43,7 +42,7 @@ const deleteTask = async (
   ctx?: { params: { id: string; projectId: string; taskId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = params?.id
+  const workspaceId = params?.id;
   const projectId = Number(params?.projectId);
   const taskId = Number(params?.taskId);
 
@@ -68,7 +67,7 @@ const getTaskById = async (
 ) => {
   const params = await ctx?.params;
 
-  const workspaceId = params?.id
+  const workspaceId = params?.id;
   const projectId = Number(params?.projectId);
   const taskId = Number(params?.taskId);
 

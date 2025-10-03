@@ -25,6 +25,7 @@ model User {
   // workspace         WorkSpace[]
   authoredWorkspace    WorkSpace[]       @relation("WorkspaceAuthor")
   workspaceMemberships WorkspaceMember[]
+  projectMemberships   projectMemeber[]
 
   authoredProjects Project[]  @relation("ProjectAuthor")
   createdTasks     Task[]     @relation("TaskAuthor")
@@ -112,11 +113,26 @@ model WorkspaceMember {
   workspace   WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
 
-
   invitedBy String?
   joinedAt  DateTime @default(now())
 
   @@unique([userId, workspaceId])
+}
+
+model projectMemeber {
+  id   Int         @id @default(autoincrement())
+  role ProjectRole @default(MEMBER)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId Int
+
+  invitedBy String?
+  joinedAt  DateTime @default(now())
+
+  @@unique([userId, projectId])
 }
 
 model Project {
@@ -126,6 +142,8 @@ model Project {
   description String?
   startdate   DateTime?
   target      DateTime?
+
+  member projectMemeber[]
 
   priority Priority @default(NONE)
   status   Status   @default(PLANNED)
@@ -207,4 +225,10 @@ enum WorkspaceRole {
   ADMIN
   MEMBER
   VIEWER
+}
+
+enum ProjectRole {
+  OWNER
+  ADMIN
+  MEMBER
 }

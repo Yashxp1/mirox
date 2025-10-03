@@ -19,19 +19,21 @@ const createWorkspace = async (req: NextRequest, user: { id: string }) => {
     data: {
       name: validatedData.name,
       author: { connect: { id: user.id } },
+      members: {
+        create: { userId: user.id, role: 'OWNER' },
+      },
+    },
+    include: {
+      members: true,
     },
   });
 
   return workspace;
 };
 
-const getAllWorkspace = async (
-  req: NextRequest,
-  user: { id: string }
-  // ctx?: { params: { id: string } }
-) => {
+const getAllWorkspace = async (req: NextRequest, user: { id: string }) => {
   const workspace = await prisma.workSpace.findMany({
-    where: { authorId: user.id },
+    where: { authorId: user.id,  },
   });
 
   return workspace;

@@ -9,7 +9,7 @@ const createProject = async (
   ctx?: { params: { id: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = (params?.id);
+  const workspaceId = params?.id;
 
   if (!workspaceId) throw new Error('Invalid workspace id');
 
@@ -24,7 +24,6 @@ const createProject = async (
 
   const project = await prisma.project.create({
     data: {
-      title: validatedData.title,
       name: validatedData.name,
       summary: validatedData.summary,
       description: validatedData.description,
@@ -46,7 +45,7 @@ const getProject = async (
   ctx?: { params: { id: string; projectId: string } }
 ) => {
   const params = await ctx?.params;
-  const workspaceId = params?.id
+  const workspaceId = params?.id;
 
   if (!workspaceId) throw new Error('Invalid workspace id');
 

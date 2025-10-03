@@ -23,11 +23,9 @@ const updateProject = async (
     where: {
       id: projectId,
       authorId: user.id,
-      // workspaceId: workspaceId,
     },
     data: {
       name: validatedData.name,
-      title: validatedData.title,
       summary: validatedData.summary,
       description: validatedData.description,
       status: validatedData.status,

@@ -10,6 +10,7 @@ const joinWorkspace = async (
 ) => {
   const params = await ctx?.params;
   const workspaceId = params?.id;
+
   if (!workspaceId) throw new Error('Invalid workspace id');
 
   const checkWorkspace = await prisma.workSpace.findUnique({
@@ -110,32 +111,30 @@ const updateRole = async (
 
   const body = await req.json();
   const validateData = roleUpdateSchema.parse(body);
-  
-   const { targetUserId, role } = validateData;
 
   if (!workspaceId) {
     throw new Error('Workspace not found');
   }
 
-  const memebership = await prisma.workspaceMember.findFirst({
+  const membership = await prisma.workspaceMember.findFirst({
     where: {
       workspaceId,
       userId: user.id,
     },
   });
 
-  if (!memebership || !['OWNER', 'ADMIN'].includes(memebership.role)) {
+  if (!membership || !['OWNER', 'ADMIN'].includes(membership.role)) {
     throw new Error('Not authorized to change roles');
   }
 
   const updateRole = await prisma.workspaceMember.update({
     where: {
       userId_workspaceId: {
-        userId: user.id,
+        userId: validateData.targetUserId,
         workspaceId,
       },
     },
-    data: { role: validateData,  },
+    data: { role: validateData.role },
   });
 
   return updateRole;
