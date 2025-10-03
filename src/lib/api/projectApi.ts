@@ -26,7 +26,7 @@ export const projectApi = {
     payload: Omit<Project, 'id'>
   ): Promise<Project> => {
     const res = await axios.post<{ data: Project }>(
-      `${baseURL}/${workspaceId}`,
+      `${baseURL}/${workspaceId}/project`,
       payload
     );
     return res.data.data;

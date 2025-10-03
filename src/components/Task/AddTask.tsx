@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import {
@@ -10,6 +10,10 @@ import {
   Plus,
   X,
 } from 'lucide-react';
+import Priority from '../dropDown/Priority';
+import Status from '../dropDown/Status';
+import StartDate from '../dropDown/StartDate';
+import Target from '../dropDown/Target';
 
 const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,25 +52,10 @@ const AddTask = () => {
                 />
               </div>
               <div className="flex pb-8 justify-start gap-2 flex-wrap">
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 border border-zinc-700 text-sm text-zinc-300 hover:bg-zinc-800 cursor-pointer">
-                  <CircleDotDashed size={16} />
-                  <span>Priority</span>
-                </div>
-
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 border border-zinc-700 text-sm text-zinc-300 hover:bg-zinc-800 cursor-pointer">
-                  <CalendarArrowUp size={16} />
-                  <span>Start Date</span>
-                </div>
-
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 border border-zinc-700 text-sm text-zinc-300 hover:bg-zinc-800 cursor-pointer">
-                  <Crosshair size={16} />
-                  <span>Target</span>
-                </div>
-
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 border border-zinc-700 text-sm text-zinc-300 hover:bg-zinc-800 cursor-pointer">
-                  <ChartNoAxesColumn size={16} />
-                  <span>Status</span>
-                </div>
+                <Priority />
+                <Status />
+                <StartDate />
+                <Target />
               </div>
               {/* <hr /> */}
               {/* <div className="pt-6 text-lg">
