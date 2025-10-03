@@ -25,7 +25,7 @@ model User {
   // workspace         WorkSpace[]
   authoredWorkspace    WorkSpace[]       @relation("WorkspaceAuthor")
   workspaceMemberships WorkspaceMember[]
-  projectMemberships   projectMemeber[]
+  projectMemberships   ProjectMemeber[]
 
   authoredProjects Project[]  @relation("ProjectAuthor")
   createdTasks     Task[]     @relation("TaskAuthor")
@@ -119,7 +119,35 @@ model WorkspaceMember {
   @@unique([userId, workspaceId])
 }
 
-model projectMemeber {
+model Project {
+  id          Int       @id @default(autoincrement())
+  name        String
+  summary     String?
+  description String?
+  startdate   DateTime?
+  target      DateTime?
+
+  member ProjectMemeber[]
+
+  priority Priority @default(NONE)
+  status   Status   @default(PLANNED)
+
+  tasks Task[]
+
+  author   User   @relation("ProjectAuthor", fields: [authorId], references: [id])
+  authorId String
+
+  assignee   User?   @relation("ProjectAssignee", fields: [assigneeId], references: [id])
+  assigneeId String?
+
+  workspace   WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProjectMemeber {
   id   Int         @id @default(autoincrement())
   role ProjectRole @default(MEMBER)
 
@@ -135,35 +163,6 @@ model projectMemeber {
   @@unique([userId, projectId])
 }
 
-model Project {
-  id          Int       @id @default(autoincrement())
-  name        String
-  summary     String?
-  description String?
-  startdate   DateTime?
-  target      DateTime?
-
-  member projectMemeber[]
-
-  priority Priority @default(NONE)
-  status   Status   @default(PLANNED)
-
-  tasks Task[]
-  // comments Comments[]
-
-  author   User   @relation("ProjectAuthor", fields: [authorId], references: [id])
-  authorId String
-
-  assignee   User?   @relation("ProjectAssignee", fields: [assigneeId], references: [id])
-  assigneeId String?
-
-  workspace   WorkSpace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Task {
   id          Int       @id @default(autoincrement())
   title       String
@@ -176,13 +175,13 @@ model Task {
   author   User   @relation("TaskAuthor", fields: [authorId], references: [id])
   authorId String
 
-  assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
   assigneeId String?
 
   comments Comments[]
 
-  Project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId Int?
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -192,13 +191,11 @@ model Comments {
   id Int @id @default(autoincrement())
 
   body String
-  // filetype String?
-  // fileUrl  String?
 
-  issue   Task @relation(fields: [issueId], references: [id])
+  issue   Task @relation(fields: [issueId], references: [id], onDelete: Cascade)
   issueId Int
 
-  author   User   @relation("CommentAuthor", fields: [authorId], references: [id])
+  author   User   @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   createdAt DateTime @default(now())
@@ -213,7 +210,7 @@ enum Priority {
 
 enum Status {
   DONE
-  In_PROGRESS
+  IN_PROGRESS
   PLANNED
   COMPLETED
   BACKLOG
