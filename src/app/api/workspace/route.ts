@@ -33,7 +33,7 @@ const createWorkspace = async (req: NextRequest, user: { id: string }) => {
 
 const getAllWorkspace = async (req: NextRequest, user: { id: string }) => {
   const workspace = await prisma.workSpace.findMany({
-    where: { authorId: user.id,  },
+    where: { authorId: user.id },
   });
 
   return workspace;

@@ -61,7 +61,7 @@ const getMembers = async (
       workspaceId,
     },
     include: {
-      user: true,
+      user: true, 
     },
   });
 
@@ -85,6 +85,7 @@ const leaveWorkspace = async (
   if (!workspace) {
     throw new Error('Workspace not found');
   }
+
   if (workspace.authorId === user.id) {
     throw new Error('Owner cannot leave the workspace');
   }
