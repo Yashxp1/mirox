@@ -45,6 +45,7 @@ export const UpdateWorkSpaceSchema = z.object({
 
 export const CreateProjectSchema = z.object({
   name: z.string().min(1),
+  workspaceId: z.string().min(1),
   summary: z.string().nullable().optional(),
   description: z.string().nullable().optional(),
   status: StatusEnum.optional(),
@@ -55,6 +56,7 @@ export const CreateProjectSchema = z.object({
 
 export const UpdateProjectSchema = z.object({
   name: z.string().min(1),
+  workspaceId: z.string().min(1),
   summary: z.string().nullable().optional(),
   description: z.string().nullable().optional(),
   status: StatusEnum.optional(),
@@ -71,6 +73,7 @@ export const CreateTaskSchema = z.object({
   target: z.coerce.date().nullable().optional(),
   status: StatusEnum.optional(),
   priority: PriorityEnum.optional(),
+  assigneeId: z.string().min(1).optional(),
 });
 
 export const UpdateTaskSchema = z.object({
