@@ -77,11 +77,14 @@ CREATE TABLE "public"."Authenticator" (
 
 -- CreateTable
 CREATE TABLE "public"."WorkSpace" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "publicId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "WorkSpace_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -89,7 +92,7 @@ CREATE TABLE "public"."WorkspaceMember" (
     "id" SERIAL NOT NULL,
     "role" "public"."WorkspaceRole" NOT NULL DEFAULT 'MEMBER',
     "userId" TEXT NOT NULL,
-    "workspaceId" TEXT NOT NULL,
+    "workspaceId" INTEGER NOT NULL,
     "invitedBy" TEXT,
     "joinedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -108,7 +111,7 @@ CREATE TABLE "public"."Project" (
     "status" "public"."Status" NOT NULL DEFAULT 'PLANNED',
     "authorId" TEXT NOT NULL,
     "assigneeId" TEXT,
-    "workspaceId" TEXT,
+    "workspaceId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -138,7 +141,7 @@ CREATE TABLE "public"."Task" (
     "priority" "public"."Priority" NOT NULL DEFAULT 'NONE',
     "authorId" TEXT NOT NULL,
     "assigneeId" TEXT,
-    "projectId" INTEGER,
+    "projectId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -166,7 +169,7 @@ CREATE UNIQUE INDEX "Session_sessionToken_key" ON "public"."Session"("sessionTok
 CREATE UNIQUE INDEX "Authenticator_credentialID_key" ON "public"."Authenticator"("credentialID");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "WorkSpace_id_key" ON "public"."WorkSpace"("id");
+CREATE UNIQUE INDEX "WorkSpace_publicId_key" ON "public"."WorkSpace"("publicId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "WorkspaceMember_userId_workspaceId_key" ON "public"."WorkspaceMember"("userId", "workspaceId");
