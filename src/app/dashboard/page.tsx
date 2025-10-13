@@ -1,12 +1,13 @@
-import JoinWorkspace from '@/components/dashboard/JoinWorkspace';
-import Topbar from '@/components/dashboard/Topbar';
+import { ModeToggle } from '@/components/darkmode/ModeToggle';
 import React from 'react';
 
 const page = () => {
   return (
-    <div >
-      <Topbar />
-      <JoinWorkspace/>
+    <div>
+      <nav>
+        <ModeToggle />
+      </nav>
+      Landing Page
     </div>
   );
 };
