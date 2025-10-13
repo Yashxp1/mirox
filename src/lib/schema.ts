@@ -43,47 +43,10 @@ export const UpdateWorkSpaceSchema = z.object({
   name: z.string().min(1).optional(),
 });
 
-export const CreateProjectSchema = z.object({
+export const DocSchema = z.object({
   name: z.string().min(1),
-  workspaceId: z.string().min(1),
-  summary: z.string().nullable().optional(),
-  description: z.string().nullable().optional(),
-  status: StatusEnum.optional(),
-  priority: PriorityEnum.optional(),
-  startdate: z.coerce.date().nullable().optional(),
-  target: z.coerce.date().nullable().optional(),
-});
-
-export const UpdateProjectSchema = z.object({
-  name: z.string().min(1),
-  workspaceId: z.string().min(1),
-  summary: z.string().nullable().optional(),
-  description: z.string().nullable().optional(),
-  status: StatusEnum.optional(),
-  priority: PriorityEnum.optional(),
-  startdate: z.coerce.date().nullable().optional(),
-  target: z.coerce.date().nullable().optional(),
-});
-
-// ===== Task =====
-export const CreateTaskSchema = z.object({
-  title: z.string().min(1),
-  description: z.string().nullable().optional(),
-  startdate: z.coerce.date().nullable().optional(),
-  target: z.coerce.date().nullable().optional(),
-  status: StatusEnum.optional(),
-  priority: PriorityEnum.optional(),
-  assigneeId: z.string().min(1).optional(),
-});
-
-export const UpdateTaskSchema = z.object({
-  title: z.string().optional(),
-  description: z.string().nullable().optional(),
-  startdate: z.coerce.date().nullable().optional(),
-  target: z.coerce.date().nullable().optional(),
-  status: StatusEnum.optional(),
-  priority: PriorityEnum.optional(),
-  assigneeId: z.string().nullable().optional(),
+  // wsId: z.string(),
+  content: z.json(),
 });
 
 // ===== role =====
