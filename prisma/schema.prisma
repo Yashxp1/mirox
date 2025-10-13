@@ -84,9 +84,9 @@ model Authenticator {
 }
 
 model Workspace {
-  id          Int    @id @default(autoincrement())
-  workspaceId String @unique @default(cuid())
-  name        String
+  id   String @unique @default(cuid())
+  // workspaceId String @unique @default(cuid())
+  name String
 
   members   WorkspaceMember[]
   documents Doc[]
@@ -103,14 +103,14 @@ model Workspace {
 }
 
 model WorkspaceMember {
-  id   Int           @id @default(autoincrement())
+  id   String        @unique @default(cuid())
   role WorkspaceRole @default(MEMBER)
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId Int
+  workspaceId String
 
   invitedBy String?
   joinedAt  DateTime @default(now())
@@ -119,8 +119,8 @@ model WorkspaceMember {
 }
 
 model Doc {
-  id      Int    @id @default(autoincrement())
-  docId   String @unique @default(cuid())
+  id      Int    @unique @default(autoincrement())
+  // docId   String @unique @default(cuid())
   name    String
   content Json?
 
@@ -128,9 +128,9 @@ model Doc {
   authorId String
 
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId Int
+  workspaceId String
 
-   shares DocumentShare[]
+  shares DocumentShare[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -143,10 +143,10 @@ model Doc {
 }
 
 model DocumentShare {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
+  id        Int   @id @default(autoincrement())
+  createdAt DateTime @default(now())
 
-  doc   Doc    @relation(fields: [docId], references: [id], onDelete: Cascade)
+  doc   Doc @relation(fields: [docId], references: [id], onDelete: Cascade)
   docId Int
 
   @@index([docId])
