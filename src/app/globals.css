@@ -79,7 +79,8 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
+  /* --background: oklch(0.141 0.005 285.823); */
+  --background: #222120;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
   --card-foreground: oklch(0.985 0 0);
@@ -119,6 +120,18 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+   h1 {
+    font-size: 1.4rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
   }
 }
 
