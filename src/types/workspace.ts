@@ -1,4 +1,4 @@
-import { Project } from './project';
+import { Project } from './document';
 
 export interface Workspace {
   id: number;
