@@ -1,32 +1,35 @@
-import { Project } from '@/types/project';
+import { Document } from '@/types/document';
 import axios from 'axios';
 
 const baseURL = '/api/workspace';
 
-export const projectApi = {
-  getAll: async (workspaceId: string | number): Promise<Project[]> => {
-    const res = await axios.get<{ data: Project[] }>(
-      `${baseURL}/${workspaceId}/project`
-    );
-    return res.data.data;
-  },
+export const docApi = {
+  getAll: async (workspaceId: string | number): Promise<Document[]> => {
+  const res = await axios.get<{ data: { documents: Document[] }[] }>(`${baseURL}/${workspaceId}`);
+
+  const workspaceArray = res.data.data;
+  if (!workspaceArray || workspaceArray.length === 0) return [];
+
+  return workspaceArray[0].documents || [];
+},
+
 
   getOne: async (
     workspaceId: string | number,
-    projectId: string | number
-  ): Promise<Project> => {
-    const res = await axios.get<{ data: Project }>(
-      `${baseURL}/${workspaceId}/project/${projectId}`
+    docId: string | number
+  ): Promise<Document> => {
+    const res = await axios.get<{ data: Document }>(
+      `${baseURL}/${workspaceId}/${docId}`
     );
     return res.data.data;
   },
 
   create: async (
     workspaceId: string | number,
-    payload: Omit<Project, 'id'>
-  ): Promise<Project> => {
-    const res = await axios.post<{ data: Project }>(
-      `${baseURL}/${workspaceId}/project`,
+    payload: Omit<Document, 'id'>
+  ): Promise<Document> => {
+    const res = await axios.post<{ data: Document }>(
+      `${baseURL}/${workspaceId}`,
       payload
     );
     return res.data.data;
@@ -34,11 +37,11 @@ export const projectApi = {
 
   update: async (
     workspaceId: string | number,
-    projectId: string | number,
-    payload: Partial<Project>
-  ): Promise<Project> => {
-    const res = await axios.put<{ data: Project }>(
-      `${baseURL}/${workspaceId}/${projectId}`,
+    docId: string | number,
+    payload: Partial<Document>
+  ): Promise<Document> => {
+    const res = await axios.put<{ data: Document }>(
+      `${baseURL}/${workspaceId}/${docId}`,
       payload
     );
     return res.data.data;
@@ -46,8 +49,8 @@ export const projectApi = {
 
   remove: async (
     workspaceId: string | number,
-    projectId: string | number
+    docId: string | number
   ): Promise<void> => {
-    await axios.delete(`${baseURL}/${workspaceId}/${projectId}`);
+    await axios.delete(`${baseURL}/${workspaceId}/${docId}`);
   },
 };

@@ -4,7 +4,6 @@ import axios from 'axios';
 const baseURL = '/api/workspace';
 
 export const workspaceApi = {
-  
   getAll: async (): Promise<Workspace[]> => {
     const res = await axios.get<{ data: Workspace[] }>(`${baseURL}/`);
     return res.data.data;
@@ -17,9 +16,9 @@ export const workspaceApi = {
     return res.data.data;
   },
 
-  create: async (payload: Omit<Workspace, 'id'>): Promise<Workspace> => {
-    const res = await axios.post<{ data: Workspace }>(`${baseURL}`, payload);
-    return res.data.data;
+  create: async (data: { name: string }): Promise<Workspace> => {
+    const res = await axios.post<Workspace>(`${baseURL}/`, data);
+    return res.data;
   },
 
   update: async (
