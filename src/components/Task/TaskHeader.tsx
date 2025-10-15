@@ -1,5 +1,5 @@
 'use client';
-import { useGetOneProject } from '@/api-hooks/useProjects';
+import { useGetOneProject } from '@/api-hooks/useDocuments';
 import { useGetOneWorkspace } from '@/api-hooks/useWorkspaces';
 import { Box, BriefcaseBusiness, ClipboardList, Link2 } from 'lucide-react';
 import { useParams } from 'next/navigation';

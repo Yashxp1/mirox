@@ -1,4 +1,4 @@
-import { useGetOneProject } from '@/api-hooks/useProjects';
+import { useGetOneProject } from '@/api-hooks/useDocuments';
 import {
   Box,
   BriefcaseBusiness,

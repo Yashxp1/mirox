@@ -13,7 +13,6 @@ import {
   Strikethrough,
 } from 'lucide-react';
 import { Toggle } from '../ui/toggle';
-import { ModeToggle } from '../darkmode/ModeToggle';
 import { Editor } from '@tiptap/react';
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
@@ -85,7 +84,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   ];
 
   return (
-    <div className="border rounded-md p-1 mb-1 space-x-2 z-50">
+    <div className="border-b py-1 space-x-2 w-full">
       {Options.map((option, idx) => (
         <Toggle
           key={idx}
@@ -95,7 +94,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           {option.icon}
         </Toggle>
       ))}
-      <ModeToggle></ModeToggle>
     </div>
   );
 };

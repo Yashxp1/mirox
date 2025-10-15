@@ -1,13 +1,10 @@
-import { ModeToggle } from '@/components/darkmode/ModeToggle';
 import React from 'react';
+import Workspace from './Workspace';
 
 const page = () => {
   return (
-    <div>
-      <nav>
-        <ModeToggle />
-      </nav>
-      Landing Page
+    <div className="">
+      <Workspace />
     </div>
   );
 };

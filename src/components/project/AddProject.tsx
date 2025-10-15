@@ -5,10 +5,10 @@ import Status from '../dropDown/Status';
 import Target from '../dropDown/Target';
 import Priority from '../dropDown/Priority';
 import StartDate from '../dropDown/StartDate';
-import { useCreateProject } from '@/api-hooks/useProjects';
+import { useCreateProject } from '@/api-hooks/useDocuments';
 import { useParams } from 'next/navigation';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Project } from '@/types/project';
+import { Project } from '@/types/document';
 
 const AddProject = () => {
   const [isOpen, setIsOpen] = useState(false);

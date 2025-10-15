@@ -34,8 +34,7 @@ const Tiptap = ({ contentData, onChange }: EditorProps) => {
     content: contentData,
     editorProps: {
       attributes: {
-        class:
-          'min-h-[156px] border rounded-md dark:bg-zinc-800 bg-zinc-100 focus:outline-none ring-0 py-2 px-3',
+        class: ' w-[900px] focus:outline-none ring-0 py-10 px-10 ',
       },
     },
     onUpdate: ({ editor }) => {
@@ -46,9 +45,16 @@ const Tiptap = ({ contentData, onChange }: EditorProps) => {
   });
 
   return (
-    <div>
-      <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+    <div className="h-full flex flex-col">
+      <div className="z-40">
+        <MenuBar editor={editor} />
+      </div>
+
+      <div className="flex-1 overflow-y-auto flex border rounded-xl justify-center items-center mt-4 dark:bg-zinc-800 bg-zinc-100 mx-auto shadow-2xl">
+      <div className="h-[560px]">
+        <EditorContent editor={editor} />
+      </div>
+    </div>
     </div>
   );
 };

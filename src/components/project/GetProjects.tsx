@@ -1,5 +1,5 @@
 'use client';
-import { useGetAllProject } from '@/api-hooks/useProjects';
+import { useGetAllProject } from '@/api-hooks/useDocuments';
 import {
   Box,
   CalendarArrowUp,
