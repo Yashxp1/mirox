@@ -5,31 +5,32 @@ const baseURL = '/api/workspace';
 
 export const docApi = {
   getAll: async (workspaceId: string | number): Promise<Document[]> => {
-  const res = await axios.get<{ data: { documents: Document[] }[] }>(`${baseURL}/${workspaceId}`);
+    const res = await axios.get<{ data: { documents: Document[] }[] }>(
+      `${baseURL}/${workspaceId}`
+    );
 
-  const workspaceArray = res.data.data;
-  if (!workspaceArray || workspaceArray.length === 0) return [];
+    const workspaceArray = res.data.data;
+    if (!workspaceArray || workspaceArray.length === 0) return [];
 
-  return workspaceArray[0].documents || [];
-},
-
+    return workspaceArray[0].documents || [];
+  },
 
   getOne: async (
     workspaceId: string | number,
     docId: string | number
   ): Promise<Document> => {
     const res = await axios.get<{ data: Document }>(
-      `${baseURL}/${workspaceId}/${docId}`
+      `${baseURL}/${workspaceId}/doc/${docId}`
     );
     return res.data.data;
   },
 
   create: async (
     workspaceId: string | number,
-    payload: Omit<Document, 'id'>
+    payload: Partial<Document>
   ): Promise<Document> => {
     const res = await axios.post<{ data: Document }>(
-      `${baseURL}/${workspaceId}`,
+      `${baseURL}/${workspaceId}/doc`,
       payload
     );
     return res.data.data;
