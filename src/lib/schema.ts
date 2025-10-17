@@ -46,7 +46,7 @@ export const UpdateWorkSpaceSchema = z.object({
 export const DocSchema = z.object({
   name: z.string().min(1),
   // wsId: z.string(),
-  content: z.json(),
+  content: z.json().optional(),
 });
 
 // ===== role =====
