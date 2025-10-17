@@ -27,7 +27,7 @@ export function useGetOnedoc(
 export function useCreatedoc(workspaceId: string | number) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (payload: Omit<Document, 'id'>) =>
+    mutationFn: (payload: Partial<Document>) =>
       docApi.create(workspaceId, payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['docs'] }),
   });
