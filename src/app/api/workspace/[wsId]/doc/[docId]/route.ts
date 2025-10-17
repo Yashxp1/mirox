@@ -25,7 +25,7 @@ const getDocumentById = async (
     throw new Error('Workspace not found');
   }
 
-  const doc = await prisma.doc.findMany({
+  const doc = await prisma.doc.findUnique({
     where: {
       id: docId,
       workspaceId: wsId,
