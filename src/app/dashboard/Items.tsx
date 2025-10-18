@@ -46,13 +46,13 @@ const Items: React.FC<ItemsProps> = ({ workspaceId }) => {
               {/* <p className="text-zinc-400 text-xs bg-red-900"> {new Date(document.createdAt).toLocaleString()}</p> */}
             </div>
             <hr className="border-zinc-700" />
-            <div className="text-sm pt-4 text-zinc-300">
+            {/* <div className="text-sm pt-4 text-zinc-300">
               {document.content.blocks.map((block, idx) => (
                 <p key={idx} className="mb-2 line-clamp-3">
                   {block.data.text}
                 </p>
               ))}
-            </div>
+            </div> */}
           </div>
         </Link>
       ))}
