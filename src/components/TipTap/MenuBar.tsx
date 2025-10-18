@@ -84,7 +84,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   ];
 
   return (
-    <div className="border-b py-1 space-x-2 w-full">
+    <div className=" py-1 space-x-2 w-full flex justify-center items-center">
       {Options.map((option, idx) => (
         <Toggle
           key={idx}
