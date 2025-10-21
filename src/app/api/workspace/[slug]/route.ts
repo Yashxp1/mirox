@@ -9,10 +9,10 @@ const getWorkSpaceById = async (
 ) => {
   const workspaceId = (await params).slug;
 
-  const workspace = await prisma.workSpace.findUnique({
+  const workspace = await prisma.workspace.findUnique({
     where: { id: parseInt(workspaceId) },
     include: {
-      Project: true,
+      members: true,
     },
   });
 

@@ -7,7 +7,7 @@ const createWorkSpace = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
   const validateData = CreateWorkSpaceSchema.parse(body);
 
-  const workSpace = await prisma.workSpace.create({
+  const workSpace = await prisma.workspace.create({
     data: {
       name: validateData.name,
       authorId: user.id,
@@ -21,7 +21,7 @@ const updateWorkSpace = async (req: NextRequest) => {
   const body = await req.json();
   const validateData = UpdateWorkSpaceSchema.parse(body);
 
-  const update = await prisma.workSpace.update({
+  const update = await prisma.workspace.update({
     where: { id: validateData.id },
     data: {
       name: validateData.name,
@@ -35,17 +35,17 @@ const deleteWorkSpace = async (req: NextRequest) => {
   if (!workSpaceId) {
     throw new Error('Workspace Id not found!');
   }
-  const deleteWorkSpace = await prisma.workSpace.delete({
+  const deleteWorkSpace = await prisma.workspace.delete({
     where: { id: workSpaceId },
   });
   return deleteWorkSpace;
 };
 
 const getWorkSpace = async (req: NextRequest, user: { id: string }) => {
-  const Workspace = await prisma.workSpace.findMany({
+  const Workspace = await prisma.workspace.findMany({
     where: { authorId: user.id },
     include: {
-      Project: true,
+      members: true,
     },
   });
   return Workspace;

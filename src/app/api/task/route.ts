@@ -16,7 +16,7 @@ const createTask = async (req: NextRequest, user: { id: string }) => {
       status: validatedData.status,
       priority: validatedData.priority,
       authorId: user.id,
-      projectId: validatedData.projectId,
+      workspaceId: validatedData.projectId,
     },
   });
 
