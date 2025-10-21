@@ -25,7 +25,6 @@ model User {
   // workspace         WorkSpace[]
   authoredWorkspace WorkSpace[] @relation("WorkspaceAuthor")
 
-  authoredProjects Project[]  @relation("ProjectAuthor")
   createdTasks     Task[]     @relation("TaskAuthor")
   assignedTasks    Task[]     @relation("TaskAssignee")
   authoredComment  Comments[] @relation("CommentAuthor")
@@ -88,9 +87,8 @@ model Authenticator {
 
 model WorkSpace {
   id   Int    @id @default(autoincrement())
+  wsId String @unique @default(cuid())
   name String
-
-  Project Project[]
 
   author   User   @relation("WorkspaceAuthor", fields: [authorId], references: [id])
   authorId String
@@ -99,31 +97,6 @@ model WorkSpace {
   updatedAt DateTime @updatedAt
 }
 
-model Project {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  title       String
-  summary     String?
-  description String?
-  startdate   DateTime?
-  target      DateTime?
-
-  priority Priority @default(NONE)
-  status   Status   @default(PLANNED)
-
-  tasks Task[]
-  // comments Comments[]
-
-  author   User   @relation("ProjectAuthor", fields: [authorId], references: [id])
-  authorId String
-
-  workspace   WorkSpace? @relation(fields: [workspaceId], references: [id])
-  workspaceId Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 model Task {
   id          Int       @id @default(autoincrement())
@@ -142,7 +115,6 @@ model Task {
 
   comments Comments[]
 
-  Project   Project? @relation(fields: [projectId], references: [id])
   projectId Int?
 
   CreatedAt DateTime @default(now())
