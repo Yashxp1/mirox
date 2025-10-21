@@ -1,35 +1,9 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { UpdateWorkSpaceSchema } from '@/lib/schema';
+import { CreateTaskSchema, UpdateTaskSchema } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
-const getWorkSpaceById = async (
-  req: NextRequest,
-  user: { id: string },
-  ctx?: { params: { wsId: string } }
-) => {
-  
-  const param = await ctx?.params;
-  const wsId = param?.wsId;
-
-  if (!wsId) {
-    throw new Error('workspace not found!');
-  }
-
-  const workspace = await prisma.workspace.findUnique({
-    where: { wsId },
-    include: { members: true },
-  });
-
-  if (!workspace || workspace.authorId !== user.id) {
-    throw new Error('Workspace not found or unauthorized');
-  }
-
-  return workspace;
-
-};
-
-const updateWorkSpace = async (
+const createTask = async (
   req: NextRequest,
   user: { id: string },
   ctx?: { params: { wsId: string } }
@@ -51,20 +25,26 @@ const updateWorkSpace = async (
   }
 
   const body = await req.json();
-  const validateData = UpdateWorkSpaceSchema.parse(body);
+  const validatedData = CreateTaskSchema.parse(body);
 
-  const update = await prisma.workspace.update({
-    where: { wsId: wsId },
+  const task = await prisma.task.create({
     data: {
-      name: validateData.name,
+      title: validatedData.title,
+      description: validatedData.description,
+      startdate: validatedData.startdate,
+      target: validatedData.target,
+      status: validatedData.status,
+      priority: validatedData.priority,
       authorId: user.id,
+      workspaceId: workspace.wsId,
     },
   });
 
-  return update;
+  return task;
 };
 
-const deleteWorkSpace = async (
+
+const getTask = async (
   req: NextRequest,
   user: { id: string },
   ctx?: { params: { wsId: string } }
@@ -85,13 +65,15 @@ const deleteWorkSpace = async (
     throw new Error('Workspace not found or unauthorized');
   }
 
-  const deleteWorkSpace = await prisma.workspace.delete({
-    where: { wsId },
+  const task = await prisma.task.findMany({
+    where: { workspaceId: workspace.wsId },
   });
 
-  return deleteWorkSpace;
+  return task;
 };
 
-export const GET = withApiHandler(getWorkSpaceById);
-export const PUT = withApiHandler(updateWorkSpace);
-export const DELETE = withApiHandler(deleteWorkSpace);
+
+
+export const POST = withApiHandler(createTask);
+export const GET = withApiHandler(getTask);
+
