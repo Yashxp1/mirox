@@ -39,7 +39,6 @@ export const CreateWorkSpaceSchema = z.object({
 });
 
 export const UpdateWorkSpaceSchema = z.object({
-  id: z.number(),
   name: z.string().min(1).optional(),
 });
 
