@@ -73,11 +73,10 @@ export const CreateTaskSchema = z.object({
   status: StatusEnum.optional(),
   priority: PriorityEnum.optional(),
   assigneeId: z.string().nullable().optional(),
-  projectId: z.number().nullable(),
+  // workspaceId: z.string()
 });
 
 export const UpdateTaskSchema = z.object({
-  id: z.number(),
   title: z.string().optional(),
   description: z.string().nullable().optional(),
   startdate: z.coerce.date().nullable().optional(),
