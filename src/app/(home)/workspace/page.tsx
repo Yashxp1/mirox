@@ -1,4 +1,3 @@
-import Projects from '@/components/project/Projects';
 import { Box, Plus } from 'lucide-react';
 
 interface WorkspacePageProps {
@@ -19,8 +18,6 @@ const Page = async ({ params }: WorkspacePageProps) => {
           <Plus size={14} /> Add Project
         </button>
       </div>
-
-      <Projects />
     </div>
   );
 };
