@@ -2,6 +2,7 @@ import { Project } from './project';
 
 export interface Workspace {
   id: number;
+  wsId: string;
   name: string;
   authorId: string;
   CreatedAt: string;

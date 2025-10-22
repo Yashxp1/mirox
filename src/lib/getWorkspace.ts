@@ -1,6 +1,7 @@
 import { prisma } from './prisma';
 
 export async function getWorkspace(wsId: string | undefined, user:string) {
+  
   if (!wsId) {
     throw new Error('workspace not found!');
   }

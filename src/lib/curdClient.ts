@@ -12,7 +12,7 @@ export function createCrudClient<T extends { id: number | string }>(
       const res = await axios.get<{ data: T }>(`${baseUrl}/${id}`);
       return res.data.data;
     },
-    create: async (payload: Omit<T, 'id'>): Promise<T> => {
+    create: async (payload: Partial<T>): Promise<T> => {
       const res = await axios.post<{ data: T }>(baseUrl, payload);
       return res.data.data;
     },
