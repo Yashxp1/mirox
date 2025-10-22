@@ -1,6 +1,6 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { CreateTaskSchema, UpdateTaskSchema } from '@/lib/schema';
+import { CreateTaskSchema } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
 const createTask = async (
@@ -43,7 +43,6 @@ const createTask = async (
   return task;
 };
 
-
 const getTask = async (
   req: NextRequest,
   user: { id: string },
@@ -69,11 +68,12 @@ const getTask = async (
     where: { workspaceId: workspace.wsId },
   });
 
+  if (!task) {
+    throw new Error('Task not found'!);
+  }
+
   return task;
 };
 
-
-
 export const POST = withApiHandler(createTask);
 export const GET = withApiHandler(getTask);
-

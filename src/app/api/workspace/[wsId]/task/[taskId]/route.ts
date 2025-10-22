@@ -63,11 +63,11 @@ const deleteTask = async (
     throw new Error('Task Id not found!');
   }
 
-  const deleteTask = await prisma.task.delete({
+  await prisma.task.delete({
     where: { id: Number(taskId) },
   });
 
-  return deleteTask;
+  return { message: 'Deleted task successfully' };
 };
 
 const updateTask = async (
@@ -75,7 +75,6 @@ const updateTask = async (
   user: { id: string },
   ctx?: { params: { wsId: string; taskId: string } }
 ) => {
-
   const param = await ctx?.params;
   const wsId = param?.wsId;
   const taskId = param?.taskId;

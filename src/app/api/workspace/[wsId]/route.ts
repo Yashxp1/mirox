@@ -8,7 +8,6 @@ const getWorkSpaceById = async (
   user: { id: string },
   ctx?: { params: { wsId: string } }
 ) => {
-  
   const param = await ctx?.params;
   const wsId = param?.wsId;
 
@@ -26,7 +25,6 @@ const getWorkSpaceById = async (
   }
 
   return workspace;
-
 };
 
 const updateWorkSpace = async (
@@ -85,11 +83,11 @@ const deleteWorkSpace = async (
     throw new Error('Workspace not found or unauthorized');
   }
 
-  const deleteWorkSpace = await prisma.workspace.delete({
+  await prisma.workspace.delete({
     where: { wsId },
   });
 
-  return deleteWorkSpace;
+  return { message: 'Deleted workspace successfully' };
 };
 
 export const GET = withApiHandler(getWorkSpaceById);
