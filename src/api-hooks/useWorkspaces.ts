@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export function useGetAllWorkspaces() {
   return useQuery<Workspace[]>({
     queryKey: ['workspaces'],
-    queryFn: workspaceApi.getAll,
+    queryFn: () => workspaceApi.getAll(),
     staleTime: 5 * 60 * 1000,
   });
 }

@@ -4,24 +4,29 @@ export function createCrudClient<T extends { id: number | string }>(
   baseUrl: string
 ) {
   return {
-    getAll: async (): Promise<T[]> => {
-      const res = await axios.get<{ data: T[] }>(baseUrl);
+    getAll: async (wsId?: string): Promise<T[]> => {
+      const url = wsId ? `${baseUrl}/${wsId}/task` : baseUrl;
+      const res = await axios.get<{ data: T[] }>(url);
       return res.data.data;
     },
-    getOne: async (id: number): Promise<T> => {
-      const res = await axios.get<{ data: T }>(`${baseUrl}/${id}`);
+    getOne: async (wsId?: string, taskId?: string): Promise<T> => {
+      const url = wsId ? `${baseUrl}/${wsId}/task/${taskId}` : `${baseUrl}/${wsId}`;
+      const res = await axios.get<{ data: T }>(url);
       return res.data.data;
     },
-    create: async (payload: Partial<T>): Promise<T> => {
-      const res = await axios.post<{ data: T }>(baseUrl, payload);
+    create: async (payload: Partial<T>, wsId?: string): Promise<T> => {
+      const url = wsId ? `${baseUrl}/${wsId}/task` : baseUrl;
+      const res = await axios.post<{ data: T }>(url, payload);
       return res.data.data;
     },
-    update: async (id: number, payload: Partial<T>): Promise<T> => {
-      const res = await axios.put<{ data: T }>(`${baseUrl}/${id}`, payload);
+    update: async (id: number | string, payload: Partial<T>, wsId?: string): Promise<T> => {
+      const url = wsId ? `${baseUrl}/${wsId}/task/${id}` : `${baseUrl}/${id}`;
+      const res = await axios.put<{ data: T }>(url, payload);
       return res.data.data;
     },
-    remove: async (id: number): Promise<void> => {
-      await axios.delete(`${baseUrl}/${id}`);
+    remove: async (id: number | string, wsId?: string): Promise<void> => {
+      const url = wsId ? `${baseUrl}/${wsId}/task/${id}` : `${baseUrl}/${id}`;
+      await axios.delete(url);
     },
   };
 }
