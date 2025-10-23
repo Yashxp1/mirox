@@ -22,12 +22,11 @@ const getTaskById = async (
   });
 
   if (!workspace || workspace.authorId !== user.id) {
-    throw new Error('Workspace not found or unauthorized');
+    throw new Error('Workspace not found or unauthorized!!');
   }
 
-  const task = await prisma.workspace.findUnique({
+  const task = await prisma.task.findUnique({
     where: { id: Number(taskId) },
-    include: { members: true },
   });
 
   if (!task || task.authorId !== user.id) {
