@@ -25,7 +25,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="h-screen w-full relative" style={{ width }}>
+    <div className="h-screen w-full relative transition-all duration-200" style={{ width }}>
       <SidebarHeader/>
       <SidebarContent/>
       <div

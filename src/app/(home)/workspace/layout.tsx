@@ -15,8 +15,8 @@ export default function RootLayout({
   };
 
   return (
-    <main className="flex min-h-screen">
-      <div>{isSidebarOpen && <Sidebar />}</div>
+    <main className="flex min-h-screen transition-all duration-300">
+      <div className='transition-all duration-300'>{isSidebarOpen && <Sidebar />}</div>
       <div className="flex-1 transition-all duration-300">
         <Topbar toggleSidebar={toggleSidebar} />
         {children}

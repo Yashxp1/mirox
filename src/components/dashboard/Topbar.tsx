@@ -1,11 +1,5 @@
 'use client';
-import {
-  CircleDashed,
-  Copy,
-  DiamondPlus,
-  PanelRightOpen,
-  Radio,
-} from 'lucide-react';
+import { ClipboardList, ListTodo, PanelRightOpen } from 'lucide-react';
 import React from 'react';
 
 interface TopbarProps {
@@ -13,13 +7,6 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
-  const items = [
-    { icon: Copy, label: 'All issues' },
-    { icon: Radio, label: 'Active' },
-    { icon: CircleDashed, label: 'Backlog' },
-    { icon: DiamondPlus, label: null },
-  ];
-
   return (
     <div className="border border-l-0 gap-2 w-full flex p-1.5">
       <div
@@ -28,15 +15,17 @@ const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
       >
         <PanelRightOpen size={19} strokeWidth={2.5} />
       </div>
-      {items.map((i, idx) => (
-        <div
-          key={idx}
-          className="flex cursor-default justify-center items-center gap-2 border px-2 py-1.5 hover:bg-zinc-900 hover:text-white text-zinc-500 rounded-md transition-all"
-        >
-          <span>{<i.icon size={17} strokeWidth={2.5} />}</span>
-          <p className="text-sm font-medium text-[#E3E4E7]">{i.label}</p>
+
+      <div className="flex gap-2">
+        <div className="flex cursor-default justify-center items-center gap-2 border px-2 py-1.5 hover:bg-zinc-900 hover:text-white rounded-md transition-all">
+          <span>{<ClipboardList size={16} />}</span>
+          <p className="text-xs">All issues</p>
         </div>
-      ))}
+        <div className="flex cursor-default justify-center items-center gap-2 border px-2 py-1.5 hover:bg-zinc-900 hover:text-white rounded-md transition-all">
+          <span>{<ListTodo size={16} />}</span>
+          <p className="text-xs">Assigned</p>
+        </div>
+      </div>
     </div>
   );
 };
