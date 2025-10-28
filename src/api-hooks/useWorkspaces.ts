@@ -12,7 +12,7 @@ export function useGetAllWorkspaces() {
 }
 
 //------ReadOne------
-export function useGetOneWorkspaces(id: number) {
+export function useGetOneWorkspaces(id:string) {
   return useQuery<Workspace>({
     queryKey: ['workspaces', id],
     queryFn: () => workspaceApi.getOne(id),

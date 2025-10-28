@@ -24,8 +24,6 @@ const Page = () => {
       return;
     }
 
-    console.log('name ------> ', workspaceName);
-
     mutate(
       { name: workspaceName },
       {
