@@ -2,17 +2,16 @@
 import { useGetAllWorkspaces } from '@/api-hooks/useWorkspaces';
 import SignOut from '@/components/auth/SignOut';
 import Create from '@/components/icon/Create';
-import {
-  BriefcaseBusiness,
-  ChevronDown,
-  LayoutGrid,
-  Plus,
-  Search,
-} from 'lucide-react';
+import { BriefcaseBusiness, ChevronDown, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 
-const SidebarHeader = () => {
+interface SidebarHeaderProps {
+  workspace: any;
+  workspaceError: boolean;
+}
+
+const SidebarHeader = ({ workspace, workspaceError }: SidebarHeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -36,7 +35,11 @@ const SidebarHeader = () => {
   }, [isOpen]);
 
   const { data, error } = useGetAllWorkspaces();
+
+  console.log('wsname : ', workspace?.name);
+
   if (error) return <p>Something went wrong</p>;
+  if (workspaceError) return <p>Something went wrong</p>;
 
   return (
     <div className="flex justify-between items-center p-4 relative">
@@ -44,7 +47,11 @@ const SidebarHeader = () => {
         onClick={handlePopUp}
         className="hover-sidebarHeader border w-[60%] flex justify-between items-center cursor-pointer"
       >
-        <LayoutGrid size={19} />
+        <p className="flex items-center gap-2">
+          <BriefcaseBusiness size={16} />
+          {workspace?.name || 'Workspace Name'}
+        </p>
+
         <ChevronDown
           size={15}
           className={
