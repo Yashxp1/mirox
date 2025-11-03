@@ -1,6 +1,6 @@
 import { withApiHandler } from '@/lib/apiHandler';
 import { prisma } from '@/lib/prisma';
-import { CreateWorkSpaceSchema,  } from '@/lib/schema';
+import { CreateWorkSpaceSchema } from '@/lib/schema';
 import { NextRequest } from 'next/server';
 
 const createWorkSpace = async (req: NextRequest, user: { id: string }) => {
@@ -17,12 +17,15 @@ const createWorkSpace = async (req: NextRequest, user: { id: string }) => {
   return workSpace;
 };
 
-
 const getWorkSpace = async (req: NextRequest, user: { id: string }) => {
   const Workspace = await prisma.workspace.findMany({
-    where: { authorId: user.id },
+    where: {
+      OR: [{ authorId: user.id }, { members: { some: { userId: user.id } } }],
+    },
     include: {
-      members: true,
+      members: {
+        include: { user: true },
+      },
     },
   });
   return Workspace;

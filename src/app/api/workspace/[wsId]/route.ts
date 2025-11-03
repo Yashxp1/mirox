@@ -17,11 +17,24 @@ const getWorkSpaceById = async (
 
   const workspace = await prisma.workspace.findUnique({
     where: { wsId },
-    include: { members: true },
+    include: {
+      members: {
+        include: {
+          user: true,
+        },
+      },
+    },
   });
 
-  if (!workspace || workspace.authorId !== user.id) {
+  if (!workspace) {
     throw new Error('Workspace not found or unauthorized');
+  }
+
+  const isAuthor = workspace.authorId === user.id;
+  const isMember = workspace.members.some((m) => m.userId === user.id);
+
+  if (!isAuthor && !isMember) {
+    throw new Error('Unauthorized access');
   }
 
   return workspace;

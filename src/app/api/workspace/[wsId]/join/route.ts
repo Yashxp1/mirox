@@ -75,8 +75,27 @@ const leaveWorkspace = async (
   await prisma.workspace.delete({ where: { id: isMember.id } });
 
   return { message: 'Left workspace successfully' };
-  
 };
 
+const getMembers = async (
+  req: NextRequest,
+  user: { id: string },
+  ctx: { params: { wsId: string } }
+) => {
+  const params = await ctx?.params;
+  const wsId = params.wsId;
+
+  if (!wsId) {
+    throw new Error('workspace not found!');
+  }
+
+  const workspace = await prisma.workspace.findMany({
+    where: { wsId },
+    include: { members: true },
+  });
+
+  return workspace;
+};
 export const POST = withApiHandler(joinWorkspace);
 export const DELETE = withApiHandler(leaveWorkspace);
+export const GET = withApiHandler(getMembers);
