@@ -1,5 +1,6 @@
 import { workspaceApi } from '@/lib/api';
 import { Workspace } from '@/types/workspace';
+import { WorkspaceMember } from '@prisma/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 //------ReadAll------
@@ -12,7 +13,7 @@ export function useGetAllWorkspaces() {
 }
 
 //------ReadOne------
-export function useGetOneWorkspaces(id:string) {
+export function useGetOneWorkspaces(id: string) {
   return useQuery<Workspace>({
     queryKey: ['workspaces', id],
     queryFn: () => workspaceApi.getOne(id),
@@ -45,5 +46,23 @@ export function useRemoveWorkspaces(id: number) {
   return useMutation({
     mutationFn: () => workspaceApi.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['workspaces'] }),
+  });
+}
+
+//------Join------
+export function useJoinWorkspace() {
+  return useMutation({
+    mutationFn: async (wsId: string) => {
+      if (!wsId) throw new Error('Workspace ID is required');
+      return await workspaceApi.join(wsId);
+    },
+  });
+}
+//------WsMembers------
+export function useGetWSMembers(wsId: string) {
+  return useQuery<WorkspaceMember[]>({
+    queryKey: ['workspaces', wsId],
+    queryFn: () => workspaceApi.getWorkspaceMembers(wsId),
+    staleTime: 5 * 60 * 1000,
   });
 }
