@@ -3,6 +3,7 @@
 import {
   useCreateWorkspaces,
   useGetAllWorkspaces,
+  useJoinWorkspace,
 } from '@/api-hooks/useWorkspaces';
 import Link from 'next/link';
 import { Spinner } from '@/components/ui/spinner';
@@ -14,9 +15,12 @@ import { useState } from 'react';
 
 const Page = () => {
   const [workspaceName, setWorkspaceName] = useState('');
+  const [workspaceID, setWorkspaceID] = useState('');
   const { data, isLoading, isError } = useGetAllWorkspaces();
 
   const { mutate, isPending } = useCreateWorkspaces();
+
+  const { mutate: joinWorkspace, isPending: isJoining } = useJoinWorkspace();
 
   const handleCreateWorkspace = () => {
     if (!workspaceName.trim()) {
@@ -39,19 +43,59 @@ const Page = () => {
     );
   };
 
-  if (isError) return <p>Error loading workspace: {String(isError)}</p>;
+  const handleJoinWorkspace = () => {
+    if (!workspaceID.trim()) {
+      toast.error('Workspace ID cannot be empty');
+      return;
+    }
+
+    joinWorkspace(workspaceID, {
+      onSuccess: () => {
+        toast.success('Joined workspace successfully!');
+        setWorkspaceID('');
+      },
+      onError: (err) => {
+        console.error(err);
+        toast.error('Failed to join workspace');
+      },
+    });
+  };
+
+  if (isError) return <p>Error loading workspace</p>;
 
   return (
-    <div className="flex text-zinc-200 justify-center flex-col items-center w-full h-[400px]">
-      <div className="flex justify-center gap-2 py-4">
-        <Input
-          value={workspaceName}
-          onChange={(e) => setWorkspaceName(e.target.value)}
-          placeholder="Enter a workspace name"
-        />
-        <Button onClick={handleCreateWorkspace} disabled={isPending}>
-          {isPending ? <Spinner /> : 'Join'}
-        </Button>
+    <div className="flex flex-col items-center text-foreground w-full min-h-[400px] py-8">
+      <div className="flex flex-col gap-4 w-full max-w-md">
+        <div className="flex flex-col gap-2">
+          <Input
+            value={workspaceName}
+            onChange={(e) => setWorkspaceName(e.target.value)}
+            placeholder="Enter workspace name"
+          />
+          <Button
+            className="w-full"
+            variant="secondary"
+            onClick={handleCreateWorkspace}
+            disabled={isPending}
+          >
+            {isPending ? <Spinner /> : 'Create Workspace'}
+          </Button>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Input
+            value={workspaceID}
+            onChange={(e) => setWorkspaceID(e.target.value)}
+            placeholder="Enter workspace ID to join"
+          />
+          <Button
+            className="w-full"
+            onClick={handleJoinWorkspace}
+            disabled={isJoining}
+          >
+            {isJoining ? <Spinner /> : 'Join Workspace'}
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -59,14 +103,18 @@ const Page = () => {
           <Spinner className="size-6" />
         </div>
       ) : (
-        data?.map((ws) => (
-          <div key={ws.id} className="w-full flex justify-center items-center">
-            <Link href={`/workspace/${ws.wsId}`}>
-              <div className="border flex text-sm justify-between w-[280px] rounded-lg p-2 my-1 hover:bg-zinc-800 transition-all duration-300">
-                <p className="flex justify-center items-center gap-2">
+        <div className="pt-6 w-full flex flex-col items-center">
+          {data?.map((ws) => (
+            <Link
+              key={ws.id}
+              href={`/workspace/${ws.wsId}`}
+              className="w-full max-w-md"
+            >
+              <div className="border border-border flex text-sm justify-between w-full rounded-lg p-2 my-1 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+                <p className="flex items-center gap-2">
                   <BriefcaseBusiness size={16} /> {ws.name}
                 </p>
-                <p className="flex text-xs justify-center items-center gap-2">
+                <p className="flex text-xs items-center gap-2">
                   {new Date(ws.CreatedAt).toLocaleString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -75,8 +123,8 @@ const Page = () => {
                 </p>
               </div>
             </Link>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );
