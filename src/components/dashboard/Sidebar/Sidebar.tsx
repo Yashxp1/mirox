@@ -3,7 +3,7 @@ import SidebarHeader from './SidebarHeader';
 import SidebarContent from './SidebarContent';
 
 interface SidebarProps {
-  workspace: any; // or define a proper type if you know the shape, e.g. Workspace
+  workspace: any; 
   workspaceError: boolean;
 }
 

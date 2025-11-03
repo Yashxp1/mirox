@@ -1,5 +1,5 @@
 'use client';
-import { ClipboardList, ListTodo, PanelRightOpen } from 'lucide-react';
+import { ClipboardList, ListTodo, PanelRightOpen, Users } from 'lucide-react';
 import React from 'react';
 import { ModeToggle } from '../darkmode/ModeToggle';
 import Link from 'next/link';
@@ -36,6 +36,15 @@ const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
             <div className="flex cursor-default justify-center items-center gap-2 border px-2 hover:bg-zinc-900 hover:text-white rounded-md transition-all">
               <span>{<ListTodo size={16} />}</span>
               <p className="">Assigned</p>
+            </div>
+            <div className="flex cursor-default justify-center items-center gap-2 border px-2 hover:bg-zinc-900 hover:text-white rounded-md transition-all">
+              <Link
+                href={`/workspace/${id}/members`}
+                className="flex justify-center items-center gap-2"
+              >
+                <span>{<Users size={16} />}</span>
+                <p className="">Memebers</p>
+              </Link>
             </div>
           </div>
         </div>
