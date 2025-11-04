@@ -1,3 +1,4 @@
+import { WorkspaceMember } from '@/types/workspace';
 import axios from 'axios';
 
 export function createCrudClient<T extends { id: number | string }>(
@@ -9,11 +10,7 @@ export function createCrudClient<T extends { id: number | string }>(
       const res = await axios.get<{ data: T[] }>(url);
       return res.data.data;
     },
-    // getOne: async (wsId?: string, taskId?: string): Promise<T> => {
-    //   const url = wsId ? `${baseUrl}/${wsId}/task/${taskId}` : `${baseUrl}/${wsId}`;
-    //   const res = await axios.get<{ data: T }>(url);
-    //   return res.data.data;
-    // },
+
     getOne: async (wsId?: string, taskId?: string): Promise<T> => {
       let url;
       if (wsId && taskId) url = `${baseUrl}/${wsId}/task/${taskId}`;
@@ -29,6 +26,7 @@ export function createCrudClient<T extends { id: number | string }>(
       const res = await axios.post<{ data: T }>(url, payload);
       return res.data.data;
     },
+
     update: async (
       id: number | string,
       payload: Partial<T>,
@@ -38,9 +36,32 @@ export function createCrudClient<T extends { id: number | string }>(
       const res = await axios.put<{ data: T }>(url, payload);
       return res.data.data;
     },
+
     remove: async (id: number | string, wsId?: string): Promise<void> => {
       const url = wsId ? `${baseUrl}/${wsId}/task/${id}` : `${baseUrl}/${id}`;
       await axios.delete(url);
+    },
+
+    join: async (wsId?: string): Promise<T> => {
+      const url = `${baseUrl}/${wsId}/join`;
+      const res = await axios.post<{ data: T }>(url);
+      return res.data.data;
+    },
+
+    getWorkspaceMembers: async (wsId: string): Promise<WorkspaceMember[]> => {
+      const url = `${baseUrl}/${wsId}/join`;
+      const res = await axios.get<{ data: WorkspaceMember[] }>(url);
+      return res.data.data;
+    },
+
+    assignTask: async (
+      id: number | string,
+      payload: Partial<T>,
+      wsId?: string
+    ): Promise<T> => {
+      const url = `${baseUrl}/${wsId}/task/${id}/assign`;
+      const res = await axios.get<{ data: T }>(url);
+      return res.data.data;
     },
   };
 }
