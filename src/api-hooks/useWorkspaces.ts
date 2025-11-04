@@ -1,6 +1,5 @@
 import { workspaceApi } from '@/lib/api';
-import { Workspace } from '@/types/workspace';
-import { WorkspaceMember } from '@prisma/client';
+import { Workspace, WorkspaceMember } from '@/types/workspace';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 //------ReadAll------
@@ -61,7 +60,7 @@ export function useJoinWorkspace() {
 //------WsMembers------
 export function useGetWSMembers(wsId: string) {
   return useQuery<WorkspaceMember[]>({
-    queryKey: ['workspaces', wsId],
+    queryKey: ['workspace-members', wsId],
     queryFn: () => workspaceApi.getWorkspaceMembers(wsId),
     staleTime: 5 * 60 * 1000,
   });

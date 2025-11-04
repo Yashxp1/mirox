@@ -18,14 +18,6 @@ export function useOneTasks(wsId: string, taskId: string) {
   });
 }
 
-// export function useCreateTask(wsId: string) {
-//   const qc = useQueryClient();
-//   return useMutation({
-//     mutationFn: (payload: Partial<Task>) => taskApi.create(payload, wsId),
-//     onSuccess: () => qc.invalidateQueries({ queryKey: ['workspace'] }),
-//   });
-// }
-
 export function useCreateTask(wsId: string) {
   const qc = useQueryClient();
   return useMutation({
@@ -42,6 +34,18 @@ export function useUpdateTask(wsId: string, taskId: string) {
   return useMutation({
     mutationFn: (payload: Partial<Task>) =>
       taskApi.update(taskId, payload, wsId),
+    onSuccess: (updatedTask) => {
+      qc.setQueryData(['tasks', wsId, taskId], updatedTask);
+      qc.invalidateQueries({ queryKey: ['tasks', wsId, taskId] });
+    },
+  });
+}
+
+export function useAssignTask(wsId: string, taskId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: Partial<Task>) =>
+      taskApi.assignTask(taskId, payload, wsId),
     onSuccess: (updatedTask) => {
       qc.setQueryData(['tasks', wsId, taskId], updatedTask);
       qc.invalidateQueries({ queryKey: ['tasks', wsId, taskId] });
