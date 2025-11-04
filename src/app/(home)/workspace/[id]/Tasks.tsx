@@ -2,7 +2,7 @@
 
 import { useGetAllTasks } from '@/api-hooks/useTasks';
 import { Spinner } from '@/components/ui/spinner';
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react';
@@ -22,9 +22,10 @@ const Tasks = () => {
         </div>
       ) : (
         <div className="text-sm">
-          <div className="grid grid-cols-[1fr_100px_120px_100px] gap-4 border-b border-border px-4 py-2.5 font-medium text-muted-foreground bg-muted/30">
+          <div className="grid grid-cols-4 gap-4 border-b border-border px-4 py-2.5 font-medium text-muted-foreground bg-muted/30">
             <p>Task Name</p>
-            <p>Task Id</p>
+            <p>Assigned</p>
+            {/* <p>Task Id</p> */}
             <p>Status</p>
             <p>Priority</p>
           </div>
@@ -33,12 +34,13 @@ const Tasks = () => {
             {data && data.length > 0 ? (
               data.map((task) => (
                 <Link key={task.id} href={`/workspace/${id}/${task.id}`}>
-                  <div className="grid grid-cols-[1fr_100px_120px_100px] gap-4 border-b border-border hover:bg-accent hover:text-accent-foreground transition-colors px-4 py-2.5 cursor-pointer items-center">
+                  <div className="grid grid-cols-4 gap-4 border-b border-border hover:bg-accent hover:text-accent-foreground transition-colors px-4 py-2.5 cursor-pointer items-center">
                     <div className="flex gap-2 items-center">
                       <ClipboardList size={16} />
                       <p>{task.title}</p>
                     </div>
-                    <p className="hidden md:flex">{task.id}</p>
+                    <p className="">{task.assigneeId || '-'}</p>
+                    {/* <p className="hidden md:flex">{task.id}</p> */}
                     <p>{task.status.toLowerCase()}</p>
                     <p className="hidden md:flex">
                       {task.priority.toLowerCase()}

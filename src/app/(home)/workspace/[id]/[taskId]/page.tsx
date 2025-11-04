@@ -1,5 +1,9 @@
 'use client';
-import { useOneTasks, useUpdateTask } from '@/api-hooks/useTasks';
+import {
+  useAssignTask,
+  useOneTasks,
+  useUpdateTask,
+} from '@/api-hooks/useTasks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
@@ -49,6 +53,11 @@ const Page = () => {
 
   const { data, isError, isLoading } = useOneTasks(id, taskId);
   const { mutate, isPending } = useUpdateTask(id, taskId);
+
+  const { mutate: assignTask, isPending: isAssigning } = useAssignTask(
+    id,
+    taskId
+  );
 
   const [isModified, setIsModified] = useState(false);
 
@@ -121,6 +130,10 @@ const Page = () => {
       }
     );
   };
+
+  const handleAssign = () => {
+    
+  }
 
   if (isError) return <p>An error occured</p>;
 
@@ -305,6 +318,34 @@ const Page = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
+
+              {/* ------------------------------------------------------ */}
+              <div className="flex flex-col">
+                <span className="text-xs text-muted-foreground mb-1">
+                  Assigned to
+                </span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger value={taskStatus} asChild>
+                    <p className="flex border py-1 px-2 rounded-md bg-white/20 hover:bg-white/30 text-white dark:text-white border-white/50 transition-all cursor-default">
+                      {'Assign'}
+                    </p>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="start">
+                    <DropdownMenuGroup>
+                      {['IN_PROGRESS', 'PLANNED', 'DONE'].map((i, idx) => (
+                        <DropdownMenuItem
+                          key={idx}
+                          onSelect={() => setTaskStatus(i as TaskStatusType)}
+                        >
+                          {i}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* ------------------------------------------------------ */}
             </div>
             {isModified && (
               <div className="pt-4 transition-all duration-200">
