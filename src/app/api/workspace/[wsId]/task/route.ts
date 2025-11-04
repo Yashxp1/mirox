@@ -36,7 +36,7 @@ const createTask = async (
       status: validatedData.status,
       priority: validatedData.priority,
       authorId: user.id,
-      workspaceId: workspace.wsId,
+      workspaceId: workspace.wsId, 
     },
   });
 

@@ -89,12 +89,33 @@ const getMembers = async (
     throw new Error('workspace not found!');
   }
 
-  const workspace = await prisma.workspace.findMany({
+  const workspace = await prisma.workspace.findUnique({
     where: { wsId },
-    include: { members: true },
+    include: {
+      members: {
+        include: {
+          user: { select: { id: true, name: true, email: true, image: true } },
+        },
+      },
+    },
   });
 
-  return workspace;
+  if (!workspace) {
+    throw new Error('workspace not found!');
+  }
+
+  return workspace.members.map((m) => ({
+    id: m.id,
+    role: m.role,
+    createdAt: m.createdAt,
+    userId: m.userId,
+    workspaceId: m.workspaceId,
+    name: m.user?.name,
+    email: m.user?.email,
+    image: m.user?.image,
+  }));
+
+  // return NextResponse.json({ data: workspace.members });
 };
 export const POST = withApiHandler(joinWorkspace);
 export const DELETE = withApiHandler(leaveWorkspace);
