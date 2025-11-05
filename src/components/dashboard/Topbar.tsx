@@ -34,8 +34,13 @@ const Topbar: React.FC<TopbarProps> = ({ toggleSidebar }) => {
               </Link>
             </div>
             <div className="flex cursor-default justify-center items-center gap-2 border px-2 hover:bg-zinc-900 hover:text-white rounded-md transition-all">
-              <span>{<ListTodo size={16} />}</span>
-              <p className="">Assigned</p>
+              <Link
+                href={`/workspace/${id}/assigned`}
+                className="flex justify-center items-center gap-2"
+              >
+                <span>{<ListTodo size={16} />}</span>
+                <p className="">Assigned</p>
+              </Link>
             </div>
             <div className="flex cursor-default justify-center items-center gap-2 border px-2 hover:bg-zinc-900 hover:text-white rounded-md transition-all">
               <Link
