@@ -1,19 +1,21 @@
 'use client';
-
-import { useGetAllTasks } from '@/api-hooks/useTasks';
+import { useTaskByAssigneeId } from '@/api-hooks/useTasks';
 import { Spinner } from '@/components/ui/spinner';
 import { ClipboardList } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react';
 
-const Tasks = () => {
+const Page = () => {
   const params = useParams();
   const id = params.id as string;
-  const { data, isLoading, isError } = useGetAllTasks(id);
+  // const taskId = params.taskId as string;
+
+  const { data, isLoading, isError } = useTaskByAssigneeId(id);
 
   if (isError) return <p>Error loading tasks</p>;
 
+  console.log('ass data: => ', data);
   return (
     <div>
       {isLoading ? (
@@ -41,7 +43,7 @@ const Tasks = () => {
                     </div>
                     <p className="">{task.assigneeId ? '🟢' : '🔴'}</p>
                     {/* <p className="hidden md:flex">{task.id}</p> */}
-                    <p
+                   <p
                       className={`hidden md:flex font-semibold ${
                         task.status === 'DONE'
                           ? 'text-green-500'
@@ -52,14 +54,17 @@ const Tasks = () => {
                     >
                       {task.status.toLocaleLowerCase()}
                     </p>
+                    {/* <p className="hidden md:flex">
+                      {task.priority.toLowerCase()}
+                    </p> */}
                     <p
                       className={`hidden md:flex font-semibold ${
                         task.priority === 'LOW'
-                          ? 'text-pink-300'
+                          ? 'text-pink-500'
                           : task.priority === 'MEDIUM'
-                          ? 'text-yellow-300'
+                          ? 'text-yellow-500'
                           : task.priority === 'HIGH'
-                          ? 'text-red-400'
+                          ? 'text-red-500'
                           : 'text-white'
                       }`}
                     >
@@ -80,4 +85,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default Page;

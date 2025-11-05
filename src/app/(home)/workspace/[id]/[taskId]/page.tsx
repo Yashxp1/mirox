@@ -1,9 +1,5 @@
 'use client';
-import {
-  useAssignTask,
-  useOneTasks,
-  useUpdateTask,
-} from '@/api-hooks/useTasks';
+import { useOneTasks, useUpdateTask } from '@/api-hooks/useTasks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
@@ -26,6 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useGetWSMembers } from '@/api-hooks/useWorkspaces';
 
 type PriorityLevelType = 'LOW' | 'MEDIUM' | 'HIGH' | 'NONE';
 type TaskStatusType = 'IN_PROGRESS' | 'DONE' | 'PLANNED';
@@ -37,6 +34,7 @@ const Page = () => {
 
   const [taskName, setTaskName] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
+  const [taskAssignee, setTaskAssignee] = useState('');
 
   const [taskPriority, setTaskPriority] = useState<
     PriorityLevelType | undefined
@@ -54,10 +52,7 @@ const Page = () => {
   const { data, isError, isLoading } = useOneTasks(id, taskId);
   const { mutate, isPending } = useUpdateTask(id, taskId);
 
-  const { mutate: assignTask, isPending: isAssigning } = useAssignTask(
-    id,
-    taskId
-  );
+  const { data: wsMembers, isPending: isFetching } = useGetWSMembers(id);
 
   const [isModified, setIsModified] = useState(false);
 
@@ -70,6 +65,7 @@ const Page = () => {
       setTaskStart(data?.startdate ? new Date(data.startdate) : undefined);
     if (data?.target)
       setTaskTarget(data.target ? new Date(data.target) : undefined);
+    if (data?.assigneeId) setTaskAssignee(data.assigneeId);
   }, [data]);
 
   useEffect(() => {
@@ -86,6 +82,7 @@ const Page = () => {
 
     const changed =
       taskName !== (data.title || '') ||
+      taskAssignee !== (data.assigneeId || '') ||
       taskDescription !== (data.description || '') ||
       taskPriority !== data.priority ||
       taskStatus !== data.status ||
@@ -95,6 +92,7 @@ const Page = () => {
     setIsModified(changed);
   }, [
     taskName,
+    taskAssignee,
     taskDescription,
     taskStart,
     taskPriority,
@@ -114,6 +112,7 @@ const Page = () => {
         title: taskName,
         description: taskDescription,
         priority: taskPriority,
+        assigneeId: taskAssignee,
         status: taskStatus,
         startdate: taskStart ? taskStart.toISOString() : undefined,
         target: taskTarget ? taskTarget.toISOString() : undefined,
@@ -131,10 +130,6 @@ const Page = () => {
     );
   };
 
-  const handleAssign = () => {
-    
-  }
-
   if (isError) return <p>An error occured</p>;
 
   return (
@@ -145,6 +140,7 @@ const Page = () => {
             <Spinner className="size-6" />
           </div>
         ) : (
+          
           <div className=" w-full px-40 py-12">
             <input
               value={taskName}
@@ -159,15 +155,6 @@ const Page = () => {
             />
 
             <div className="flex pt-6 text-xs gap-2">
-              {/* <div className="flex flex-col">
-                <span className="text-xs flex items-center gap-1 text-muted-foreground mb-1">
-                  <User size={16} /> Author
-                </span>
-                <p className="flex border py-1 px-2 rounded-md bg-blue-500/20 hover:bg-blue-500/30 text-blue-700 dark:text-blue-300 border-blue-500/50 transition-all cursor-default">
-                  {data?.authorId}
-                </p>
-              </div> */}
-
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground mb-1">
                   Created
@@ -273,7 +260,17 @@ const Page = () => {
                     // onChange={(e) => setTaskPriority(e.target.value)}
                     asChild
                   >
-                    <p className="flex border py-1 px-2 rounded-md bg-red-500/20 hover:bg-red-500/30 text-red-700 dark:text-red-300 border-red-500/50 transition-all cursor-default">
+                    <p
+                      className={`flex border py-1 px-2 rounded-md transition-all cursor-default ${
+                        taskPriority === 'LOW'
+                          ? 'bg-pink-500/20 hover:bg-pink-500/30 text-pink-700 dark:text-pink-300 border-pink-500/50'
+                          : taskPriority === 'MEDIUM'
+                          ? 'bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-300 border-yellow-500/50'
+                          : taskPriority === 'HIGH'
+                          ? 'bg-red-500/20 hover:bg-red-500/30 text-red-700 dark:text-red-300 border-red-500/50'
+                          : 'bg-gray-500/20 hover:bg-gray-500/30 text-gray-700 dark:text-gray-300 border-gray-500/50'
+                      }`}
+                    >
                       {taskPriority || data?.priority || 'Set Priority'}
                     </p>
                   </DropdownMenuTrigger>
@@ -300,8 +297,18 @@ const Page = () => {
                 </span>
                 <DropdownMenu>
                   <DropdownMenuTrigger value={taskStatus} asChild>
-                    <p className="flex border py-1 px-2 rounded-md bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-300 border-yellow-500/50 transition-all cursor-default">
-                      {taskStatus || data?.status || 'Set Status'}
+                    <p
+                      className={`flex border py-1 px-2 rounded-md transition-all cursor-default ${
+                        taskStatus === 'DONE'
+                          ? 'bg-green-500/20 hover:bg-green-500/30 text-green-700 dark:text-green-300 border-green-500/50'
+                          : taskStatus === 'IN_PROGRESS'
+                          ? 'bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-300 border-yellow-500/50'
+                          : taskStatus === 'PLANNED'
+                          ? 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-700 dark:text-blue-300 border-blue-500/50'
+                          : 'bg-gray-500/20 hover:bg-gray-500/30 text-gray-700 dark:text-gray-300 border-gray-500/50'
+                      }`}
+                    >
+                      {taskStatus || 'Set Status'}
                     </p>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="start">
@@ -319,7 +326,6 @@ const Page = () => {
                 </DropdownMenu>
               </div>
 
-              {/* ------------------------------------------------------ */}
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground mb-1">
                   Assigned to
@@ -327,25 +333,29 @@ const Page = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger value={taskStatus} asChild>
                     <p className="flex border py-1 px-2 rounded-md bg-white/20 hover:bg-white/30 text-white dark:text-white border-white/50 transition-all cursor-default">
-                      {'Assign'}
+                      {isFetching ? (
+                        <Spinner />
+                      ) : (
+                        wsMembers?.map((n) => (
+                          <p key={n.id}>{n.name.toLocaleUpperCase()}</p>
+                        )) || 'error'
+                      )}
                     </p>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="start">
                     <DropdownMenuGroup>
-                      {['IN_PROGRESS', 'PLANNED', 'DONE'].map((i, idx) => (
+                      {wsMembers?.map((i) => (
                         <DropdownMenuItem
-                          key={idx}
-                          onSelect={() => setTaskStatus(i as TaskStatusType)}
+                          key={i.id}
+                          onSelect={() => setTaskAssignee(i.id as any)}
                         >
-                          {i}
+                          {i.id && i.name}
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-
-              {/* ------------------------------------------------------ */}
             </div>
             {isModified && (
               <div className="pt-4 transition-all duration-200">
