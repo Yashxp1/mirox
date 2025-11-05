@@ -27,6 +27,14 @@ const createTask = async (
   const body = await req.json();
   const validatedData = CreateTaskSchema.parse(body);
 
+  const currentMember = workspace.members.find((m) => m.userId === user.id);
+  const isAuthor = workspace.authorId === user.id;
+  const isAdmin = currentMember?.role === 'ADMIN';
+
+  if (!isAuthor && !isAdmin) {
+    throw new Error('Unauthorized: only author or admin can assign tasks');
+  }
+
   const task = await prisma.task.create({
     data: {
       title: validatedData.title,
@@ -36,7 +44,8 @@ const createTask = async (
       status: validatedData.status,
       priority: validatedData.priority,
       authorId: user.id,
-      workspaceId: workspace.wsId, 
+      workspaceId: workspace.wsId,
+      assigneeId: validatedData.assigneeId,
     },
   });
 

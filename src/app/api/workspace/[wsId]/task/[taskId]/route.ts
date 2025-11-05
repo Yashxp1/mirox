@@ -16,7 +16,7 @@ const getTaskById = async (
     throw new Error('workspace not found!');
   }
 
- const workspace = await prisma.workspace.findUnique({
+  const workspace = await prisma.workspace.findUnique({
     where: { wsId },
     include: {
       members: {
@@ -40,9 +40,12 @@ const getTaskById = async (
 
   const task = await prisma.task.findUnique({
     where: { id: Number(taskId) },
+    include: {
+      assignee: true,
+    },
   });
 
-  if (!task ) {
+  if (!task) {
     throw new Error('Workspace not found or unauthorized');
   }
 
@@ -121,6 +124,7 @@ const updateTask = async (
       status: validatedData.status,
       priority: validatedData.priority,
       workspaceId: workspace.wsId,
+      assigneeId: validatedData.assigneeId,
     },
   });
 
