@@ -11,6 +11,12 @@ export function createCrudClient<T extends { id: number | string }>(
       return res.data.data;
     },
 
+    getByAssigneeId: async (wsId?: string): Promise<T[]> => {
+      const url = `${baseUrl}/${wsId}/task/assignee`;
+      const res = await axios.get<{ data: T[] }>(url);
+      return res.data.data;
+    },
+
     getOne: async (wsId?: string, taskId?: string): Promise<T> => {
       let url;
       if (wsId && taskId) url = `${baseUrl}/${wsId}/task/${taskId}`;
