@@ -4,6 +4,9 @@ CREATE TYPE "public"."Priority" AS ENUM ('LOW', 'HIGH', 'MEDIUM', 'NONE');
 -- CreateEnum
 CREATE TYPE "public"."Status" AS ENUM ('DONE', 'IN_PROGRESS', 'PLANNED', 'COMPLETED', 'BACKLOG', 'CANCELED');
 
+-- CreateEnum
+CREATE TYPE "public"."Role" AS ENUM ('ADMIN', 'MEMBER');
+
 -- CreateTable
 CREATE TABLE "public"."User" (
     "id" TEXT NOT NULL,
@@ -70,33 +73,15 @@ CREATE TABLE "public"."Authenticator" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."WorkSpace" (
+CREATE TABLE "public"."Workspace" (
     "id" SERIAL NOT NULL,
+    "wsId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "CreatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "WorkSpace_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."Project" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "summary" TEXT,
-    "description" TEXT,
-    "startdate" TIMESTAMP(3),
-    "target" TIMESTAMP(3),
-    "priority" "public"."Priority" NOT NULL DEFAULT 'NONE',
-    "status" "public"."Status" NOT NULL DEFAULT 'PLANNED',
-    "authorId" TEXT NOT NULL,
-    "workspaceId" INTEGER,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Workspace_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -110,11 +95,22 @@ CREATE TABLE "public"."Task" (
     "priority" "public"."Priority" NOT NULL DEFAULT 'NONE',
     "authorId" TEXT NOT NULL,
     "assigneeId" TEXT,
-    "projectId" INTEGER,
-    "CreatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "workspaceId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Task_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."WorkspaceMember" (
+    "id" SERIAL NOT NULL,
+    "userId" TEXT NOT NULL,
+    "workspaceId" INTEGER NOT NULL,
+    "role" "public"."Role" NOT NULL DEFAULT 'MEMBER',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "WorkspaceMember_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -123,6 +119,7 @@ CREATE TABLE "public"."Comments" (
     "body" TEXT NOT NULL,
     "issueId" INTEGER NOT NULL,
     "authorId" TEXT NOT NULL,
+    "authorName" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Comments_pkey" PRIMARY KEY ("id")
@@ -137,6 +134,9 @@ CREATE UNIQUE INDEX "Session_sessionToken_key" ON "public"."Session"("sessionTok
 -- CreateIndex
 CREATE UNIQUE INDEX "Authenticator_credentialID_key" ON "public"."Authenticator"("credentialID");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Workspace_wsId_key" ON "public"."Workspace"("wsId");
+
 -- AddForeignKey
 ALTER TABLE "public"."Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -147,13 +147,7 @@ ALTER TABLE "public"."Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY 
 ALTER TABLE "public"."Authenticator" ADD CONSTRAINT "Authenticator_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."WorkSpace" ADD CONSTRAINT "WorkSpace_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."Project" ADD CONSTRAINT "Project_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."Project" ADD CONSTRAINT "Project_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "public"."WorkSpace"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."Workspace" ADD CONSTRAINT "Workspace_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Task" ADD CONSTRAINT "Task_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -162,7 +156,13 @@ ALTER TABLE "public"."Task" ADD CONSTRAINT "Task_authorId_fkey" FOREIGN KEY ("au
 ALTER TABLE "public"."Task" ADD CONSTRAINT "Task_assigneeId_fkey" FOREIGN KEY ("assigneeId") REFERENCES "public"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Task" ADD CONSTRAINT "Task_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "public"."Project"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."Task" ADD CONSTRAINT "Task_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "public"."Workspace"("wsId") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."WorkspaceMember" ADD CONSTRAINT "WorkspaceMember_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."WorkspaceMember" ADD CONSTRAINT "WorkspaceMember_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "public"."Workspace"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Comments" ADD CONSTRAINT "Comments_issueId_fkey" FOREIGN KEY ("issueId") REFERENCES "public"."Task"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
