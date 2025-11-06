@@ -11,7 +11,11 @@ export default auth((req) => {
 
   const url = req.nextUrl.origin;
 
-  const isProtectedRoute = privateRoute.includes(nextUrl.pathname);
+  const isProtectedRoute = privateRoute.some((path) =>
+    nextUrl.pathname.startsWith(path)
+  );
+
+  
 
   const isAuthRoute = authRoute.includes(nextUrl.pathname);
 
