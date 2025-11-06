@@ -69,5 +69,27 @@ export function createCrudClient<T extends { id: number | string }>(
       const res = await axios.get<{ data: T }>(url);
       return res.data.data;
     },
+
+    getAllComments: async (wsId: string, taskId: string): Promise<T[]> => {
+      const url = `${baseUrl}/${wsId}/task/${taskId}/comments`;
+      const res = await axios.get<{ data: T[] }>(url);
+      return res.data.data;
+    },
+
+    createComment: async (
+      payload: Partial<T>,
+      wsId: string,
+      taskId: string
+    ): Promise<T> => {
+      const url = `${baseUrl}/${wsId}/task/${taskId}/comments`;
+      const res = await axios.post<{ data: T }>(url, payload);
+      return res.data.data;
+    },
+
+    updateTaskComments: async (wsId: string, taskId: string): Promise<T[]> => {
+      const url = `${baseUrl}/${wsId}/task/${taskId}/comments`;
+      const res = await axios.get<{ data: T[] }>(url);
+      return res.data.data;
+    },
   };
 }

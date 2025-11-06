@@ -50,10 +50,16 @@ export function useRemoveWorkspaces(id: number) {
 
 //------Join------
 export function useJoinWorkspace() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (wsId: string) => {
       if (!wsId) throw new Error('Workspace ID is required');
       return await workspaceApi.join(wsId);
+    },
+    onSuccess: (data, wsId) => {
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
+      queryClient.invalidateQueries({ queryKey: ['workspace', wsId] });
+      queryClient.setQueryData(['workspace', wsId], data);
     },
   });
 }
