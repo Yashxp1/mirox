@@ -22,7 +22,7 @@ const Page = () => {
 
   const { mutate: joinWorkspace, isPending: isJoining } = useJoinWorkspace();
 
-  const [WSAction, setWSAction] = useState<'create' | 'Join' | null>(null);
+  const [WSAction, setWSAction] = useState<'create' | 'Join' | null>('Join');
 
   // const handleToggleAction = () => {
   //   setWSAction(!WSAction);
@@ -139,26 +139,32 @@ const Page = () => {
         </div>
       ) : (
         <div className="pt-3 w-full flex flex-col items-center">
-          {data?.map((ws) => (
-            <Link
-              key={ws.id}
-              href={`/workspace/${ws.wsId}`}
-              className="w-full max-w-md"
-            >
-              <div className="border border-border flex justify-between w-full rounded-lg p-2 sm:p-2 my-1 text-sm sm:text-base hover:bg-accent hover:text-accent-foreground transition-all duration-200">
-                <p className="flex items-center gap-2 truncate">
-                  <BriefcaseBusiness size={16} /> {ws.name}
-                </p>
-                <p className="flex text-xs sm:text-sm items-center gap-1 text-zinc-400">
-                  {new Date(ws.CreatedAt).toLocaleString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                  <ArrowRight size={16} />
-                </p>
-              </div>
-            </Link>
-          ))}
+          {data?.length === 0 ? (
+            <p className='dark:text-zinc-400 text-zinc-800'>No workspace found</p>
+          ) : (
+            <>
+              {data?.map((ws) => (
+                <Link
+                  key={ws.id}
+                  href={`/workspace/${ws.wsId}`}
+                  className="w-full max-w-md"
+                >
+                  <div className="border border-border flex justify-between w-full rounded-lg p-2 sm:p-2 my-1 text-sm sm:text-base hover:bg-accent hover:text-accent-foreground transition-all duration-200">
+                    <p className="flex items-center gap-2 truncate">
+                      <BriefcaseBusiness size={16} /> {ws.name}
+                    </p>
+                    <p className="flex text-xs sm:text-sm items-center gap-1 text-zinc-400">
+                      {new Date(ws.CreatedAt).toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                      <ArrowRight size={16} />
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </>
+          )}
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 'use client';
 import { useTaskByAssigneeId } from '@/api-hooks/useTasks';
 import { Spinner } from '@/components/ui/spinner';
-import { ClipboardList } from 'lucide-react';
+import { CircleCheck, CircleEllipsis, ClipboardList } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react';
@@ -41,15 +41,20 @@ const Page = () => {
                       <ClipboardList size={16} />
                       <p>{task.title}</p>
                     </div>
-                    <p className="">{task.assigneeId ? '🟢' : '🔴'}</p>
-                    {/* <p className="hidden md:flex">{task.id}</p> */}
-                   <p
+                    <p className="">
+                      {task.assigneeId ? (
+                        <CircleCheck size={18} className="text-green-500" />
+                      ) : (
+                        <CircleEllipsis size={18} className="text-yellow-500" />
+                      )}
+                    </p>
+                    <p
                       className={`hidden md:flex font-semibold ${
                         task.status === 'DONE'
                           ? 'text-green-500'
                           : task.status === 'IN_PROGRESS'
                           ? 'text-yellow-500'
-                          : 'text-white'
+                          : 'dark:text-white text-black-200'
                       }`}
                     >
                       {task.status.toLocaleLowerCase()}
@@ -65,7 +70,7 @@ const Page = () => {
                           ? 'text-yellow-500'
                           : task.priority === 'HIGH'
                           ? 'text-red-500'
-                          : 'text-white'
+                          : 'dark:text-white text-black-200'
                       }`}
                     >
                       {task.priority.toLocaleLowerCase()}

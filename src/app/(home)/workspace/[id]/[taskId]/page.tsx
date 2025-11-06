@@ -1,9 +1,13 @@
 'use client';
-import { useOneTasks, useUpdateTask } from '@/api-hooks/useTasks';
+import {
+  useCreateTaskComments,
+  useGetTaskComments,
+  useOneTasks,
+  useUpdateTask,
+} from '@/api-hooks/useTasks';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import { ChevronDownIcon, SendHorizontal } from 'lucide-react';
+import { ArrowUpRight, ChevronDownIcon, SendHorizontal } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -23,9 +27,36 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useGetWSMembers } from '@/api-hooks/useWorkspaces';
+import { Textarea } from '@/components/ui/textarea';
 
 type PriorityLevelType = 'LOW' | 'MEDIUM' | 'HIGH' | 'NONE';
 type TaskStatusType = 'IN_PROGRESS' | 'DONE' | 'PLANNED';
+
+const randomNameIcon = [
+  { bg: 'bg-red-900/50', text: 'text-red-300' },
+  { bg: 'bg-blue-900/50', text: 'text-blue-300' },
+  { bg: 'bg-green-900/50', text: 'text-green-300' },
+  { bg: 'bg-purple-900/50', text: 'text-purple-300' },
+  { bg: 'bg-pink-900/50', text: 'text-pink-300' },
+  { bg: 'bg-yellow-900/50', text: 'text-yellow-300' },
+  { bg: 'bg-orange-900/50', text: 'text-orange-300' },
+  { bg: 'bg-emerald-900/50', text: 'text-emerald-300' },
+  { bg: 'bg-teal-900/50', text: 'text-teal-300' },
+  { bg: 'bg-cyan-900/50', text: 'text-cyan-300' },
+  { bg: 'bg-sky-900/50', text: 'text-sky-300' },
+  { bg: 'bg-indigo-900/50', text: 'text-indigo-300' },
+  { bg: 'bg-violet-900/50', text: 'text-violet-300' },
+  { bg: 'bg-fuchsia-900/50', text: 'text-fuchsia-300' },
+  { bg: 'bg-rose-900/50', text: 'text-rose-300' },
+  { bg: 'bg-lime-900/50', text: 'text-lime-300' },
+  { bg: 'bg-amber-900/50', text: 'text-amber-300' },
+  { bg: 'bg-stone-900/50', text: 'text-stone-300' },
+  { bg: 'bg-gray-900/50', text: 'text-gray-300' },
+  { bg: 'bg-slate-900/50', text: 'text-slate-300' },
+];
+
+const nameIcon =
+  randomNameIcon[Math.floor(Math.random() * randomNameIcon.length)];
 
 const Page = () => {
   const params = useParams();
@@ -50,11 +81,16 @@ const Page = () => {
   const [targetOpen, setTargetOpen] = useState(false);
 
   const { data, isError, isLoading } = useOneTasks(id, taskId);
+
   const { mutate, isPending } = useUpdateTask(id, taskId);
 
   const { data: wsMembers, isPending: isFetching } = useGetWSMembers(id);
 
+  const { data: taskComments } = useGetTaskComments(id, taskId);
+
   const [isModified, setIsModified] = useState(false);
+
+  const [taskCmt, setTaskCmt] = useState('');
 
   useEffect(() => {
     if (data?.title) setTaskName(data.title);
@@ -130,6 +166,33 @@ const Page = () => {
     );
   };
 
+  const { mutate: createCmt, isPending: isCreatingCmt } = useCreateTaskComments(
+    id,
+    taskId
+  );
+
+  const handleCreateTaskComment = () => {
+    if (!taskCmt.trim()) {
+      toast.error('comment cannot be blank');
+    }
+
+    createCmt(
+      {
+        commentbody: taskCmt,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Added a comment');
+          setTaskCmt('');
+        },
+        onError: (err) => {
+          console.log(err);
+          toast.error('Failed to  add a comment');
+        },
+      }
+    );
+  };
+
   if (isError) return <p>An error occured</p>;
 
   return (
@@ -140,7 +203,6 @@ const Page = () => {
             <Spinner className="size-6" />
           </div>
         ) : (
-          
           <div className=" w-full px-40 py-12">
             <input
               value={taskName}
@@ -336,9 +398,10 @@ const Page = () => {
                       {isFetching ? (
                         <Spinner />
                       ) : (
-                        wsMembers?.map((n) => (
-                          <p key={n.id}>{n.name.toLocaleUpperCase()}</p>
-                        )) || 'error'
+                        <p>{data?.assigneeId || '-'}</p>
+                        // wsMembers?.map((n) => (
+                        //   <p key={n.id}>{n.name.toLocaleUpperCase()}</p>
+                        // )) || 'error'
                       )}
                     </p>
                   </DropdownMenuTrigger>
@@ -349,7 +412,7 @@ const Page = () => {
                           key={i.id}
                           onSelect={() => setTaskAssignee(i.id as any)}
                         >
-                          {i.id && i.name}
+                          {i.name}
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuGroup>
@@ -361,7 +424,7 @@ const Page = () => {
               <div className="pt-4 transition-all duration-200">
                 <Button
                   onClick={handleUpdate}
-                  className="transition-all duration-200"
+                  className="transition-all duration-200 hover:bg-orange-900 text-orange-300 bg-orange-900/50"
                 >
                   {isPending ? <Spinner /> : 'Save'}
                 </Button>
@@ -370,14 +433,53 @@ const Page = () => {
             <div className="border-b pt-4" />
             <div className="pt-3">
               <h1 className="font-[500] py-4">Comments</h1>
-              <div className="flex gap-2">
-                <Input />
-                <Button>
-                  <SendHorizontal />
-                </Button>
-                {/* <Textarea /> */}
+              <div className="flex items-start gap-2">
+                <Textarea
+                  value={taskCmt}
+                  onChange={(e) => setTaskCmt(e.target.value)}
+                />
+                {isCreatingCmt ? (
+                  <div
+                    onClick={handleCreateTaskComment}
+                    className="rounded-full text-white bg-green-800 p-2"
+                  >
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div
+                    onClick={handleCreateTaskComment}
+                    className="rounded-full text-white bg-green-800 p-2"
+                  >
+                    <ArrowUpRight size={16} />
+                  </div>
+                )}
               </div>
-              <div>{/* {data?.comments} */}</div>
+              <div className="my-4 text-sm rounded-md border-zinc-900">
+                {taskComments?.map((c) => (
+                  <div
+                    key={c.id}
+                    className="flex items-start gap-2 p-2  rounded-md hover:bg-zinc-800/70 transition-colors"
+                  >
+                    <div>
+                      <p
+                        className={`text-xs px-2 py-1 ${nameIcon.bg} rounded-sm ${nameIcon.text}`}
+                      >
+                        {c.authorName || '-'}
+                      </p>
+                    </div>
+                    <div className="flex justify-between w-full  items-center">
+                      <p className="text-zinc-200">{c.body || 'error'}</p>
+                      <p className="text-xs text-zinc-400">
+                        {new Date(c.createdAt).toLocaleString('en-Us', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

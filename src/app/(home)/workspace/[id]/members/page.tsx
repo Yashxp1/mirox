@@ -34,7 +34,7 @@ const Page = () => {
     );
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-10 px-4 bg-background text-foreground transition-colors duration-200">
+    <div className=" flex flex-col items-center py-10 px-4 bg-background text-foreground transition-colors duration-200">
       <div className="w-full max-w-5xl text-sm border border-border rounded-xl overflow-hidden shadow-sm">
         <div className="grid grid-cols-[1.5fr_1fr_1.5fr_0.8fr_1fr] gap-4 border-b border-border px-5 py-3 font-medium text-muted-foreground bg-muted/40">
           <p>Name</p>

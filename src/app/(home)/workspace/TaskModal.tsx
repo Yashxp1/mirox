@@ -14,7 +14,7 @@ import {
 
 import { ChevronDownIcon } from 'lucide-react';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
 
@@ -221,7 +221,17 @@ const TaskModal = () => {
                     // onChange={(e) => setTaskPriority(e.target.value)}
                     asChild
                   >
-                    <p className="flex border py-1 px-2 rounded-md bg-red-500/20 hover:bg-red-500/30 text-red-700 dark:text-red-300 border-red-500/50 transition-all cursor-default">
+                    <p
+                      className={`flex border py-1 px-2 rounded-md ${
+                        taskPriority === 'LOW'
+                          ? 'bg-pink-500/20 hover:bg-pink-500/30 text-pink-700 dark:text-pink-300 border-pink-500/50'
+                          : taskPriority === 'MEDIUM'
+                          ? 'bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-300 border-yellow-500/50'
+                          : taskPriority === 'HIGH'
+                          ? 'bg-red-500/20 hover:bg-red-500/30 text-red-700 dark:text-red-300 border-red-500/50'
+                          : 'bg-gray-500/20 hover:bg-gray-500/30 text-gray-700 dark:text-gray-300 border-gray-500/50'
+                      } transition-all cursor-default`}
+                    >
                       {taskPriority || 'Set Priority'}
                     </p>
                   </DropdownMenuTrigger>
@@ -248,7 +258,17 @@ const TaskModal = () => {
                 </span>
                 <DropdownMenu>
                   <DropdownMenuTrigger value={taskStatus} asChild>
-                    <p className="flex border py-1 px-2 rounded-md bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-300 border-yellow-500/50 transition-all cursor-default">
+                    <p
+                      className={`flex border py-1 px-2 rounded-md ${
+                        taskStatus === 'DONE'
+                          ? 'bg-green-500/20 hover:bg-green-500/30 text-green-700 dark:text-green-300 border-green-500/50'
+                          : taskStatus === 'IN_PROGRESS'
+                          ? 'bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-700 dark:text-yellow-300 border-yellow-500/50'
+                          : taskStatus === 'PLANNED'
+                          ? 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-700 dark:text-blue-300 border-blue-500/50'
+                          : 'bg-gray-500/20 hover:bg-gray-500/30 text-gray-700 dark:text-gray-300 border-gray-500/50'
+                      } transition-all cursor-default`}
+                    >
                       {taskStatus || 'Set Status'}
                     </p>
                   </DropdownMenuTrigger>
