@@ -32,32 +32,6 @@ import { Textarea } from '@/components/ui/textarea';
 type PriorityLevelType = 'LOW' | 'MEDIUM' | 'HIGH' | 'NONE';
 type TaskStatusType = 'IN_PROGRESS' | 'DONE' | 'PLANNED';
 
-const randomNameIcon = [
-  { bg: 'bg-red-900/50', text: 'text-red-300' },
-  { bg: 'bg-blue-900/50', text: 'text-blue-300' },
-  { bg: 'bg-green-900/50', text: 'text-green-300' },
-  { bg: 'bg-purple-900/50', text: 'text-purple-300' },
-  { bg: 'bg-pink-900/50', text: 'text-pink-300' },
-  { bg: 'bg-yellow-900/50', text: 'text-yellow-300' },
-  { bg: 'bg-orange-900/50', text: 'text-orange-300' },
-  { bg: 'bg-emerald-900/50', text: 'text-emerald-300' },
-  { bg: 'bg-teal-900/50', text: 'text-teal-300' },
-  { bg: 'bg-cyan-900/50', text: 'text-cyan-300' },
-  { bg: 'bg-sky-900/50', text: 'text-sky-300' },
-  { bg: 'bg-indigo-900/50', text: 'text-indigo-300' },
-  { bg: 'bg-violet-900/50', text: 'text-violet-300' },
-  { bg: 'bg-fuchsia-900/50', text: 'text-fuchsia-300' },
-  { bg: 'bg-rose-900/50', text: 'text-rose-300' },
-  { bg: 'bg-lime-900/50', text: 'text-lime-300' },
-  { bg: 'bg-amber-900/50', text: 'text-amber-300' },
-  { bg: 'bg-stone-900/50', text: 'text-stone-300' },
-  { bg: 'bg-gray-900/50', text: 'text-gray-300' },
-  { bg: 'bg-slate-900/50', text: 'text-slate-300' },
-];
-
-const nameIcon =
-  randomNameIcon[Math.floor(Math.random() * randomNameIcon.length)];
-
 const Page = () => {
   const params = useParams();
   const id = params.id as string;
@@ -394,16 +368,13 @@ const Page = () => {
                 </span>
                 <DropdownMenu>
                   <DropdownMenuTrigger value={taskStatus} asChild>
-                    <p className="flex border py-1 px-2 rounded-md bg-white/20 hover:bg-white/30 text-white dark:text-white border-white/50 transition-all cursor-default">
+                    <div className="flex border py-1 px-2 rounded-md bg-white/20 hover:bg-white/30 text-white dark:text-white border-white/50 transition-all cursor-default">
                       {isFetching ? (
                         <Spinner />
                       ) : (
                         <p>{data?.assigneeId || '-'}</p>
-                        // wsMembers?.map((n) => (
-                        //   <p key={n.id}>{n.name.toLocaleUpperCase()}</p>
-                        // )) || 'error'
                       )}
-                    </p>
+                    </div>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="start">
                     <DropdownMenuGroup>
@@ -454,23 +425,27 @@ const Page = () => {
                   </div>
                 )}
               </div>
-              <div className="my-4 text-sm rounded-md border-zinc-900">
+              <div className="my-4 text-sm rounded-md border border-zinc-200 dark:border-zinc-900 space-y-2">
                 {taskComments?.map((c) => (
                   <div
                     key={c.id}
-                    className="flex items-start gap-2 p-2  rounded-md hover:bg-zinc-800/70 transition-colors"
+                    className="flex items-start gap-2 p-2 rounded-md transition-colors 
+                 hover:bg-purple-100 dark:hover:bg-purple-500/10"
                   >
                     <div>
                       <p
-                        className={`text-xs px-2 py-1 ${nameIcon.bg} rounded-sm ${nameIcon.text}`}
+                        className="text-xs px-2 py-1 rounded-sm bg-purple-100 text-purple-700 
+                     dark:bg-purple-900/50 dark:text-purple-300 transition-colors duration-200"
                       >
                         {c.authorName || '-'}
                       </p>
                     </div>
-                    <div className="flex justify-between w-full  items-center">
-                      <p className="text-zinc-200">{c.body || 'error'}</p>
-                      <p className="text-xs text-zinc-400">
-                        {new Date(c.createdAt).toLocaleString('en-Us', {
+                    <div className="flex justify-between w-full items-center">
+                      <p className="text-zinc-900 dark:text-zinc-200">
+                        {c.body || 'error'}
+                      </p>
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                        {new Date(c.createdAt).toLocaleString('en-US', {
                           day: '2-digit',
                           month: 'short',
                           year: 'numeric',

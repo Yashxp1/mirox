@@ -1,35 +1,131 @@
 'use client';
-import { useGetOneWorkspaces } from '@/api-hooks/useWorkspaces';
-import Sidebar from '@/components/dashboard/Sidebar/Sidebar';
+import { BriefcaseBusiness, Plus, LogOut } from 'lucide-react';
 import Topbar from '@/components/dashboard/Topbar';
-import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import SignOut from '@/components/auth/SignOut';
+import { Spinner } from '@/components/ui/spinner';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import TaskModal from './TaskModal';
+import { useGetAllWorkspaces } from '@/api-hooks/useWorkspaces';
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const params = useParams();
-  const id = params.id as string;
-
-const { data: workspace, isError } = useGetOneWorkspaces(id);
-
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
+}) {
+  const { data, isLoading } = useGetAllWorkspaces();
 
   return (
-    <main className="flex min-h-screen transition-all duration-300">
-      <div className="transition-all duration-300">
-        {isSidebarOpen && <Sidebar workspace={workspace} workspaceError={isError} />}
+    <main className="flex min-h-screen relative transition-all duration-300 bg-background">
+      <div className="sticky top-0 z-40 w-full">
+        <Topbar />
+        <div className="px-4 md:px-8 py-4">{children}</div>
       </div>
-      <div className="flex-1 transition-all duration-300">
-        <Topbar toggleSidebar={toggleSidebar} />
-        {children}
-      </div>
+
+      <Popover>
+        <PopoverTrigger asChild>
+          <span 
+            aria-label="Open actions"
+            className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg 
+                       hover:shadow-xl hover:bg-primary/90 active:scale-95 transition-all duration-200 flex items-center justify-center"
+          >
+            <Plus
+              className="transition-transform duration-300 group-hover:rotate-90"
+              size={24}
+            />
+          </span>
+        </PopoverTrigger>
+
+        <PopoverContent
+          align="end"
+          side="top"
+          className="w-96 p-0 z-[9999] rounded-2xl shadow-2xl border border-border/50 overflow-hidden"
+        >
+          {isLoading ? (
+            <div className="flex justify-center items-center py-8">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="bg-popover">
+              <div className="border-b border-border/50 px-5 py-4 bg-muted/30">
+                <h2 className="text-base font-semibold text-foreground">
+                  Quick Actions
+                </h2>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Manage workspaces and tasks
+                </p>
+              </div>
+
+              <div className="p-4 space-y-3 max-h-96 overflow-y-auto">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 px-2">
+                    <BriefcaseBusiness size={14} className="text-primary" />
+                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Workspaces
+                    </h3>
+                  </div>
+
+                  {data?.length ? (
+                    <div className="space-y-1">
+                      {data.map((ws) => (
+                        <Link
+                          key={ws.id}
+                          href={`/workspace/${ws.wsId}`}
+                          className="block"
+                        >
+                          <div
+                            className="rounded-lg text-sm font-medium text-foreground 
+                                     hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer transition-all duration-200 
+                                     py-2.5 px-3 hover:translate-x-1"
+                          >
+                            {ws.name}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted-foreground py-2 px-3">
+                      No workspaces available
+                    </p>
+                  )}
+
+                  <Link href="/dashboard" className="block pt-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full flex items-center gap-2 text-sm justify-center rounded-lg font-medium"
+                    >
+                      <Plus size={16} />
+                      New Workspace
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className="h-px bg-border/50 my-2"></div>
+
+                <TaskModal />
+
+                <div className="h-px bg-border/50 my-2"></div>
+
+                <div className="rounded-lg overflow-hidden">
+                  <button
+                    className="w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-500
+                               hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200 rounded-lg"
+                  >
+                    <LogOut size={16} />
+                    <SignOut />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </PopoverContent>
+      </Popover>
     </main>
   );
 }
