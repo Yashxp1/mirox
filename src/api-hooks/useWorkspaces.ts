@@ -48,6 +48,15 @@ export function useRemoveWorkspaces(id: number) {
   });
 }
 
+//---------leaveWs--------
+export function useLeaveWorkspace(wsId: string, userId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => workspaceApi.leaveWS(wsId, userId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['workspace'] }),
+  });
+}
+
 //------Join------
 export function useJoinWorkspace() {
   const queryClient = useQueryClient();

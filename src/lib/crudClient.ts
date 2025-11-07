@@ -1,3 +1,4 @@
+import { TaskCmt } from '@/types/task';
 import { WorkspaceMember } from '@/types/workspace';
 import axios from 'axios';
 
@@ -48,6 +49,10 @@ export function createCrudClient<T extends { id: number | string }>(
       await axios.delete(url);
     },
 
+    leaveWS: async (wsId: string, userId: string): Promise<void> => {
+      const url = `${baseUrl}/${wsId}/join`;
+      await axios.delete(url);
+    },
     join: async (wsId?: string): Promise<T> => {
       const url = `${baseUrl}/${wsId}/join`;
       const res = await axios.post<{ data: T }>(url);
@@ -77,12 +82,12 @@ export function createCrudClient<T extends { id: number | string }>(
     },
 
     createComment: async (
-      payload: Partial<T>,
+      payload: Partial<TaskCmt>,
       wsId: string,
       taskId: string
-    ): Promise<T> => {
+    ): Promise<TaskCmt> => {
       const url = `${baseUrl}/${wsId}/task/${taskId}/comments`;
-      const res = await axios.post<{ data: T }>(url, payload);
+      const res = await axios.post<{ data: TaskCmt }>(url, payload);
       return res.data.data;
     },
 

@@ -1,11 +1,6 @@
 import { taskApi } from '@/lib/api';
-import { Task } from '@/types/task';
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { Task, TaskCmt } from '@/types/task';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useGetAllTasks(wsId: string) {
   return useQuery<Task[]>({
@@ -76,7 +71,7 @@ export function useGetTaskComments(wsId: string, taskId: string) {
 export function useCreateTaskComments(wsId: string, taskId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (payload: Partial<Task>) =>
+    mutationFn: (payload: Partial<TaskCmt>) =>
       taskApi.createComment(payload, wsId, taskId),
     onSuccess: (cmt) => {
       qc.invalidateQueries({ queryKey: ['taskCmt'] });
