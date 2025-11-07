@@ -9,25 +9,19 @@ import Link from 'next/link';
 import { Spinner } from '@/components/ui/spinner';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BriefcaseBusiness } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import SignOut from '@/components/auth/SignOut';
+import { ModeToggle } from '@/components/darkmode/ModeToggle';
+import { ArrowRight, BriefcaseBusiness, LogOut } from 'lucide-react';
 
 const Page = () => {
   const [workspaceName, setWorkspaceName] = useState('');
   const [workspaceID, setWorkspaceID] = useState('');
   const { data, isLoading, isError } = useGetAllWorkspaces();
-
   const { mutate, isPending } = useCreateWorkspaces();
-
   const { mutate: joinWorkspace, isPending: isJoining } = useJoinWorkspace();
-
-  const [WSAction, setWSAction] = useState<'create' | 'Join' | null>('Join');
-
-  // const handleToggleAction = () => {
-  //   setWSAction(!WSAction);
-  //   console.log('clicked!', WSAction);
-  // };
+  const [WSAction, setWSAction] = useState<'create' | 'join' | null>('join');
 
   const handleCreateWorkspace = () => {
     if (!workspaceName.trim()) {
@@ -68,105 +62,176 @@ const Page = () => {
     });
   };
 
-  if (isError) return <p>Error loading workspace</p>;
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center space-y-2">
+          <p className="text-destructive font-medium">
+            Failed to load workspaces
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Please try again later
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center text-foreground w-full min-h-[400px] py-8 px-4 sm:px-6 md:px-8">
-      <div className="flex flex-col justify-center items-center w-full max-w-md">
-        <div className="flex w-full gap-2 pb-3">
-          <h1
-            onClick={() => setWSAction('create')}
-            className={`flex-1 text-center py-2 rounded-md border cursor-pointer text-sm sm:text-base font-medium transition-all ${
-              WSAction === 'create'
-                ? 'bg-zinc-800 text-white border-zinc-700'
-                : 'bg-transparent hover:bg-zinc-900 border-zinc-700 text-zinc-300'
-            }`}
-          >
-            Create
-          </h1>
-          <h1
-            onClick={() => setWSAction('Join')}
-            className={`flex-1 text-center py-2 rounded-md border cursor-pointer text-sm sm:text-base font-medium transition-all ${
-              WSAction === 'Join'
-                ? 'bg-zinc-800 text-white border-zinc-700'
-                : 'bg-transparent hover:bg-zinc-900 border-zinc-700 text-zinc-300'
-            }`}
-          >
-            Join
-          </h1>
-        </div>
-
-        {WSAction === 'create' && (
-          <div className="flex flex-col w-full gap-3 rounded-md bg-zinc-950/40 backdrop-blur-sm">
-            <Input
-              value={workspaceName}
-              onChange={(e) => setWorkspaceName(e.target.value)}
-              placeholder="Enter workspace name"
-              className="text-sm sm:text-base"
-            />
-            <Button
-              className="w-full text-sm sm:text-base"
-              onClick={handleCreateWorkspace}
-              disabled={isPending}
-            >
-              {isPending ? <Spinner /> : 'Create Workspace'}
-            </Button>
-          </div>
-        )}
-
-        {WSAction === 'Join' && (
-          <div className="flex flex-col w-full gap-3 rounded-md bg-zinc-950/40 backdrop-blur-sm">
-            <Input
-              value={workspaceID}
-              onChange={(e) => setWorkspaceID(e.target.value)}
-              placeholder="Enter workspace ID to join"
-              className="text-sm sm:text-base"
-            />
-            <Button
-              className="w-full text-sm sm:text-base"
-              onClick={handleJoinWorkspace}
-              disabled={isJoining}
-            >
-              {isJoining ? <Spinner /> : 'Join Workspace'}
-            </Button>
-          </div>
-        )}
+    <div className="min-h-screen bg-background">
+      <div className="fixed flex justify-center items-center bottom-6 right-6 z-50 p-3 gap-2">
+        <Button variant="outline" className="" size="sm">
+          <LogOut className="mr-2 h-4 w-4" />
+          <SignOut />
+        </Button>
+        <ModeToggle />
       </div>
 
-      {isLoading ? (
-        <div className="pt-6">
-          <Spinner className="size-6" />
+      <main className="container max-w-2xl mx-auto px-4 py-8">
+        <div className="dark:bg-zinc-800 bg-zinc-300 p-1 rounded-lg mb-8">
+          <div className="grid grid-cols-2 gap-1">
+            <button
+              onClick={() => setWSAction('create')}
+              className={`px-4 py-2.5  text-sm font-medium rounded-md transition-all ${
+                WSAction === 'create'
+                  ? 'dark:bg-zinc-700 bg-zinc-100 text-foreground shadow-sm'
+                  : ' hover:text-foreground dark:text-zinc-300 text-zinc-800'
+              }`}
+            >
+              Create Workspace
+            </button>
+
+            <button
+              onClick={() => setWSAction('join')}
+              className={`px-4 py-2.5  text-sm font-medium rounded-md transition-all ${
+                WSAction === 'join'
+                  ? 'dark:bg-zinc-700 bg-zinc-100 text-foreground shadow-sm'
+                  : 'dark:text-zinc-300 hover:text-foreground text-zinc-800'
+              }`}
+            >
+              Join Workspace
+            </button>
+          </div>
         </div>
-      ) : (
-        <div className="pt-3 w-full flex flex-col items-center">
-          {data?.length === 0 ? (
-            <p className='dark:text-zinc-400 text-zinc-800'>No workspace found</p>
-          ) : (
-            <>
-              {data?.map((ws) => (
-                <Link
-                  key={ws.id}
-                  href={`/workspace/${ws.wsId}`}
-                  className="w-full max-w-md"
+
+        <div className="mb-12">
+          {WSAction === 'create' && (
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="workspace-name"
+                  className="text-sm font-medium mb-2 block"
                 >
-                  <div className="border border-border flex justify-between w-full rounded-lg p-2 sm:p-2 my-1 text-sm sm:text-base hover:bg-accent hover:text-accent-foreground transition-all duration-200">
-                    <p className="flex items-center gap-2 truncate">
-                      <BriefcaseBusiness size={16} /> {ws.name}
-                    </p>
-                    <p className="flex text-xs sm:text-sm items-center gap-1 text-zinc-400">
-                      {new Date(ws.CreatedAt).toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                      <ArrowRight size={16} />
-                    </p>
+                  Workspace Name
+                </label>
+                <Input
+                  id="workspace-name"
+                  value={workspaceName}
+                  onChange={(e) => setWorkspaceName(e.target.value)}
+                  placeholder="Enter a workspace name"
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && handleCreateWorkspace()
+                  }
+                />
+              </div>
+              <Button
+                className="w-full"
+                onClick={handleCreateWorkspace}
+                disabled={isPending || !workspaceName.trim()}
+                size="lg"
+              >
+                {isPending ? (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    Creating...
+                  </>
+                ) : (
+                  'Create Workspace'
+                )}
+              </Button>
+            </div>
+          )}
+
+          {WSAction === 'join' && (
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="workspace-id"
+                  className="text-sm font-medium mb-2 block"
+                >
+                  Workspace ID
+                </label>
+                <Input
+                  id="workspace-id"
+                  value={workspaceID}
+                  onChange={(e) => setWorkspaceID(e.target.value)}
+                  placeholder="Enter workspace ID"
+                  onKeyDown={(e) => e.key === 'Enter' && handleJoinWorkspace()}
+                />
+              </div>
+              <Button
+                className="w-full"
+                onClick={handleJoinWorkspace}
+                disabled={isJoining || !workspaceID.trim()}
+                size="lg"
+              >
+                {isJoining ? (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    Joining...
+                  </>
+                ) : (
+                  'Join Workspace'
+                )}
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Your Workspaces</h2>
+
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Spinner className="h-8 w-8" />
+            </div>
+          ) : data?.length === 0 ? (
+            <div className="text-center py-12 border border-dashed rounded-lg">
+              <BriefcaseBusiness className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
+              <p className="text-muted-foreground">No workspaces found</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Create or join a workspace to get started
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {data?.map((ws) => (
+                <Link key={ws.id} href={`/workspace/${ws.wsId}`}>
+                  <div className="group flex items-center my-1 justify-between px-4 py-2 rounded-lg border bg-card hover:bg-accent transition-colors">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="p-2 rounded-md bg-primary/10">
+                        <BriefcaseBusiness className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm truncate">{ws.name}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Created{' '}
+                          {new Date(ws.CreatedAt).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" />
                   </div>
                 </Link>
               ))}
-            </>
+            </div>
           )}
         </div>
-      )}
+      </main>
     </div>
   );
 };

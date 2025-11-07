@@ -1,7 +1,8 @@
 'use client';
-import { BriefcaseBusiness, Plus, LogOut } from 'lucide-react';
+
+
+import { BriefcaseBusiness, Plus } from 'lucide-react';
 import Topbar from '@/components/dashboard/Topbar';
-import SignOut from '@/components/auth/SignOut';
 import { Spinner } from '@/components/ui/spinner';
 import {
   Popover,
@@ -17,7 +18,6 @@ import {
 } from '@/api-hooks/useWorkspaces';
 import { useParams } from 'next/navigation';
 import { toast } from 'sonner';
-// import { useState } from 'react';
 
 export default function RootLayout({
   children,
@@ -47,16 +47,6 @@ export default function RootLayout({
             <BriefcaseBusiness />
             {isFetching ? <Spinner /> : <>{wsName?.name}</>}
           </Button>
-          {/* <span
-            aria-label="Open actions"
-            className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg 
-                       hover:shadow-xl hover:bg-primary/90 active:scale-95 transition-all duration-200 flex items-center justify-center"
-          >
-            <Plus
-              className="transition-transform duration-300 group-hover:rotate-90"
-              size={24}
-            />
-          </span> */}
         </PopoverTrigger>
 
         <PopoverContent
@@ -75,9 +65,6 @@ export default function RootLayout({
                   <h2 className="text-base text-foreground">
                     Workspace actions
                   </h2>
-                  {/* <p className="text-xs text-muted-foreground mt-1">
-                    {}
-                  </p> */}
                 </div>
                 <div>
                   <Button
@@ -110,7 +97,7 @@ export default function RootLayout({
                           className="block"
                         >
                           <div
-                            className="rounded-lg dark:bg-zinc-800 bg-zinc-100 text-xs font-[500] text-foreground 
+                            className="rounded-md dark:bg-zinc-800 bg-zinc-100 text-xs font-[500] text-foreground 
                                      hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer transition-all duration-200 
                                      py-2.5 px-3"
                           >
@@ -143,16 +130,6 @@ export default function RootLayout({
                 <TaskModal />
 
                 <div className="h-px bg-border/50 my-2"></div>
-
-                <div className="rounded-lg overflow-hidden">
-                  <button
-                    className="w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-500
-                               hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200 rounded-lg"
-                  >
-                    <LogOut size={16} />
-                    <SignOut />
-                  </button>
-                </div>
               </div>
             </div>
           )}
