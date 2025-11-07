@@ -24,7 +24,7 @@ export default function RootLayout({
         <AppProviders>
           <main>{children}</main>
         </AppProviders>
-        <Toaster />
+        <Toaster position='top-center' />
       </body>
     </html>
   );

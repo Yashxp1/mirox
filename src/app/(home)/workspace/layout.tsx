@@ -16,6 +16,7 @@ import {
   useGetOneWorkspaces,
 } from '@/api-hooks/useWorkspaces';
 import { useParams } from 'next/navigation';
+import { toast } from 'sonner';
 // import { useState } from 'react';
 
 export default function RootLayout({
@@ -27,6 +28,11 @@ export default function RootLayout({
   const params = useParams();
   const wsId = params.id as string;
   const { data: wsName, isLoading: isFetching } = useGetOneWorkspaces(wsId);
+
+  const handleInvite = async () => {
+    await navigator.clipboard.writeText(wsId);
+    toast.success('Workspace id copied!');
+  };
 
   return (
     <main className="flex min-h-screen relative transition-all duration-300 bg-background">
@@ -74,7 +80,12 @@ export default function RootLayout({
                   </p> */}
                 </div>
                 <div>
-                  <Button variant="ghost" size="sm" className="text-xs">
+                  <Button
+                    onClick={handleInvite}
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs"
+                  >
                     <Plus size={14} />
                     Invite
                   </Button>
