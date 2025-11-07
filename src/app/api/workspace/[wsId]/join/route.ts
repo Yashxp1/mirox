@@ -57,6 +57,10 @@ const leaveWorkspace = async (
     where: { wsId },
   });
 
+  if (!workspace) {
+    throw new Error('Workspace not found');
+  }
+
   const isMember = await prisma.workspaceMember.findFirst({
     where: {
       userId: user.id,
@@ -72,7 +76,7 @@ const leaveWorkspace = async (
     throw new Error('Workspace owner cannot leave their own workspace');
   }
 
-  await prisma.workspace.delete({ where: { id: isMember.id } });
+  await prisma.workspaceMember.delete({ where: { id: isMember.id } });
 
   return { message: 'Left workspace successfully' };
 };
@@ -117,6 +121,7 @@ const getMembers = async (
 
   // return NextResponse.json({ data: workspace.members });
 };
+
 export const POST = withApiHandler(joinWorkspace);
 export const DELETE = withApiHandler(leaveWorkspace);
 export const GET = withApiHandler(getMembers);

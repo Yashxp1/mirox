@@ -7,14 +7,22 @@ const createWorkSpace = async (req: NextRequest, user: { id: string }) => {
   const body = await req.json();
   const validateData = CreateWorkSpaceSchema.parse(body);
 
-  const workSpace = await prisma.workspace.create({
+  const workspace = await prisma.workspace.create({
     data: {
       name: validateData.name,
       authorId: user.id,
     },
   });
 
-  return workSpace;
+  await prisma.workspaceMember.create({
+    data: {
+      userId: user.id,
+      workspaceId: workspace.id,
+      role: 'ADMIN',
+    },
+  });
+
+  return workspace;
 };
 
 const getWorkSpace = async (req: NextRequest, user: { id: string }) => {
