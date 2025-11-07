@@ -11,7 +11,12 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import TaskModal from './TaskModal';
-import { useGetAllWorkspaces } from '@/api-hooks/useWorkspaces';
+import {
+  useGetAllWorkspaces,
+  useGetOneWorkspaces,
+} from '@/api-hooks/useWorkspaces';
+import { useParams } from 'next/navigation';
+// import { useState } from 'react';
 
 export default function RootLayout({
   children,
@@ -19,6 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { data, isLoading } = useGetAllWorkspaces();
+  const params = useParams();
+  const wsId = params.id as string;
+  const { data: wsName, isLoading: isFetching } = useGetOneWorkspaces(wsId);
 
   return (
     <main className="flex min-h-screen relative transition-all duration-300 bg-background">
@@ -29,7 +37,11 @@ export default function RootLayout({
 
       <Popover>
         <PopoverTrigger asChild>
-          <span 
+          <Button className="fixed bottom-6 right-6 z-50 p-3" variant="outline">
+            <BriefcaseBusiness />
+            {isFetching ? <Spinner /> : <>{wsName?.name}</>}
+          </Button>
+          {/* <span
             aria-label="Open actions"
             className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg 
                        hover:shadow-xl hover:bg-primary/90 active:scale-95 transition-all duration-200 flex items-center justify-center"
@@ -38,7 +50,7 @@ export default function RootLayout({
               className="transition-transform duration-300 group-hover:rotate-90"
               size={24}
             />
-          </span>
+          </span> */}
         </PopoverTrigger>
 
         <PopoverContent
@@ -52,13 +64,21 @@ export default function RootLayout({
             </div>
           ) : (
             <div className="bg-popover">
-              <div className="border-b border-border/50 px-5 py-4 bg-muted/30">
-                <h2 className="text-base font-semibold text-foreground">
-                  Quick Actions
-                </h2>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Manage workspaces and tasks
-                </p>
+              <div className="flex justify-between items-center border-b border-border/50 px-5 py-2 bg-muted/30">
+                <div>
+                  <h2 className="text-base text-foreground">
+                    Workspace actions
+                  </h2>
+                  {/* <p className="text-xs text-muted-foreground mt-1">
+                    {}
+                  </p> */}
+                </div>
+                <div>
+                  <Button variant="ghost" size="sm" className="text-xs">
+                    <Plus size={14} />
+                    Invite
+                  </Button>
+                </div>
               </div>
 
               <div className="p-4 space-y-3 max-h-96 overflow-y-auto">
@@ -79,9 +99,9 @@ export default function RootLayout({
                           className="block"
                         >
                           <div
-                            className="rounded-lg text-sm font-medium text-foreground 
+                            className="rounded-lg dark:bg-zinc-800 bg-zinc-100 text-xs font-[500] text-foreground 
                                      hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer transition-all duration-200 
-                                     py-2.5 px-3 hover:translate-x-1"
+                                     py-2.5 px-3"
                           >
                             {ws.name}
                           </div>
@@ -93,17 +113,18 @@ export default function RootLayout({
                       No workspaces available
                     </p>
                   )}
-
-                  <Link href="/dashboard" className="block pt-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full flex items-center gap-2 text-sm justify-center rounded-lg font-medium"
-                    >
-                      <Plus size={16} />
-                      New Workspace
-                    </Button>
-                  </Link>
+                  <div className="">
+                    <Link href="/dashboard" className="block pt-1 w-full">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full flex items-center gap-2 text-sm justify-center rounded-lg font-medium"
+                      >
+                        <Plus size={16} />
+                        New Workspace
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="h-px bg-border/50 my-2"></div>

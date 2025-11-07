@@ -7,7 +7,7 @@ import {
 } from '@/api-hooks/useTasks';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { ArrowUpRight, ChevronDownIcon, SendHorizontal } from 'lucide-react';
+import { ArrowUpRight, ChevronDownIcon, User2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -31,6 +31,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 type PriorityLevelType = 'LOW' | 'MEDIUM' | 'HIGH' | 'NONE';
 type TaskStatusType = 'IN_PROGRESS' | 'DONE' | 'PLANNED';
+type TaskAssigneeType = string | number;
 
 const Page = () => {
   const params = useParams();
@@ -39,7 +40,7 @@ const Page = () => {
 
   const [taskName, setTaskName] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
-  const [taskAssignee, setTaskAssignee] = useState('');
+  const [taskAssignee, setTaskAssignee] = useState<TaskAssigneeType>('');
 
   const [taskPriority, setTaskPriority] = useState<
     PriorityLevelType | undefined
@@ -59,6 +60,7 @@ const Page = () => {
   const { mutate, isPending } = useUpdateTask(id, taskId);
 
   const { data: wsMembers, isPending: isFetching } = useGetWSMembers(id);
+  // const { data: wsMembers, isPending: isFetching } = useGetOneWorkspaces(id);
 
   const { data: taskComments } = useGetTaskComments(id, taskId);
 
@@ -122,7 +124,7 @@ const Page = () => {
         title: taskName,
         description: taskDescription,
         priority: taskPriority,
-        assigneeId: taskAssignee,
+        assigneeId: taskAssignee?.toString(),
         status: taskStatus,
         startdate: taskStart ? taskStart.toISOString() : undefined,
         target: taskTarget ? taskTarget.toISOString() : undefined,
@@ -368,22 +370,22 @@ const Page = () => {
                 </span>
                 <DropdownMenu>
                   <DropdownMenuTrigger value={taskStatus} asChild>
-                    <div className="flex border py-1 px-2 rounded-md bg-white/20 hover:bg-white/30 text-white dark:text-white border-white/50 transition-all cursor-default">
+                    <div className="flex border py-1 px-2 rounded-md hover:bg-black/10 dark:hover:bg-white/30 border-black/20 dark:border-white/50 text-black dark:text-white transition-all cursor-default">
                       {isFetching ? (
                         <Spinner />
                       ) : (
-                        <p>{data?.assigneeId || '-'}</p>
+                        <p>{data?.assignee?.name || '-'}</p>
                       )}
                     </div>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="start">
                     <DropdownMenuGroup>
-                      {wsMembers?.map((i) => (
+                      {wsMembers?.map((m) => (
                         <DropdownMenuItem
-                          key={i.id}
-                          onSelect={() => setTaskAssignee(i.id as any)}
+                          key={m.id}
+                          onSelect={() => setTaskAssignee(m.userId)}
                         >
-                          {i.name}
+                          <User2 /> {m.name || 'error'}
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuGroup>
@@ -394,8 +396,10 @@ const Page = () => {
             {isModified && (
               <div className="pt-4 transition-all duration-200">
                 <Button
+                  variant="outline"
+                  size="sm"
                   onClick={handleUpdate}
-                  className="transition-all duration-200 hover:bg-orange-900 text-orange-300 bg-orange-900/50"
+                  className=""
                 >
                   {isPending ? <Spinner /> : 'Save'}
                 </Button>
@@ -425,7 +429,7 @@ const Page = () => {
                   </div>
                 )}
               </div>
-              <div className="my-4 text-sm rounded-md border border-zinc-200 dark:border-zinc-900 space-y-2">
+              <div className="my-4 text-sm rounded-md  space-y-2">
                 {taskComments?.map((c) => (
                   <div
                     key={c.id}

@@ -93,7 +93,7 @@ const TaskModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full flex items-center gap-2">
+        <Button className="w-full flex items-center gap-2">
           <PencilLine size={18} />
           Create Task
         </Button>
