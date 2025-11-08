@@ -57,6 +57,18 @@ export function useLeaveWorkspace(wsId: string, userId: string) {
   });
 }
 
+export function useUpdateMemberRole(wsId: string, mId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: Partial<WorkspaceMember>) =>
+      workspaceApi.updateWSMemberRole(wsId, payload, mId),
+    onSuccess: (updatedTask) => {
+      qc.setQueryData(['tasks', wsId, mId], updatedTask);
+      qc.invalidateQueries({ queryKey: ['tasks', wsId, mId] });
+    },
+  });
+}
+
 //------Join------
 export function useJoinWorkspace() {
   const queryClient = useQueryClient();
@@ -77,6 +89,14 @@ export function useGetWSMembers(wsId: string) {
   return useQuery<WorkspaceMember[]>({
     queryKey: ['workspace-members', wsId],
     queryFn: () => workspaceApi.getWorkspaceMembers(wsId),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useGetOneWSMember(wsId: string, mId: string) {
+  return useQuery<WorkspaceMember>({
+    queryKey: ['workspace-members', wsId, mId],
+    queryFn: () => workspaceApi.getOneWSMember(wsId, mId),
     staleTime: 5 * 60 * 1000,
   });
 }

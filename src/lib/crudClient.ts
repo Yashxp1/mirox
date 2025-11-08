@@ -49,10 +49,21 @@ export function createCrudClient<T extends { id: number | string }>(
       await axios.delete(url);
     },
 
-    leaveWS: async (wsId: string, userId: string): Promise<void> => {
-      const url = `${baseUrl}/${wsId}/join`;
+    leaveWS: async (wsId: string, mId: string): Promise<void> => {
+      const url = `${baseUrl}/${wsId}/join/${mId}`;
       await axios.delete(url);
     },
+
+    updateWSMemberRole: async (
+      wsId: string,
+      payload: Partial<T>,
+      mId: string
+    ): Promise<T> => {
+      const url = `${baseUrl}/${wsId}/join/${mId}`;
+      const res = await axios.put<{ data: T }>(url, payload);
+      return res.data.data;
+    },
+
     join: async (wsId?: string): Promise<T> => {
       const url = `${baseUrl}/${wsId}/join`;
       const res = await axios.post<{ data: T }>(url);
@@ -62,6 +73,15 @@ export function createCrudClient<T extends { id: number | string }>(
     getWorkspaceMembers: async (wsId: string): Promise<WorkspaceMember[]> => {
       const url = `${baseUrl}/${wsId}/join`;
       const res = await axios.get<{ data: WorkspaceMember[] }>(url);
+      return res.data.data;
+    },
+
+    getOneWSMember: async (
+      wsId: string,
+      mId: string
+    ): Promise<WorkspaceMember> => {
+      const url = `${baseUrl}/${wsId}/join/${mId}`;
+      const res = await axios.get<{ data: WorkspaceMember}>(url);
       return res.data.data;
     },
 

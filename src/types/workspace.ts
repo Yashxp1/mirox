@@ -9,12 +9,17 @@ export interface Workspace {
 export interface WorkspaceMember {
   id: number;
   userId: string;
-  email: string;
-  name: string;
-  member: string;
-  createdAt: string;
+  workspaceId: number;
   role: Role;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+  };
 }
+
 
 export enum Role {
   ADMIN = 'ADMIN',
