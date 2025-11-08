@@ -20,7 +20,7 @@ const createTask = async (
     include: { members: true },
   });
 
-  if (!workspace || workspace.authorId !== user.id) {
+  if (!workspace  ) {
     throw new Error('Workspace not found or unauthorized');
   }
 
