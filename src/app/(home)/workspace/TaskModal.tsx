@@ -123,15 +123,6 @@ const TaskModal = () => {
           />
           <div>
             <div className="flex pt-6 text-xs gap-2">
-              {/* <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground mb-1">
-                  Created
-                </span>
-                <p className="flex border py-1 px-2 rounded-md bg-blue-500/20 hover:bg-blue-500/30 text-blue-700 dark:text-blue-300 border-blue-500/50 transition-all cursor-default">
-                  date created
-                </p>
-              </div> */}
-
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground mb-1">
                   Start Date
