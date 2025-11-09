@@ -1,16 +1,25 @@
-import Github from '@/components/auth/GithubSignIn';
-import { ModeToggle } from '@/components/darkmode/ModeToggle';
+import Hero from '@/components/landing/Hero';
+import Navbar from '@/components/landing/Navbar';
+import Screenshot from '@/components/landing/Screenshot';
 import React from 'react';
+import { Bricolage_Grotesque } from 'next/font/google';
+import Working from '@/components/landing/Working';
+import Join from '@/components/landing/Join';
+import Footer from '@/components/landing/Footer';
+
+const grotesque = Bricolage_Grotesque({ subsets: ['latin'] });
 
 const Page = () => {
   return (
-    <div className="flex flex-col gap-4 justify-center items-center">
-      <h1>Landing Page</h1>
-      <div>
-        <ModeToggle />
+    <div className={`${grotesque.className}`}>
+      <Navbar />
+      <div className="px-3 ">
+        <Hero />
+        <Screenshot />
+        <Working />
+        <Join />
       </div>
-
-      <Github />
+      <Footer />
     </div>
   );
 };

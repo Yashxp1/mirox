@@ -83,7 +83,7 @@ const Tasks = () => {
                     ? 'text-yellow-500 bg-yellow-500/10'
                     : task.priority === 'HIGH'
                     ? 'text-red-400 bg-red-400/10 '
-                    : 'text-zinc-600 dark:text-white bg-zinc-700/30 '
+                    : 'text-zinc-600 dark:text-white bg-zinc-300/30 '
                 }`}
               >
                 {task.priority}

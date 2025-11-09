@@ -1,11 +1,7 @@
 // src/app/layout.tsx
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-import { AppProviders } from '@/providers/AppProvider';
 import { Toaster } from '@/components/ui/sonner';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Mirox',
@@ -20,11 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased text-zinc-800 dark:text-zinc-200`}>
-        <AppProviders>
-          <main>{children}</main>
-        </AppProviders>
-        <Toaster position='top-center' />
+      <body>
+        <main>{children}</main>
+        <Toaster position="top-center" />
       </body>
     </html>
   );

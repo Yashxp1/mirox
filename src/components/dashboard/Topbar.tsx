@@ -1,10 +1,10 @@
 'use client';
-import { ClipboardList, ListTodo, Users } from 'lucide-react';
+import { ClipboardList, ListTodo, Sparkles, Users } from 'lucide-react';
 import React from 'react';
 import { ModeToggle } from '../darkmode/ModeToggle';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils'; 
+import { cn } from '@/lib/utils';
 
 const Topbar = () => {
   const params = useParams();
@@ -49,6 +49,11 @@ const Topbar = () => {
         <div className="flex items-center px-2 sm:px-4">
           <ModeToggle />
         </div>
+        {/* <div className="bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-full p-0.5 shadow-lg">
+          <div className="bg-white rounded-full p-1">
+            <Sparkles className="w-5 h-5 text-purple-600 stroke-[1.5]" />
+          </div>
+        </div> */}
       </div>
     </div>
   );
