@@ -1,5 +1,5 @@
 import { TaskCmt } from '@/types/task';
-import { WorkspaceMember } from '@/types/workspace';
+import { AllWorkspaceMembers, WorkspaceMember } from '@/types/workspace';
 import axios from 'axios';
 
 export function createCrudClient<T extends { id: number | string }>(
@@ -70,9 +70,9 @@ export function createCrudClient<T extends { id: number | string }>(
       return res.data.data;
     },
 
-    getWorkspaceMembers: async (wsId: string): Promise<WorkspaceMember[]> => {
+    getWorkspaceMembers: async (wsId: string): Promise<AllWorkspaceMembers[]> => {
       const url = `${baseUrl}/${wsId}/join`;
-      const res = await axios.get<{ data: WorkspaceMember[] }>(url);
+      const res = await axios.get<{ data: AllWorkspaceMembers[] }>(url);
       return res.data.data;
     },
 

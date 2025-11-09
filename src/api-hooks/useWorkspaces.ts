@@ -1,5 +1,9 @@
 import { workspaceApi } from '@/lib/api';
-import { Workspace, WorkspaceMember } from '@/types/workspace';
+import {
+  AllWorkspaceMembers,
+  Workspace,
+  WorkspaceMember,
+} from '@/types/workspace';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 //------ReadAll------
@@ -49,14 +53,16 @@ export function useRemoveWorkspaces(id: number) {
 }
 
 //---------leaveWs--------
-export function useLeaveWorkspace(wsId: string, userId: string) {
-  const qc = useQueryClient();
+export function useLeaveWS(wsId: string) {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: () => workspaceApi.leaveWS(wsId, userId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['workspace'] }),
+    mutationFn: (mId: string) => workspaceApi.leaveWS(wsId, mId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['workspace', wsId] });
+    },
   });
 }
-
 export function useUpdateMemberRole(wsId: string, mId: string) {
   const qc = useQueryClient();
   return useMutation({
@@ -86,7 +92,7 @@ export function useJoinWorkspace() {
 }
 //------WsMembers------
 export function useGetWSMembers(wsId: string) {
-  return useQuery<WorkspaceMember[]>({
+  return useQuery<AllWorkspaceMembers[]>({
     queryKey: ['workspace-members', wsId],
     queryFn: () => workspaceApi.getWorkspaceMembers(wsId),
     staleTime: 5 * 60 * 1000,

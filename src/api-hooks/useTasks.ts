@@ -26,6 +26,17 @@ export function useOneTasks(wsId: string, taskId: string) {
   });
 }
 
+export function useDeleteTask(wsId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (taskId: string) => taskApi.remove(taskId, wsId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks', wsId] });
+    },
+  });
+}
+
 export function useCreateTask(wsId: string) {
   const qc = useQueryClient();
   return useMutation({
