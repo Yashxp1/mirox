@@ -22,11 +22,11 @@ const Tasks = () => {
   if (isLoading)
     return (
       <div className="flex items-center justify-center h-60">
-         <Spinner className="size-6" />
+        <Spinner className="size-6" />
       </div>
     );
 
-  if (!data || data.length === 0)
+  if (!data || !Array.isArray(data) || data.length === 0)
     return (
       <p className="text-muted-foreground text-sm text-center mt-10">
         No tasks found.
@@ -43,7 +43,7 @@ const Tasks = () => {
           <p>Priority</p>
         </div>
 
-        {data.map((task) => (
+        {data?.map((task) => (
           <Link key={task.id} href={`/workspace/${id}/${task.id}`}>
             <div className="grid grid-cols-[2fr_1fr_1.5fr_1fr] gap-4 border-b border-border px-5 py-3 items-center hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
               <div className="flex items-center gap-2">

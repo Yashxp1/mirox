@@ -3,30 +3,45 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   useGetOneWSMember,
+  useLeaveWS,
   useUpdateMemberRole,
 } from '@/api-hooks/useWorkspaces';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Spinner } from '@/components/ui/spinner';
+import type { Role } from '@/types/workspace';
 import Image from 'next/image';
+import { Spinner } from '@/components/ui/spinner';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+  DialogHeader,
+} from '@/components/ui/dialog';
 
 const Page = () => {
   const params = useParams();
   const wsId = params.id as string;
   const mId = params.mId as string;
 
-  const { data, isLoading, isError } = useGetOneWSMember(wsId, mId);
+  const { data, isLoading } = useGetOneWSMember(wsId, mId);
   const { mutate, isPending: isUpdating } = useUpdateMemberRole(wsId, mId);
 
-  console.log('data : ', data);
+  const { mutate: deleteTask, isPending: isDeleting } = useLeaveWS(wsId);
+// console.log('ws' , mId)
+  const router = useRouter();
+  const handleRemoveUser = () => {
+    deleteTask(mId, {
+      onSuccess: () => {
+        router.push(`/workspace/${wsId}/members`);
+        toast.success('Task deleted');
+      },
+      onError: () => toast.error('Failed to delete task'),
+    });
+  };
 
-  // const [changeRole, setChangeRole] = useState<'ADMIN' | 'MEMBER' | undefined>(
-  //   data?.role
-  // );
-
-  // console.log('ROle: ', changeRole);
-
-  const handleRoleUpdate = (newRole: 'ADMIN' | 'MEMBER') => {
+  const handleRoleUpdate = (newRole: Role) => {
     mutate(
       { role: newRole },
 
@@ -68,10 +83,16 @@ const Page = () => {
 
       <CardContent className="pt-4 space-y-3">
         {isLoading ? (
-          <Spinner className='w-full flex justify-center items-center'/>
+          <Spinner className="w-full flex justify-center items-center" />
         ) : (
           <>
             <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-zinc-500 dark:text-zinc-400">Name</span>
+                <span className="text-zinc-900 dark:text-zinc-100 font-medium">
+                  {data?.user?.name || '-'}
+                </span>
+              </div>
               <div className="flex justify-between">
                 <span className="text-zinc-500 dark:text-zinc-400">Email</span>
                 <span className="text-zinc-900 dark:text-zinc-100 font-medium">
@@ -120,7 +141,6 @@ const Page = () => {
               </div>
             </div>
 
-            {/* Role Management */}
             <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-2">
                 Change Role
@@ -148,10 +168,38 @@ const Page = () => {
               </div>
             </div>
 
-            {/* Remove Button */}
-            <Button variant="destructive" size="sm" className="w-full mt-4">
-              Remove User
-            </Button>
+            <div className="flex">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="w-full mt-4"
+                  >
+                    Remove User
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Remove user</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to remove this user?
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="flex justify-center items-center w-full gap-2">
+                    <Button
+                      onClick={handleRemoveUser}
+                      type="button"
+                      className="bg-red-600/20 text-red-500 hover:bg-red-600/10"
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? <Spinner /> : 'Remove'}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </>
         )}
       </CardContent>

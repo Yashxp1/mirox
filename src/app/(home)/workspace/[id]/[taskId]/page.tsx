@@ -1,17 +1,26 @@
 'use client';
 import {
   useCreateTaskComments,
+  useDeleteTask,
   useGetTaskComments,
   useOneTasks,
   useUpdateTask,
 } from '@/api-hooks/useTasks';
-import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { ArrowUpRight, ChevronDownIcon, User2 } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { ArrowUpRight, ChevronDownIcon, Trash2, User2 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 import {
   Popover,
@@ -57,9 +66,23 @@ const Page = () => {
 
   const { data, isError, isLoading } = useOneTasks(id, taskId);
 
+  const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask(id);
+
   const { mutate, isPending } = useUpdateTask(id, taskId);
 
   const { data: wsMembers, isPending: isFetching } = useGetWSMembers(id);
+
+  const router = useRouter();
+
+  const handleDelete = () => {
+    deleteTask(taskId, {
+      onSuccess: () => {
+        router.push(`/workspace/${id}`);
+        toast.success('Task deleted');
+      },
+      onError: () => toast.error('Failed to delete task'),
+    });
+  };
   // const { data: wsMembers, isPending: isFetching } = useGetOneWorkspaces(id);
 
   const { data: taskComments } = useGetTaskComments(id, taskId);
@@ -146,6 +169,7 @@ const Page = () => {
     id,
     taskId
   );
+
 
   const handleCreateTaskComment = () => {
     if (!taskCmt.trim()) {
@@ -392,7 +416,41 @@ const Page = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
+
+              <div className="flex">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      // onClick={() => setSelectedUserId(i.id)}
+                      className=" bg-red-500/20 text-red-600 px-2 py-1 rounded-md"
+                    >
+                      <Trash2 />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Delete Task</DialogTitle>
+                      <DialogDescription>
+                        Are you sure you want to delete this task?
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="flex justify-center items-center w-full gap-2">
+                      <Button
+                        onClick={handleDelete}
+                        type="button"
+                        className="bg-red-600/20 text-red-500 hover:bg-red-600/10"
+                        // disabled={isDeleting}
+                      >
+                        {isDeleting ? <Spinner /> : 'Delete'}
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
+
+           
             {isModified && (
               <div className="pt-4 transition-all duration-200">
                 <Button
@@ -429,36 +487,38 @@ const Page = () => {
                   </div>
                 )}
               </div>
-              <div className="my-4 text-sm rounded-md  space-y-2">
-                {taskComments?.map((c) => (
-                  <div
-                    key={c.id}
-                    className="flex items-start gap-2 p-2 rounded-md transition-colors 
+
+ <div className="my-4 text-sm rounded-md  space-y-2">
+              {taskComments?.map((c) => (
+                <div
+                  key={c.id}
+                  className="flex items-start gap-2 p-2 rounded-md transition-colors 
                  hover:bg-purple-100 dark:hover:bg-purple-500/10"
-                  >
-                    <div>
-                      <p
-                        className="text-xs px-2 py-1 rounded-sm bg-purple-100 text-purple-700 
+                >
+                  <div>
+                    <p
+                      className="text-xs px-2 py-1 rounded-sm bg-purple-100 text-purple-700 
                      dark:bg-purple-900/50 dark:text-purple-300 transition-colors duration-200"
-                      >
-                        {c.authorName || '-'}
-                      </p>
-                    </div>
-                    <div className="flex justify-between w-full items-center">
-                      <p className="text-zinc-900 dark:text-zinc-200">
-                        {c.body || 'error'}
-                      </p>
-                      <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                        {new Date(c.createdAt).toLocaleString('en-US', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: 'numeric',
-                        })}
-                      </p>
-                    </div>
+                    >
+                      {c.authorName || '-'}
+                    </p>
                   </div>
-                ))}
-              </div>
+                  <div className="flex justify-between w-full items-center">
+                    <p className="text-zinc-900 dark:text-zinc-200">
+                      {c.body || 'error'}
+                    </p>
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                      {new Date(c.createdAt).toLocaleString('en-US', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             </div>
           </div>
         )}

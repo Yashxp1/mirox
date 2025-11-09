@@ -49,14 +49,14 @@ const Page = () => {
             <Link href={`/workspace/${wsId}/members/${i.userId}`} className='grid grid-cols-[1.5fr_1fr_1.5fr_0.8fr_1fr] gap-4 border-b border-border px-5 py-1.5 items-center  transition-colors'>
               <div className="flex items-center gap-2">
                 <User size={16} />
-                <p className="truncate">{i.user.name || 'Unnamed'}</p>
+                <p className="truncate">{i?.name|| 'Unnamed'}</p>
               </div>
               <p
                 className={`text-xs w-fit font-medium transition-all duration-300 cursor-pointer ${
                   i.role === 'ADMIN'
-                    ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-600/30 hover:border-emerald-600/50'
-                    : 'text-amber-600 dark:text-amber-400 bg-amber-600/15 hover:bg-amber-600/25 border border-amber-600/30 hover:border-amber-600/50'
-                } py-1.5 px-2.5 rounded-lg flex items-center gap-1.5`}
+                    ? 'text-emerald-600 dark:text-emerald-400 '
+                    : 'text-amber-600 dark:text-amber-400'
+                } py-1.5 rounded-lg flex items-center gap-1.5`}
               >
                 <span
                   className={`w-2 h-2 rounded-full ${
@@ -75,7 +75,7 @@ const Page = () => {
                   year: 'numeric',
                 })}
               </p>
-              <p className="truncate">{i.user.email || 'N/A'}</p>
+              <p className="truncate">{i?.email || 'N/A'}</p>
             </Link>
           </div>
         ))}
