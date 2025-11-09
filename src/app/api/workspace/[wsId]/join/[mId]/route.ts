@@ -9,7 +9,7 @@ const removeFromWorkspace = async (
 ) => {
   const param = await ctx?.params;
   const wsId = param?.wsId;
-  const mId = param?.wsId;
+  const mId = param?.mId;
 
   if (!wsId || !mId) {
     throw new Error('workspace not found or member id not found!');
@@ -23,22 +23,43 @@ const removeFromWorkspace = async (
     throw new Error('Workspace not found');
   }
 
-  const isMember = await prisma.workspaceMember.findFirst({
+  const requesterMembership = await prisma.workspaceMember.findFirst({
     where: {
       userId: user.id,
-      workspaceId: workspace?.id,
+      workspaceId: workspace.id,
     },
   });
 
-  if (!isMember) {
+  if (!requesterMembership) {
     throw new Error('You are not a member of this workspace');
   }
 
-  if (workspace?.authorId === user.id) {
-    throw new Error('Workspace owner cannot leave their own workspace');
+  // ✅ Check permission
+  const isOwner = workspace.authorId === user.id;
+  const isAdmin = requesterMembership.role === 'ADMIN';
+
+  if (!isOwner && !isAdmin) {
+    throw new Error('Only the workspace owner or admin can remove members');
   }
 
-  await prisma.workspaceMember.delete({ where: { id: isMember.id } });
+  // ✅ Check if member exists
+  const targetMember = await prisma.workspaceMember.findUnique({
+    where: { id: Number(mId) },
+    include: { user: true },
+  });
+
+  if (!targetMember) {
+    throw new Error('Member not found');
+  }
+
+  // Prevent owner from removing themselves or being removed
+  if (targetMember.userId === workspace.authorId) {
+    throw new Error('Cannot remove the workspace owner');
+  }
+
+  await prisma.workspaceMember.delete({
+    where: { id: targetMember.id },
+  });
 
   return { message: 'Left workspace successfully' };
 };
