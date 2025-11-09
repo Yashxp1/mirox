@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 const Hero = () => {
   return (
@@ -13,8 +14,12 @@ const Hero = () => {
           Your all-in-one workspace to plan, collaborate, <br /> and track
           progress — built for speed, simplicity, and scale.
         </h2>
-        <div className='py-8 '>
-          <Button  className="text-sm w-40 py-5 rounded-full">Get started <ArrowRight className=''/></Button>
+        <div className="py-8 ">
+          <Link href="/register">
+            <Button className="text-sm w-40 py-5 rounded-full">
+              Get started <ArrowRight className="" />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

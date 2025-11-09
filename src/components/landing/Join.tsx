@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 const Join = () => {
   return (
@@ -11,10 +12,12 @@ const Join = () => {
           Collaborate, track progress, and <br /> get things done faster than
           ever before.
         </p>
-        <div className=''>
-          <Button className="w-32 my-6">
-            Let’s go! <ArrowRight />{' '}
-          </Button>
+        <div className="">
+          <Link href="/register">
+            <Button className="w-32 my-6">
+              Let’s go! <ArrowRight />{' '}
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
