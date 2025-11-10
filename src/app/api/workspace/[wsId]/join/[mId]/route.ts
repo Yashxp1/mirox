@@ -41,14 +41,13 @@ const removeFromWorkspace = async (
     throw new Error('Only the workspace owner or admin can remove members');
   }
 
-  
-const targetMember = await prisma.workspaceMember.findFirst({
-  where: {
-    userId: mId,
-    workspaceId: workspace.id,
-  },
-  include: { user: true },
-});
+  const targetMember = await prisma.workspaceMember.findFirst({
+    where: {
+      userId: mId,
+      workspaceId: workspace.id,
+    },
+    include: { user: true },
+  });
 
   if (!targetMember) {
     throw new Error('Member not found');
@@ -75,8 +74,6 @@ const updateMemberRole = async (
   const mId = param?.mId;
 
   const { role }: { role: 'ADMIN' | 'MEMBER' } = await req.json();
-
-  // console.log("ROLE BACKEND: ", role)
 
   if (!role || !wsId || !mId) throw new Error('Invalid input');
 
@@ -109,7 +106,6 @@ const getMember = async (
   if (!wsId || !mId) {
     throw new Error('Missing workspace ID or member ID.');
   }
-
 
   const workspace = await prisma.workspace.findUnique({
     where: { wsId },

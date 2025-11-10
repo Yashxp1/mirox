@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server';
 const getTaskByAsigneeId = async (
   req: NextRequest,
   user: { id: string },
-  ctx?: { params: { wsId: string; taskId: string } }
+  ctx?: { params: { wsId: string } }
 ) => {
   const param = await ctx?.params;
   const wsId = param?.wsId;

@@ -84,10 +84,10 @@ const leaveWorkspace = async (
 const getMembers = async (
   req: NextRequest,
   user: { id: string },
-  ctx: { params: { wsId: string } }
+  ctx?: { params: { wsId: string } }
 ) => {
   const params = await ctx?.params;
-  const wsId = params.wsId;
+  const wsId = params?.wsId;
 
   if (!wsId) {
     throw new Error('workspace not found!');
@@ -118,8 +118,6 @@ const getMembers = async (
     email: m.user?.email,
     image: m.user?.image,
   }));
-
-  // return NextResponse.json({ data: workspace.members });
 };
 
 export const POST = withApiHandler(joinWorkspace);

@@ -20,7 +20,7 @@ const createTask = async (
     include: { members: true },
   });
 
-  if (!workspace  ) {
+  if (!workspace) {
     throw new Error('Workspace not found or unauthorized');
   }
 
