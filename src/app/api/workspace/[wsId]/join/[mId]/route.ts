@@ -34,7 +34,6 @@ const removeFromWorkspace = async (
     throw new Error('You are not a member of this workspace');
   }
 
-  // ✅ Check permission
   const isOwner = workspace.authorId === user.id;
   const isAdmin = requesterMembership.role === 'ADMIN';
 
@@ -42,17 +41,19 @@ const removeFromWorkspace = async (
     throw new Error('Only the workspace owner or admin can remove members');
   }
 
-  // ✅ Check if member exists
-  const targetMember = await prisma.workspaceMember.findUnique({
-    where: { id: Number(mId) },
-    include: { user: true },
-  });
+  
+const targetMember = await prisma.workspaceMember.findFirst({
+  where: {
+    userId: mId,
+    workspaceId: workspace.id,
+  },
+  include: { user: true },
+});
 
   if (!targetMember) {
     throw new Error('Member not found');
   }
 
-  // Prevent owner from removing themselves or being removed
   if (targetMember.userId === workspace.authorId) {
     throw new Error('Cannot remove the workspace owner');
   }
@@ -105,53 +106,44 @@ const getMember = async (
   const wsId = param?.wsId;
   const mId = param?.mId;
 
+  if (!wsId || !mId) {
+    throw new Error('Missing workspace ID or member ID.');
+  }
+
+
   const workspace = await prisma.workspace.findUnique({
     where: { wsId },
-    include: {
-      members: {
-        include: {
-          user: { select: { id: true, name: true, email: true, image: true } },
-        },
-      },
-    },
+    select: { id: true },
   });
 
   if (!workspace) {
-    throw new Error('workspace not found!');
+    throw new Error('Workspace not found.');
   }
 
-  const oneUser = await prisma.workspaceMember.findFirst({
+  const member = await prisma.workspaceMember.findFirst({
     where: {
       userId: mId,
       workspaceId: workspace.id,
     },
     include: {
-      workspace: {
-        include: {
-          members: {
-            include: {
-              user: {
-                select: { id: true, name: true, email: true, image: true },
-              },
-            },
-          },
-        },
+      user: {
+        select: { id: true, name: true, email: true, image: true },
       },
     },
   });
 
-  return oneUser;
+  if (!member) {
+    throw new Error('Member not found in this workspace.');
+  }
 
-  // return workspace.members.map((m) => ({
-  //   id: m.id,
-  //   role: m.role,
-  //   createdAt: m.createdAt,
-  //   userId: m.userId,
-  //   workspaceId: m.workspaceId,
-  //   name: m.user?.name,
-  //   email: m.user?.email,
-  //   image: m.user?.image,
-  // }));
+  return {
+    id: member.id,
+    role: member.role,
+    createdAt: member.createdAt,
+    userId: member.userId,
+    workspaceId: member.workspaceId,
+    user: member.user,
+  };
 };
 
 export const PUT = withApiHandler(updateMemberRole);
