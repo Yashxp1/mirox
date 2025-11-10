@@ -40,43 +40,21 @@ const Page = () => {
   return (
     <div className="flex flex-col items-center py-10 px-4 bg-background text-foreground transition-colors duration-200">
       <div className="w-full max-w-5xl text-sm border border-border rounded-xl overflow-hidden shadow-sm">
-        <div className="grid grid-cols-[2fr_1fr_1.5fr_1fr] gap-4 border-b border-border px-5 py-3 font-medium text-muted-foreground bg-muted/40">
+        <div className="grid grid-cols-[2fr_1fr] md:grid-cols-[2fr_1fr_1.5fr_1fr] gap-4 border-b border-border px-5 py-3 font-medium text-muted-foreground bg-muted/40">
           <p>Task Name</p>
-          <p>Assigned</p>
-          <p>Status</p>
           <p>Priority</p>
+          <p className="hidden md:block">Assigned</p>
+          <p className="hidden md:block">Status</p>
         </div>
 
         {data.map((task) => (
           <Link key={task.id} href={`/workspace/${id}/${task.id}`}>
-            <div className="grid grid-cols-[2fr_1fr_1.5fr_1fr] gap-4 border-b border-border px-5 py-3 items-center hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
+            <div className="grid grid-cols-[2fr_1fr] md:grid-cols-[2fr_1fr_1.5fr_1fr] gap-4 border-b border-border px-5 py-3 items-center hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
               <div className="flex items-center gap-2">
                 <ClipboardList size={16} />
                 <p className="truncate">{task.title}</p>
               </div>
-              <div
-                className={`flex ml-3 p-1.5 items-center rounded-full w-fit ${
-                  task.assigneeId ? 'bg-green-500/10' : 'bg-yellow-500/10'
-                }`}
-              >
-                {task.assigneeId ? (
-                  <UserCheck size={16} className="text-green-500" />
-                ) : (
-                  <UserPlus size={16} className="text-yellow-500" />
-                )}
-              </div>
-
-              <span
-                className={`font-semibold w-fit text-xs px-2 py-1 rounded-md text-center ${
-                  task.status === 'DONE'
-                    ? 'text-green-500 bg-green-500/10'
-                    : task.status === 'IN_PROGRESS'
-                    ? 'text-yellow-500 bg-yellow-500/10'
-                    : 'text-blue-500 bg-blue-500/10'
-                }`}
-              >
-                {task.status.toLocaleLowerCase()}
-              </span>
+              
               <span
                 className={`font-semibold text-xs w-fit px-2 py-1 rounded-md text-center ${
                   task.priority === 'LOW'
@@ -89,6 +67,30 @@ const Page = () => {
                 }`}
               >
                 {task.priority}
+              </span>
+
+              <div
+                className={`hidden md:flex ml-3 p-1.5 items-center rounded-full w-fit ${
+                  task.assigneeId ? 'bg-green-500/10' : 'bg-yellow-500/10'
+                }`}
+              >
+                {task.assigneeId ? (
+                  <UserCheck size={16} className="text-green-500" />
+                ) : (
+                  <UserPlus size={16} className="text-yellow-500" />
+                )}
+              </div>
+
+              <span
+                className={`hidden md:inline-block font-semibold w-fit text-xs px-2 py-1 rounded-md text-center ${
+                  task.status === 'DONE'
+                    ? 'text-green-500 bg-green-500/10'
+                    : task.status === 'IN_PROGRESS'
+                    ? 'text-yellow-500 bg-yellow-500/10'
+                    : 'text-blue-500 bg-blue-500/10'
+                }`}
+              >
+                {task.status.toLocaleLowerCase()}
               </span>
             </div>
           </Link>

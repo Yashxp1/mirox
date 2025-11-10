@@ -34,11 +34,11 @@ const Page = () => {
   return (
     <div className=" flex flex-col items-center py-10 px-4 bg-background text-foreground transition-colors duration-200">
       <div className="w-full max-w-5xl text-sm border border-border rounded-xl overflow-hidden shadow-sm">
-        <div className="grid grid-cols-[1.5fr_1fr_1.5fr_0.8fr_1fr] gap-4 border-b border-border px-5 py-3 font-medium text-muted-foreground bg-muted/40">
+        <div className="grid grid-cols-[2fr_1fr] md:grid-cols-[1.5fr_1fr_1.5fr_0.8fr_1fr] gap-4 border-b border-border px-5 py-3 font-medium text-muted-foreground bg-muted/40">
           <p>Name</p>
           <p>Role</p>
-          <p>Joined</p>
-          <p>Email</p>
+          <p className="hidden md:block">Joined</p>
+          <p className="hidden md:block">Email</p>
         </div>
 
         {data.map((i) => (
@@ -46,7 +46,7 @@ const Page = () => {
             key={i.id}
             className=""
           >
-            <Link href={`/workspace/${wsId}/members/${i.userId}`} className='grid grid-cols-[1.5fr_1fr_1.5fr_0.8fr_1fr] gap-4 border-b border-border px-5 py-1.5 items-center  transition-colors'>
+            <Link href={`/workspace/${wsId}/members/${i.userId}`} className='grid grid-cols-[2fr_1fr] md:grid-cols-[1.5fr_1fr_1.5fr_0.8fr_1fr] gap-4 border-b border-border px-5 py-1.5 items-center  transition-colors'>
               <div className="flex items-center gap-2">
                 <User size={16} />
                 <p className="truncate">{i?.name|| 'Unnamed'}</p>
@@ -68,14 +68,14 @@ const Page = () => {
                 {i.role.toLowerCase()}
               </p>
 
-              <p className="text-muted-foreground text-xs">
+              <p className="hidden md:block text-muted-foreground text-xs">
                 {new Date(i.createdAt).toLocaleDateString('en-IN', {
                   day: '2-digit',
                   month: 'short',
                   year: 'numeric',
                 })}
               </p>
-              <p className="truncate">{i?.email || 'N/A'}</p>
+              <p className="hidden md:block truncate">{i?.email || 'N/A'}</p>
             </Link>
           </div>
         ))}

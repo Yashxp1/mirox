@@ -4,8 +4,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
-  title: 'Mirox',
-  description: 'Note taking made easy',
+  title: 'crewspace.',
+  description: 'Project management made easy',
   icons: { icon: '/logo.svg' },
 };
 

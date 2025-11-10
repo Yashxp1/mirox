@@ -8,7 +8,7 @@ import {
 } from '@/api-hooks/useWorkspaces';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import type { Role } from '@/types/workspace';
+import { Role } from '@/types/workspace';
 import Image from 'next/image';
 import { Spinner } from '@/components/ui/spinner';
 import {
@@ -28,19 +28,19 @@ const Page = () => {
   const { data, isLoading } = useGetOneWSMember(wsId, mId);
   const { mutate, isPending: isUpdating } = useUpdateMemberRole(wsId, mId);
 
-  const { mutate: deleteTask, isPending: isDeleting } = useLeaveWS(wsId);
-// console.log('ws' , mId)
+  const { mutate: leaveWS, isPending: isDeleting } = useLeaveWS(wsId);
+
   const router = useRouter();
+
   const handleRemoveUser = () => {
-    deleteTask(mId, {
+    leaveWS(mId, {
       onSuccess: () => {
         router.push(`/workspace/${wsId}/members`);
-        toast.success('Task deleted');
+        toast.success('Member removed');
       },
-      onError: () => toast.error('Failed to delete task'),
+      onError: () => toast.error('Failed to remove member'),
     });
   };
-
   const handleRoleUpdate = (newRole: Role) => {
     mutate(
       { role: newRole },
@@ -132,11 +132,13 @@ const Page = () => {
                   Joined At
                 </span>
                 <span className="text-zinc-900 dark:text-zinc-100 font-medium">
-                  {new Date(data?.createdAt).toLocaleString('en-Us', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
+                  {data?.createdAt
+                    ? new Date(data.createdAt).toLocaleString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                    : 'Unknown date'}
                 </span>
               </div>
             </div>
@@ -151,7 +153,7 @@ const Page = () => {
                   size="sm"
                   className="border-yellow-300 dark:border-yellow-700 hover:bg-yellow-100 dark:hover:bg-yellow-800"
                   disabled={data?.role === 'MEMBER' || isUpdating}
-                  onClick={() => handleRoleUpdate('MEMBER')}
+                  onClick={() => handleRoleUpdate(Role.MEMBER)}
                 >
                   {isUpdating ? <Spinner /> : 'Member'}
                 </Button>
@@ -161,7 +163,7 @@ const Page = () => {
                   size="sm"
                   className="border-orange-300 dark:border-orange-700 hover:bg-orange-100 dark:hover:bg-orange-800"
                   disabled={data?.role === 'ADMIN' || isUpdating}
-                  onClick={() => handleRoleUpdate('ADMIN')}
+                  onClick={() => handleRoleUpdate(Role.ADMIN)}
                 >
                   {isUpdating ? <Spinner /> : 'Admin'}
                 </Button>
