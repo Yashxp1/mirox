@@ -10,13 +10,15 @@ export function useGetAllTasks(wsId: string) {
   });
 }
 
-export function useTaskByAssigneeId(wsId: string) {
+export function useTaskByAssigneeId(wsId?: string) {
   return useQuery<Task[]>({
     queryKey: ['tasks', wsId],
-    queryFn: () => taskApi.getByAssigneeId(wsId),
+    queryFn: () => taskApi.getByAssigneeId(wsId!),
+    enabled: !!wsId,
     staleTime: 5 * 60 * 1000,
   });
 }
+
 
 export function useOneTasks(wsId: string, taskId: string) {
   return useQuery<Task>({

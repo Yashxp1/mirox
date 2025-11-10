@@ -63,6 +63,7 @@ export function useLeaveWS(wsId: string) {
     },
   });
 }
+
 export function useUpdateMemberRole(wsId: string, mId: string) {
   const qc = useQueryClient();
   return useMutation({
@@ -91,10 +92,11 @@ export function useJoinWorkspace() {
   });
 }
 //------WsMembers------
-export function useGetWSMembers(wsId: string) {
+export function useGetWSMembers(wsId?: string) {
   return useQuery<AllWorkspaceMembers[]>({
     queryKey: ['workspace-members', wsId],
-    queryFn: () => workspaceApi.getWorkspaceMembers(wsId),
+    queryFn: () => workspaceApi.getWorkspaceMembers(wsId!),
+    enabled: !!wsId,
     staleTime: 5 * 60 * 1000,
   });
 }
