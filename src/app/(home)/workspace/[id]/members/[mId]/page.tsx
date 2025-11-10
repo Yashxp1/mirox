@@ -58,7 +58,7 @@ const Page = () => {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <Image
-              src={data?.user?.image || '/logo.svg'}
+              src={'/logo.svg'}
               alt={data?.user?.name || ''}
               width={100}
               height={100}

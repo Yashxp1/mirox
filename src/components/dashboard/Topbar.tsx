@@ -1,5 +1,5 @@
 'use client';
-import { ClipboardList, ListTodo, Sparkles, Users } from 'lucide-react';
+import { ClipboardList, ListTodo, Users } from 'lucide-react';
 import React from 'react';
 import { ModeToggle } from '../darkmode/ModeToggle';
 import Link from 'next/link';
