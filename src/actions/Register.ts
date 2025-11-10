@@ -43,7 +43,7 @@ export const Register = async (data: z.infer<typeof RegisterSchema>) => {
 
     return {
       user,
-      success: `Email verificaltion is sent on ${lowerCaseEmail}`,
+      success: `Please continue to login page`,
     };
   } catch (error) {
     console.error('Database message:', error);
