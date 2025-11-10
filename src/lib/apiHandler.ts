@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from './auth';
 
-type Hanlder<T, P = Record<string, string>> = (
+type Handler<T, P = Record<string, string>> = (
   req: NextRequest,
   user: { id: string },
   ctx: { params: P }
 ) => Promise<T>;
 
 export function withApiHandler<T, P = Record<string, string>>(
-  handler: Hanlder<T, P>
+  handler: Handler<T, P>
 ) {
-  return async (req: NextRequest, ctx: { params: P }) => {
+  return async (req: NextRequest, ctx?: { params?: Promise<P> }) => {
     try {
       const session = await auth();
 
@@ -21,7 +21,13 @@ export function withApiHandler<T, P = Record<string, string>>(
         );
       }
 
-      const result = await handler(req, { id: session.user.id }, ctx);
+      const params = ctx?.params ? await ctx.params : ({} as P);
+
+      const result = await handler(
+        req,
+        { id: session.user.id },
+        { params }
+      );
 
       return NextResponse.json(
         { success: true, data: result },
