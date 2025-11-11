@@ -33,20 +33,28 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
-    setIsLoading(true);
-    const res = await login(data);
-
-    if (res?.error) {
-      setIsError(res.error);
-      setIsLoading(false);
-      toast(res.error);
-    }
-
-    if (res?.error) {
+    try {
+      setIsLoading(true);
       setIsError('');
-      setIsSuccess(res.error);
+      setIsSuccess('');
+
+      const res = await login(data);
+
+      if (res?.error) {
+        setIsError(res.error);
+        toast.error(res.error);
+        return;
+      }
+
+      if (res?.success) {
+        setIsSuccess(res.success);
+        toast.success(res.success);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Something went wrong. Please try again.');
+    } finally {
       setIsLoading(false);
-      toast(res.error);
     }
   };
 
@@ -60,11 +68,9 @@ const LoginForm = () => {
         {isError && <p className="text-red-600">{isError}</p>}
       </CardHeader>
 
-      {/* Form starts here */}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardContent>
           <div className="flex flex-col gap-6">
-            {/* Email */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -80,7 +86,6 @@ const LoginForm = () => {
               )}
             </div>
 
-            {/* Password */}
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
               <Input

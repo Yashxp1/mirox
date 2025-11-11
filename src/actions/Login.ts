@@ -6,10 +6,9 @@ import z from 'zod';
 
 export const login = async (data: z.infer<typeof LoginSchema>) => {
   const validateData = LoginSchema.parse(data);
-
   const { email, password } = validateData;
 
-  if (!validateData.email || !validateData.password) {
+  if (!email || !password) {
     return { error: 'Invalid input data' };
   }
 
@@ -17,10 +16,10 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
     await signIn('credentials', {
       email,
       password,
-      callbackUrl: '/dashboard',
+      redirect: false,
     });
 
-    // return { message: 'Login successful', user };
+    return { success: 'Login successful' };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -30,6 +29,6 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
           return { error: 'Something went wrong' };
       }
     }
-    throw error;
+    return { error: 'Unexpected error occurred' };
   }
 };
