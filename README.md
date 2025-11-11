@@ -14,6 +14,7 @@ The goal of this project is to create a simple yet powerful platform for seamles
 ## 🎥 Demo Video
 
 > [📺 Watch on YouTube](#)  
+ ## https://youtu.be/zFq6Ifi4f8U
 
 
 ---
