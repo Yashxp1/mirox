@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Hero = () => {
   return (
-    <div className="bg-gradient-to-b  from-indigo-300 to-white rounded-b-md h-[600px]">
+    <div className="bg-gradient-to-b mt-14  from-indigo-300 to-white rounded-md h-[600px]">
       <div className="flex gap-3 flex-col justify-center items-center pt-32">
         <h1 className="text-6xl text-center">
           Move ideas to impact <br /> without the chaos.
