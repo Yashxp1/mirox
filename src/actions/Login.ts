@@ -21,7 +21,7 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
       callbackUrl: '/dashboard',
     });
 
-    return { success: 'Login successful' };
+    return { success: 'Login successful.' };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

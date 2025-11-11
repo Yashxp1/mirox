@@ -18,11 +18,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema } from '@/lib/schema';
 import { login } from '@/actions/Login';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -43,12 +45,14 @@ const LoginForm = () => {
       if (res?.error) {
         setIsError(res.error);
         toast.error(res.error);
+
         return;
       }
 
       if (res?.success) {
         setIsSuccess(res.success);
-        toast.success(res.success);
+        toast.success(res.success + 'You are being redirect to the dashboard');
+        router.push('/dashboard');
       }
     } catch (error) {
       console.error(error);
