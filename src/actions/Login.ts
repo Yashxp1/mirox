@@ -17,10 +17,11 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
     await signIn('credentials', {
       email,
       password,
+      redirect: false,
       callbackUrl: '/dashboard',
     });
 
-    // return { message: 'Login successful', user };
+    return { success: 'Login successful' };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
