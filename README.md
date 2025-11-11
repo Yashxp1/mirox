@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 CrewSpace
 
-## Getting Started
+CrewSpace is a **modern project management tool** built to help teams collaborate, organise their work, and track tasks efficiently, all in one place.
 
-First, run the development server:
+---
+
+## 🧠 Overview
+
+CrewSpace allows users to **create workspaces**, **invite members**, assign them roles, and manage **tasks** with priorities, statuses, and target deadlines.  
+The goal of this project is to create a simple yet powerful platform for seamless teamwork and productivity.
+
+---
+
+## 🎥 Demo Video
+
+> [📺 Watch on YouTube](#)  
+
+
+---
+
+## 🖼️ Screenshots
+
+><img width="1919" height="864" alt="image" src="https://github.com/user-attachments/assets/ce7e81e6-1a13-4e51-bdaf-d29745d30ff9" />
+
+> <img width="1919" height="867" alt="image" src="https://github.com/user-attachments/assets/19ab835e-fef9-4ecd-9d5d-a92f6300e612" />
+
+
+---
+
+## ⚙️ Features
+
+- 🏗️ Create and manage **Workspaces**
+- 👥 Invite **Members** and assign **Roles**
+- 🧾 Create and update **Tasks**
+- 🔖 Set **Priority**, **Status**, and **Target Dates**
+- 🧭 Clean and responsive UI
+- 🔐 Authentication & Authorization with **Auth.js**
+- ⚡ Blazing-fast client with **TanStack Query**
+- 💾 Scalable backend using **Prisma** and **PostgreSQL**
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|-----------|-------------|
+| **Frontend** | Next.js, TypeScript, Tailwind CSS |
+| **Backend** | Next.js (API Routes), Prisma |
+| **Database** | PostgreSQL |
+| **Auth** | Auth.js |
+| **State/Data** | TanStack Query |
+| **Deployment** | Vercel |
+
+---
+
+## 🚀 Getting Started
 
 ```bash
+# 1️⃣ Clone the Repository
+git clone https://github.com/Yashxp1/crewspace.git
+cd crewspace
+
+# 2️⃣ Install Dependencies
+npm install
+
+# 3️⃣ Set Up Environment Variables
+# Create a .env file in the root directory and add the following:
+# ---------------------------------------------------------------
+# DATABASE_URL=your_postgres_database_url
+# NEXTAUTH_SECRET=your_auth_secret
+# NEXTAUTH_URL=http://localhost:3000
+# ---------------------------------------------------------------
+
+# 4️⃣ Run Prisma Migrations
+npx prisma migrate dev
+
+# 5️⃣ Start the Development Server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 6️⃣ Open the App
+# Visit http://localhost:3000 in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
